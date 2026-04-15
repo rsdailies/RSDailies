@@ -17,5 +17,5 @@ config.json
 credentials.json
 test-output.log
 node_modules/
-.github/
+.github/workflows/
 timer.test.txt
