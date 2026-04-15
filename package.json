@@ -4,10 +4,10 @@
   "description": "RS3 Dailies, Weeklies, Monthlies Task Checklist for RuneScape - React Rebuild",
   "type": "module",
   "main": "dist/index.js",
-  "homepage": "https://rsdailies.github.io",
+  "homepage": "https://zahzr.github.io/RSDailies",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
