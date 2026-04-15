@@ -1,8 +1,8 @@
 # Dailyscape - React Edition
 
-[![Deploy to GitHub Pages](https://github.com/rsdailies/rsdailies.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/rsdailies/rsdailies.github.io/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/Zahzr/RSDailies/actions/workflows/deploy.yml/badge.svg)](https://github.com/Zahzr/RSDailies/actions/workflows/deploy.yml)
 
-**Live Demo:** [https://rsdailies.github.io/](https://rsdailies.github.io/)
+**Live Demo:** [https://zahzr.github.io/RSDailies/](https://zahzr.github.io/RSDailies/)
 
 **Dailyscape** is a tool for RuneScape 3 players to track their daily, weekly, and monthly in-game tasks. This modernized version is built with React and TypeScript, offering a fast, reliable, and extensible experience.
 
