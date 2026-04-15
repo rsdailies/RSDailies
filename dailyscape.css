@@ -1,14 +1,14 @@
 body {
     background: #000;
     color: #c3c3c3;
-    padding-top: 75px;
+    padding-top: 72px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
 }
 
 .table_container {
-    padding-top: 75px;
-    margin-top: -75px;
-    margin-bottom: 75px;
+    padding-top: 72px;
+    margin-top: -72px;
+    margin-bottom: 48px;
 }
 
 .navbar-nav>li>.dropdown-menu {
@@ -36,13 +36,13 @@ body {
     background-color: #1f2f38;
     color: #fff;
     font-weight: 900;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     line-height: 1rem;
     margin-left: 5px;
 }
 
 #profile-name {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: normal;
     vertical-align: top;
     margin-right: 5px;
@@ -98,8 +98,9 @@ body {
 #profile-button span.expanding_text,
 #settings-button span.expanding_text,
 #layout-button span.expanding_text,
-#token-button span.expanding_text {
-    font-size: 1rem;
+#token-button span.expanding_text,
+#overview-button span.expanding_text {
+    font-size: 0.95rem;
     font-weight: normal;
 }
 
@@ -107,12 +108,12 @@ body {
     padding: .375rem .75rem;
 }
 
-.table> :not(:first-child) {
+.table>:not(:first-child) {
     border-top: 0;
 }
 
-.table> :not(caption)>*>* {
-    padding: 0.75rem;
+.table>:not(caption)>*>* {
+    padding: 0.55rem 0.7rem;
 }
 
 div.table_container[data-hide="hide"] table tbody {
@@ -171,29 +172,77 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
     color: #fff;
 }
 
+.overview_panel {
+    margin-top: 14px;
+    margin-bottom: 18px;
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.overview_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0.6rem 0.85rem;
+    background: #1b1b1b;
+    border-bottom: 1px solid #2d2d2d;
+}
+
+.overview_title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+}
+
+.overview_actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.overview_content {
+    padding: 0.75rem 0.85rem;
+    min-height: 48px;
+}
+
+.overview_empty {
+    color: #b9b9b9;
+    font-size: 0.92rem;
+}
+
 .activity_table {
     table-layout: fixed;
     width: 100%;
+    margin-bottom: 0;
 }
 
 .activity_table th {
-    font-size: 1.5em;
-    vertical-align: top;
+    font-size: 1.2rem;
+    vertical-align: middle;
     width: 62%;
     border: none;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
 }
 
 .activity_table thead td {
     text-align: right;
     position: relative;
     width: 38%;
+    vertical-align: middle;
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.45rem !important;
 }
 
 .activity_table td.activity_name {
     padding: 0;
     height: 100%;
     width: 62%;
-    min-height: 69px;
+    min-height: 54px;
     position: relative;
     vertical-align: middle;
 }
@@ -212,15 +261,18 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
 .activity_table td.activity_name a:visited {
     color: #fff;
     position: absolute;
-    display: block;
+    display: flex;
+    align-items: center;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    padding: 1rem 4.25rem 1rem 1rem;
-    line-height: 1rem;
+    padding: 0.7rem 4.1rem 0.7rem 0.85rem;
+    line-height: 1.05rem;
     text-decoration: none;
     z-index: 1;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .activity_table td.activity_name a:hover {
@@ -243,20 +295,19 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
 .activity_table td.activity_color {
     cursor: pointer;
     width: 38%;
-    padding: 0.75rem 1rem;
-    vertical-align: top;
+    padding: 0.55rem 0.85rem;
+    vertical-align: middle;
 }
 
-.activity_table td.activity_color .activity_check_off {
+.activity_table td.activity_color .activity_check_off,
+.activity_table td.activity_color .activity_check_on {
     margin-right: 5px;
     vertical-align: top;
 }
 
 .activity_table td.activity_color .activity_check_on {
-    margin-right: 5px;
     display: none;
     visibility: hidden;
-    vertical-align: top;
 }
 
 .activity_table td.activity_name button.hide-button,
@@ -365,33 +416,36 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
 
 .activity_desc {
     display: inline-block;
-    white-space: normal;
-    line-height: 1.35rem;
     width: 100%;
+    white-space: normal;
+    line-height: 1.2rem;
+    vertical-align: top;
 }
 
 .activity_note_line {
     display: block;
-    margin-top: 4px;
+    margin-top: 3px;
     color: #d4d4d4;
-    line-height: 1.35rem;
+    line-height: 1.2rem;
+    font-size: 0.92rem;
 }
 
 .item_profit {
     display: inline-block;
     margin-left: 0;
-    margin-top: 6px;
+    margin-top: 5px;
     white-space: nowrap;
     font-weight: 700;
     color: #c1991c;
+    font-size: 0.9rem;
 }
 
 .activity_inline_actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 6px;
 }
 
 .activity_inline_actions .btn {
@@ -401,96 +455,39 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
 .farming-group-row td {
     background: #111 !important;
     color: #fff;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     border-top: 1px solid #555 !important;
     border-bottom: 1px solid #555 !important;
-    padding: 0.6rem 0.85rem !important;
+    padding: 0.42rem 0.8rem !important;
 }
 
 .farming-subgroup-row td,
 .gathering-group-row td {
     background: #1a1a1a !important;
     color: #d9d9d9;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     letter-spacing: 0.03em;
     text-transform: uppercase;
     border-top: 1px solid #333 !important;
     border-bottom: 1px solid #333 !important;
-    padding: 0.45rem 0.85rem !important;
+    padding: 0.34rem 0.8rem !important;
 }
 
-.compact .activity_tables {
-    column-count: 2;
+.farming-child-row td.activity_name a,
+.farming-child-row td.activity_name a:active,
+.farming-child-row td.activity_name a:link,
+.farming-child-row td.activity_name a:visited {
+    padding-left: 1.6rem;
 }
 
-.compact .activity_tables .table_container {
-    margin: 0 10px;
-    min-width: 420px;
-    padding-top: 0;
-}
-
-.compact .activity_table thead tr {
-    display: flex;
-}
-
-.compact .activity_table tbody tr {
-    position: relative;
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: center;
-}
-
-.compact .activity_table td {
-    border: none;
-}
-
-.compact .activity_table th,
-.compact .activity_table td.activity_name {
-    width: 100%;
-    width: calc(100% - 20px);
-}
-
-.compact .activity_table td.activity_name {
-    min-height: 48px;
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-.compact .activity_table td.activity_name a,
-.compact .activity_table td.activity_name a:active,
-.compact .activity_table td.activity_name a:link,
-.compact .activity_table td.activity_name a:visited {
-    position: relative;
-}
-
-.compact .activity_color {
-    text-align: center;
-    min-height: 48px;
-    min-width: 48px;
-}
-
-.compact .activity_desc {
-    display: none;
-    visibility: hidden;
-}
-
-.compact .activity_table td.activity_color .activity_check_off,
-.compact .activity_table td.activity_color .activity_check_on {
-    margin-right: 0;
-}
-
-.compact .activity_table td.activity_name button.hide-button {
-    right: 10px;
-}
-
-.compact .activity_table td.activity_name button.delete-button {
-    right: 52px;
+.farming-child-row td.activity_color {
+    font-size: 0.92rem;
 }
 
 .countdown {
-    font-size: 1rem;
+    font-size: 0.92rem;
     white-space: nowrap;
 }
 
@@ -506,6 +503,7 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
 footer {
     text-align: center;
     margin-top: 15px;
+    margin-bottom: 18px;
 }
 
 footer a,
@@ -539,8 +537,29 @@ footer a img {
         width: 50%;
     }
 
+    .activity_table td.activity_name {
+        min-height: 58px;
+    }
+
+    .activity_table td.activity_name a,
+    .activity_table td.activity_name a:active,
+    .activity_table td.activity_name a:link,
+    .activity_table td.activity_name a:visited {
+        padding: 0.65rem 3.6rem 0.65rem 0.7rem;
+        font-size: 0.95rem;
+    }
+
+    .activity_desc {
+        font-size: 0.9rem;
+    }
+
     .activity_table a {
         text-decoration: underline;
+    }
+
+    .overview_header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
@@ -554,7 +573,8 @@ footer a img {
 
     #profile-button,
     #settings-button,
-    #layout-button {
+    #layout-button,
+    #overview-button {
         padding: 10px;
     }
 
@@ -587,6 +607,75 @@ footer a img {
     .activity_table thead td {
         width: 34%;
     }
+}
+
+.compact .activity_tables {
+    column-count: 2;
+}
+
+.compact .activity_tables .table_container {
+    margin: 0 10px 20px;
+    min-width: 420px;
+    padding-top: 0;
+}
+
+.compact .activity_table thead tr {
+    display: flex;
+}
+
+.compact .activity_table tbody tr {
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+
+.compact .activity_table td {
+    border: none;
+}
+
+.compact .activity_table th,
+.compact .activity_table td.activity_name {
+    width: calc(100% - 20px);
+}
+
+.compact .activity_table td.activity_name {
+    min-height: 42px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.compact .activity_table td.activity_name a,
+.compact .activity_table td.activity_name a:active,
+.compact .activity_table td.activity_name a:link,
+.compact .activity_table td.activity_name a:visited {
+    position: relative;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+}
+
+.compact .activity_color {
+    text-align: center;
+    min-height: 42px;
+    min-width: 42px;
+}
+
+.compact .activity_desc {
+    display: none;
+    visibility: hidden;
+}
+
+.compact .activity_table td.activity_color .activity_check_off,
+.compact .activity_table td.activity_color .activity_check_on {
+    margin-right: 0;
+}
+
+.compact .activity_table td.activity_name button.hide-button {
+    right: 10px;
+}
+
+.compact .activity_table td.activity_name button.delete-button {
+    right: 52px;
 }
 
 .modal-content {

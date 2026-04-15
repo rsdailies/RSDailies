@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  function row(id, name, wiki, note, extra) {
+  function timer(id, name, wiki, note, extra) {
     return Object.assign(
       {
         id,
@@ -29,15 +29,14 @@
       {
         id: 'herbs',
         label: 'Herbs',
-        note: 'Main herb run timers and herb patch plot checklist rows.',
+        note: 'Main herb run timer with individual patch checklist rows.',
         timers: [
-          row(
-            'farm-herbs-standard',
+          timer(
+            'farm-herbs',
             'Herb Run',
             'https://runescape.wiki/w/Herb_patch',
-            'Main herb timer. Uses your herb setting automatically.',
+            'Primary herb timer. Uses your 3-tick herb setting automatically.',
             {
-              category: 'herbs',
               cycleMinutes: 20,
               stages: 4,
               useHerbSetting: true,
@@ -63,15 +62,14 @@
       {
         id: 'allotments',
         label: 'Allotments',
-        note: 'Allotment-related timers and plot checklist rows.',
+        note: 'Allotment run timer with patch checklist rows.',
         timers: [
-          row(
+          timer(
             'farm-allotments',
             'Allotment Run',
             'https://runescape.wiki/w/Allotment_patch',
             'Typical allotment growth timer.',
             {
-              category: 'allotments',
               cycleMinutes: 10,
               stages: 4,
               alertOnReady: true,
@@ -92,15 +90,14 @@
       {
         id: 'hops',
         label: 'Hops',
-        note: 'Hops timer and hop patch checklist rows.',
+        note: 'Hop run timer with patch checklist rows.',
         timers: [
-          row(
+          timer(
             'farm-hops',
-            'Hops Run',
+            'Hop Run',
             'https://runescape.wiki/w/Hops_patch',
             'Typical hops growth timer.',
             {
-              category: 'hops',
               cycleMinutes: 10,
               stages: 4,
               alertOnReady: true,
@@ -113,7 +110,7 @@
         plots: [
           plot('hops-yanille', 'Yanille', 'https://runescape.wiki/w/Hops_patch'),
           plot('hops-lumbridge', 'Lumbridge', 'https://runescape.wiki/w/Hops_patch'),
-          plot('hops-seers', 'Seers\' Village', 'https://runescape.wiki/w/Hops_patch'),
+          plot('hops-seers', "Seers' Village", 'https://runescape.wiki/w/Hops_patch'),
           plot('hops-entrana', 'Entrana', 'https://runescape.wiki/w/Hops_patch')
         ]
       },
@@ -121,293 +118,275 @@
       {
         id: 'trees',
         label: 'Trees',
-        note: 'Tree and fruit tree timers.',
+        note: 'Tree timers broken into compact child groups.',
         timers: [
-          row(
+          timer(
             'farm-regular-trees',
             'Regular Trees',
             'https://runescape.wiki/w/Tree_patch',
-            'Tree patch growth timer.',
+            'Regular tree growth timer.',
             {
-              category: 'trees',
               cycleMinutes: 40,
               stages: 8,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('tree-lumbridge', 'Lumbridge', 'https://runescape.wiki/w/Tree_patch'),
+                plot('tree-falador', 'Falador', 'https://runescape.wiki/w/Tree_patch'),
+                plot('tree-taverley', 'Taverley', 'https://runescape.wiki/w/Tree_patch'),
+                plot('tree-varrock', 'Varrock', 'https://runescape.wiki/w/Tree_patch'),
+                plot('tree-gnome-stronghold', 'Gnome Stronghold', 'https://runescape.wiki/w/Tree_patch')
+              ]
             }
           ),
-          row(
-            'farm-fruit-trees-standard',
-            'Fruit Trees (standard)',
+          timer(
+            'farm-fruit-trees',
+            'Fruit Trees',
             'https://runescape.wiki/w/Fruit_Tree_Patch',
-            'Standard fruit tree growth timer.',
+            'Fruit tree growth timer.',
             {
-              category: 'trees',
               cycleMinutes: 160,
               stages: 6,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('fruit-gnome-stronghold', 'Gnome Stronghold', 'https://runescape.wiki/w/Fruit_Tree_Patch'),
+                plot('fruit-gnome-village', 'Tree Gnome Village', 'https://runescape.wiki/w/Fruit_Tree_Patch'),
+                plot('fruit-catherby', 'Catherby', 'https://runescape.wiki/w/Fruit_Tree_Patch'),
+                plot('fruit-herblore-habitat', 'Herblore Habitat', 'https://runescape.wiki/w/Fruit_Tree_Patch'),
+                plot('fruit-lletya', 'Lletya', 'https://runescape.wiki/w/Fruit_Tree_Patch'),
+                plot('fruit-meilyr', 'Meilyr', 'https://runescape.wiki/w/Fruit_Tree_Patch')
+              ]
             }
           ),
-          row(
-            'farm-fruit-trees-high',
-            'Fruit Trees (higher tier)',
-            'https://runescape.wiki/w/Fruit_Tree_Patch',
-            'Higher-tier fruit tree growth timer.',
-            {
-              category: 'trees',
-              cycleMinutes: 160,
-              stages: 5,
-              alertOnReady: true,
-              autoClearOnReady: false,
-              vanishOnStart: true,
-              timerKind: 'growth'
-            }
-          ),
-          row(
+          timer(
             'farm-spirit-tree',
             'Spirit Tree',
             'https://runescape.wiki/w/Spirit_tree_patch',
             'Spirit tree growth timer.',
             {
-              category: 'trees',
               cycleMinutes: 40,
               stages: 8,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('spirit-port-sarim', 'Port Sarim', 'https://runescape.wiki/w/Spirit_tree_patch'),
+                plot('spirit-etceteria', 'Etceteria', 'https://runescape.wiki/w/Spirit_tree_patch'),
+                plot('spirit-brimhaven', 'Brimhaven', 'https://runescape.wiki/w/Spirit_tree_patch'),
+                plot('spirit-miscellania', 'Miscellania', 'https://runescape.wiki/w/Spirit_tree_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-calquat',
             'Calquat',
             'https://runescape.wiki/w/Calquat_patch',
             'Calquat growth reminder.',
             {
-              category: 'trees',
               cycleMinutes: 160,
               stages: 6,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('calquat-brimhaven', 'Brimhaven', 'https://runescape.wiki/w/Calquat_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-elder-tree',
             'Elder Tree',
             'https://runescape.wiki/w/Elder_tree_patch',
             'Long elder tree growth reminder.',
             {
-              category: 'trees',
               cycleMinutes: 320,
               stages: 7,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('elder-gnome-stronghold', 'Gnome Stronghold', 'https://runescape.wiki/w/Elder_tree_patch'),
+                plot('elder-falador', 'Falador', 'https://runescape.wiki/w/Elder_tree_patch')
+              ]
             }
           )
-        ]
+        ],
+        plots: []
       },
 
       {
         id: 'specialty',
         label: 'Specialty',
-        note: 'Special farming patches and harvest reminders.',
+        note: 'Specialty farming timers with compact location checklists.',
         timers: [
-          row(
+          timer(
             'farm-bushes',
             'Bushes',
             'https://runescape.wiki/w/Bush_patch',
             'Bush patch timer.',
             {
-              category: 'specialty',
               cycleMinutes: 20,
               stages: 4,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('bush-rimmington', 'Rimmington', 'https://runescape.wiki/w/Bush_patch'),
+                plot('bush-ardougne', 'Ardougne', 'https://runescape.wiki/w/Bush_patch'),
+                plot('bush-etceteria', 'Etceteria', 'https://runescape.wiki/w/Bush_patch'),
+                plot('bush-farming-guild', 'Farming Guild / Manor Farm area', 'https://runescape.wiki/w/Bush_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-cactus',
             'Cactus',
             'https://runescape.wiki/w/Cactus_patch',
             'Cactus patch reminder timer.',
             {
-              category: 'specialty',
               cycleMinutes: 80,
               stages: 1,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'harvest'
+              timerKind: 'harvest',
+              plots: [
+                plot('cactus-al-kharid', 'Al Kharid', 'https://runescape.wiki/w/Cactus_patch'),
+                plot('cactus-menaphos', 'Menaphos', 'https://runescape.wiki/w/Cactus_patch')
+              ]
             }
           ),
-          row(
-            'farm-potato-cactus-pick',
-            'Potato Cactus Pick',
-            'https://runescape.wiki/w/Potato_cactus',
-            'Re-check reminder for cactus harvest.',
-            {
-              category: 'specialty',
-              cycleMinutes: 80,
-              stages: 1,
-              alertOnReady: true,
-              autoClearOnReady: false,
-              vanishOnStart: true,
-              timerKind: 'harvest'
-            }
-          ),
-          row(
-            'farm-poison-ivy-berries',
-            'Poison Ivy Berries',
-            'https://runescape.wiki/w/Poison_ivy_berries',
-            'Re-harvest reminder for poison ivy berries.',
-            {
-              category: 'specialty',
-              cycleMinutes: 80,
-              stages: 1,
-              alertOnReady: true,
-              autoClearOnReady: false,
-              vanishOnStart: true,
-              timerKind: 'harvest'
-            }
-          ),
-          row(
+          timer(
             'farm-mushrooms',
             'Mushrooms',
             'https://runescape.wiki/w/Mushroom_patch',
             'Mushroom patch timer.',
             {
-              category: 'specialty',
               cycleMinutes: 40,
               stages: 6,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('mushroom-canifis', 'Canifis', 'https://runescape.wiki/w/Mushroom_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-belladonna',
             'Belladonna',
             'https://runescape.wiki/w/Belladonna_patch',
             'Belladonna patch timer.',
             {
-              category: 'specialty',
               cycleMinutes: 20,
               stages: 4,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('belladonna-draynor', 'Draynor Manor', 'https://runescape.wiki/w/Belladonna_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-celastrus',
             'Celastrus',
             'https://runescape.wiki/w/Celastrus_patch',
             'Celastrus patch growth reminder.',
             {
-              category: 'specialty',
               cycleMinutes: 80,
               stages: 6,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('celastrus-anachronia', 'Anachronia', 'https://runescape.wiki/w/Celastrus_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-redwood',
             'Redwood',
             'https://runescape.wiki/w/Redwood_tree_patch',
             'Redwood growth reminder.',
             {
-              category: 'specialty',
               cycleMinutes: 320,
               stages: 7,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('redwood-farming-guild', 'Farming Guild / Manor Farm area', 'https://runescape.wiki/w/Redwood_tree_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-crystal-tree',
             'Crystal Tree',
             'https://runescape.wiki/w/Crystal_tree',
             'Crystal tree re-check reminder.',
             {
-              category: 'specialty',
               cycleMinutes: 240,
               stages: 1,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'harvest'
+              timerKind: 'harvest',
+              plots: [
+                plot('crystal-prifddinas', 'Prifddinas', 'https://runescape.wiki/w/Crystal_tree')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-anima-patch',
             'Anima Patch',
             'https://runescape.wiki/w/Anima_patch',
             'Anima patch timer.',
             {
-              category: 'specialty',
               cycleMinutes: 20,
               stages: 4,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('anima-anachronia', 'Anachronia', 'https://runescape.wiki/w/Anima_patch')
+              ]
             }
           ),
-          row(
+          timer(
             'farm-bloodweed',
             'Bloodweed',
             'https://runescape.wiki/w/Bloodweed_patch',
             'Bloodweed patch timer.',
             {
-              category: 'specialty',
               cycleMinutes: 20,
               stages: 4,
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
-              timerKind: 'growth'
+              timerKind: 'growth',
+              plots: [
+                plot('bloodweed-wilderness', 'Wilderness', 'https://runescape.wiki/w/Bloodweed_patch')
+              ]
             }
           )
-        ]
+        ],
+        plots: []
       }
     ]
   };
-
-  window.FARMING_CONFIG.tasks = window.FARMING_CONFIG.groups.flatMap(group => {
-    const timerRows = (group.timers || []).map(task => ({
-      ...task,
-      groupId: group.id,
-      groupLabel: group.label,
-      rowType: 'timer'
-    }));
-
-    const plotRows = (group.plots || []).map(task => ({
-      ...task,
-      groupId: group.id,
-      groupLabel: group.label,
-      rowType: 'plot',
-      reset: 'daily',
-      alertDaysBeforeReset: 0
-    }));
-
-    return [...timerRows, ...plotRows];
-  });
 })();
