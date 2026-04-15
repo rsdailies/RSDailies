@@ -4,26 +4,182 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DailyScape - RS3 Dailies, Weeklies, Monthlies Task Checklist for RuneScape</title>
-    <link rel="shortcut icon" href="./favicon.ico">
-    <meta name="title" content="DailyScape">
+    <title>RSDailies — RS3 Dailies, Weeklies & Monthlies</title>
+    <link rel="shortcut icon" href="./img/favicon.ico">
     <meta name="description"
-        content="RS3 Dailies, Weeklies, Monthlies Task Checklist for RuneScape. Money making guides linked to the wiki to provide further detail.">
-    <meta property="og:type" content="website">
+        content="Self-hosted RS3 daily task tracker. Dailies, weeklies, monthlies with auto-reset timers and GE profit data.">
     <meta property="og:url" content="https://zahzr.github.io/RSDailies/">
-    <meta property="og:title" content="DailyScape">
-    <meta property="og:description" content="RS3 Dailies, Weeklies, Monthlies Task Checklist for RuneScape">
-    <meta property="og:image" content="https://zahzr.github.io/RSDailies/assets/icon.png">
-    <meta property="twitter:url" content="https://zahzr.github.io/RSDailies/">
-    <meta property="twitter:title" content="DailyScape">
-    <meta property="twitter:description" content="RS3 Dailies, Weeklies, Monthlies Task Checklist for RuneScape">
-    <meta property="twitter:image" content="https://zahzr.github.io/RSDailies/assets/icon.png">
+    <meta property="og:title" content="RSDailies">
+    <meta property="og:description" content="RS3 task tracker — dailies, weeklies, monthlies">
+    <meta property="og:image" content="https://zahzr.github.io/RSDailies/img/dailyscape.png">
     <meta name="theme-color" content="#1f2f38">
+    <link rel="stylesheet" href="./dailyscape.css">
 </head>
 
 <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+
+    <nav>
+        <a href="./"><img src="./img/dailyscape.png" alt="RSDailies"> RSDailies</a>
+        <ul>
+            <li><a href="#dailies">Dailies</a></li>
+            <li><a href="#gathering">Gathering</a></li>
+            <li><a href="#weeklies">Weeklies</a></li>
+            <li><a href="#weekly-gathering">Weekly Gathering</a></li>
+            <li><a href="#monthlies">Monthlies</a></li>
+
+            <!-- Expandable: More Resources -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">More Resources ▾</a>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-header">Tools</li>
+                    <li><a href="https://runescape.wiki/w/Money_making_guide" target="_blank">Money Making Guide</a>
+                    </li>
+                    <li><a href="https://runescape.wiki/w/Distractions_and_Diversions" target="_blank">D&Ds</a></li>
+                    <li><a href="https://pvme.github.io" target="_blank">PVM Encyclopedia</a></li>
+                    <li><a href="https://runepixels.com/" target="_blank">Runepixels</a></li>
+                    <li class="dropdown-header">RS3 Discords</li>
+                    <li><a href="https://discord.gg/rs" target="_blank">Official RuneScape</a></li>
+                    <li><a href="https://discord.gg/ahelp" target="_blank">Achievement Help</a></li>
+                </ul>
+            </li>
+
+            <!-- Expandable: Profiles -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" id="profiles-toggle">&#9416; Profiles ▾</a>
+                <div class="dropdown-panel" id="profiles-panel">
+                    <strong>Profiles</strong>
+                    <div id="profile-list"></div>
+                    <button id="add-profile-btn">+ New Profile</button>
+                </div>
+            </li>
+
+            <!-- Expandable: Settings -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" id="settings-toggle">&#9881; Settings ▾</a>
+                <div class="dropdown-panel" id="settings-panel">
+                    <strong>Settings</strong>
+                    <label><input type="checkbox" id="setting-split-dailies"> Split Dailies and Daily Gathering</label>
+                    <label><input type="checkbox" id="setting-split-weeklies"> Split Weeklies and Weekly
+                        Gathering</label>
+                    <label><input type="checkbox" id="setting-3tick-herbs"> 3-tick herb patches (vs 4-tick)</label>
+                    <hr>
+                    <strong>Notifications</strong>
+                    <label><input type="checkbox" id="setting-browser-notif"> Browser notifications on reset</label>
+                    <label>Discord Webhook URL (optional):
+                        <input type="text" id="setting-webhook-url" placeholder="https://discord.com/api/webhooks/...">
+                    </label>
+                    <button id="save-settings-btn">Save Settings</button>
+                </div>
+            </li>
+
+            <li><a href="#" id="compact-toggle">&#8863; Compact</a></li>
+            <li><a href="#" id="import-export-toggle">&#128428; Import/Export</a></li>
+        </ul>
+    </nav>
+
+    <!-- Timers bar -->
+    <div id="timers-bar">
+        <span id="daily-timer"></span>
+        <span id="weekly-timer"></span>
+        <span id="monthly-timer"></span>
+    </div>
+
+    <!-- Task sections — populated by dailyscape.js from tasks-config.js -->
+    <main id="app">
+        <section id="dailies-section">
+            <table id="dailies">
+                <thead>
+                    <tr>
+                        <th>Dailies</th>
+                        <th class="section-controls"></th>
+                    </tr>
+                </thead>
+                <tbody id="dailies-body"></tbody>
+            </table>
+        </section>
+
+        <section id="gathering-section">
+            <table id="gathering">
+                <thead>
+                    <tr>
+                        <th>Daily Gathering</th>
+                        <th class="section-controls"></th>
+                    </tr>
+                </thead>
+                <tbody id="gathering-body"></tbody>
+            </table>
+        </section>
+
+        <section id="weeklies-section">
+            <table id="weeklies">
+                <thead>
+                    <tr>
+                        <th>Weeklies</th>
+                        <th class="section-controls"></th>
+                    </tr>
+                </thead>
+                <tbody id="weeklies-body"></tbody>
+            </table>
+        </section>
+
+        <section id="weekly-gathering-section">
+            <table id="weekly-gathering">
+                <thead>
+                    <tr>
+                        <th>Weekly Gathering</th>
+                        <th class="section-controls"></th>
+                    </tr>
+                </thead>
+                <tbody id="weekly-gathering-body"></tbody>
+            </table>
+        </section>
+
+        <section id="monthlies-section">
+            <table id="monthlies">
+                <thead>
+                    <tr>
+                        <th>Monthlies</th>
+                        <th class="section-controls"></th>
+                    </tr>
+                </thead>
+                <tbody id="monthlies-body"></tbody>
+            </table>
+        </section>
+
+        <!-- Custom Tasks section — user-added tasks -->
+        <section id="custom-section">
+            <table id="custom-tasks">
+                <thead>
+                    <tr>
+                        <th>Custom Tasks</th>
+                        <th class="section-controls"><button id="add-custom-task-btn">+ Add Task</button></th>
+                    </tr>
+                </thead>
+                <tbody id="custom-tasks-body"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Import/Export panel -->
+    <div id="import-export-panel" class="panel hidden">
+        <strong>Import / Export</strong>
+        <p>Copy your token to back up or move your data to another browser.</p>
+        <textarea id="export-token" readonly></textarea>
+        <button id="copy-token-btn">Copy</button>
+        <hr>
+        <textarea id="import-token" placeholder="Paste token here..."></textarea>
+        <button id="import-btn">Import</button>
+        <p id="import-error" class="error hidden">Invalid token — check and try again.</p>
+    </div>
+
+    <footer>
+        <a href="https://github.com/Zahzr/RSDailies" target="_blank"><img src="./img/github.png" alt="GitHub">
+            GitHub</a>
+        <a href="https://discord.gg/Q7W4Udr47w" target="_blank"><img src="./img/discord.png" alt="Discord"> Discord</a>
+    </footer>
+
+    <script src="./tasks-config.js"></script>
+    <script src="./dailyscape.js"></script>
 </body>
 
 </html>
