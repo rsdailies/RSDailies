@@ -491,11 +491,16 @@ function createRow(sectionKey, task, isCustom = false) {
 
   if (sectionKey !== 'rs3farming' && task.reset) {
     const target = getTaskAlertTarget(task);
+
     const meta = document.createElement('span');
     meta.className = 'activity_note_line';
-    meta.textContent = task.alertDaysBeforeReset && task.alertDaysBeforeReset > 0
-      ? `Alert target: ${formatDateTimeLocal(target)}`
-      : `Reset target: ${formatDateTimeLocal(target)}`;
+
+    if (task.alertDaysBeforeReset && task.alertDaysBeforeReset > 0) {
+      meta.textContent = `⚠ Do before reset: ${formatDateTimeLocal(target)}`;
+    } else {
+      meta.textContent = `Reset: ${formatDateTimeLocal(target)}`;
+    }
+
     desc.appendChild(meta);
   }
 
@@ -514,13 +519,15 @@ function createRow(sectionKey, task, isCustom = false) {
   if (sectionKey === 'rs3farming') {
     const timers = getFarmingTimers();
     const state = timers[task.id];
+
     const statusLine = document.createElement('span');
     statusLine.className = 'activity_note_line';
 
     if (state) {
-      statusLine.textContent = `Timer running — ready in ${formatDurationMs(state.readyAt - Date.now())}`;
+      const remaining = formatDurationMs(state.readyAt - Date.now());
+      statusLine.textContent = `⏳ Ready in ${remaining}`;
     } else {
-      statusLine.textContent = 'Click the right column to start this timer.';
+      statusLine.textContent = 'Click to start timer';
     }
 
     desc.appendChild(statusLine);
@@ -662,6 +669,36 @@ function renderSection(sectionKey, tasks) {
   tbody.innerHTML = '';
 
   const finalTasks = applyOrderingAndSort(sectionKey, tasks);
+
+  // 🔥 Farming grouping logic
+  if (sectionKey === 'rs3farming') {
+    const groups = {};
+
+    finalTasks.forEach(task => {
+      const cat = task.category || 'Other';
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(task);
+    });
+
+    Object.entries(groups).forEach(([category, list]) => {
+      const headerRow = document.createElement('tr');
+      headerRow.innerHTML = `
+        <td colspan="2" style="background:#111; font-weight:bold; padding:8px;">
+          ${category.toUpperCase().replace('-', ' ')}
+        </td>
+      `;
+      tbody.appendChild(headerRow);
+
+      list.forEach(task => {
+        const row = createRow(sectionKey, task);
+        tbody.appendChild(row);
+      });
+    });
+
+    return;
+  }
+
+  // normal sections
   finalTasks.forEach(task => {
     const row = createRow(sectionKey, task, sectionKey === 'custom');
     tbody.appendChild(row);
@@ -1159,7 +1196,8 @@ function promptAddCustomTask() {
     note: note.trim(),
     wiki: wiki.trim(),
     reset: allowed.includes(reset) ? reset : 'daily',
-    alertDaysBeforeReset
+    alertDaysBeforeReset,
+    isCustom: true
   };
 
   if (task.reset === 'timer') {
