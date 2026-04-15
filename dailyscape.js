@@ -1105,6 +1105,7 @@ function createHeaderRow(label, blockId, options = {}) {
   right.appendChild(rightInner);
 
   if (onRightClick) {
+    right.classList.add('header_like_click');
     right.addEventListener('click', (e) => {
       if (collapse && e.target.closest('.mini-collapse-btn')) return;
       onRightClick();
@@ -1576,18 +1577,62 @@ function setupViewsControl() {
     });
   }
 
+  function positionPanel(anchor) {
+    const rect = anchor.getBoundingClientRect();
+    const margin = 6;
+    const minWidth = 320;
+    const viewportPadding = 10;
+
+    // Panel may be display:none before showing, so avoid relying on offsetWidth.
+    const width = Math.max(minWidth, panel.getBoundingClientRect().width || 0);
+
+    const desiredTop = rect.bottom + margin;
+    const desiredLeft = rect.left;
+
+    const top = Math.max(viewportPadding, Math.min(desiredTop, window.innerHeight - viewportPadding - 40));
+    const left = Math.max(
+      viewportPadding,
+      Math.min(desiredLeft, window.innerWidth - viewportPadding - width)
+    );
+
+    panel.style.position = 'fixed';
+    panel.style.top = `${top}px`;
+    panel.style.left = `${left}px`;
+    panel.style.right = 'auto';
+  }
+
+  function openFrom(button) {
+    closeFloatingControls();
+    panel.style.display = 'block';
+    panel.style.visibility = 'visible';
+    panel.dataset.display = 'block';
+    panel.dataset.anchor = button.id || '';
+    renderViews();
+    positionPanel(button);
+  }
+
   buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
+
       const visible = panel.dataset.display === 'block';
-      closeFloatingControls();
-      if (!visible) {
-        panel.style.display = 'block';
-        panel.style.visibility = 'visible';
-        panel.dataset.display = 'block';
-        renderViews();
+      const sameAnchor = (panel.dataset.anchor || '') === (button.id || '');
+      if (visible && sameAnchor) {
+        closeFloatingControls();
+        return;
       }
+
+      openFrom(button);
     });
+  });
+
+  window.addEventListener('resize', () => {
+    if (panel.dataset.display !== 'block') return;
+    const anchorId = panel.dataset.anchor || '';
+    if (!anchorId) return;
+    const anchor = document.getElementById(anchorId);
+    if (!anchor) return;
+    positionPanel(anchor);
   });
 }
 
@@ -1998,9 +2043,117 @@ function promptAddCustomTask() {
 }
 
 function setupCustomAdd() {
-  document.getElementById('custom_add_button')?.addEventListener('click', (e) => {
+  const addBtn = document.getElementById('custom_add_button');
+  if (!addBtn) return;
+
+  const modalEl = document.getElementById('custom-task-modal');
+  const saveBtn = document.getElementById('custom-task-save');
+  const nameInput = document.getElementById('custom-task-name');
+  const noteInput = document.getElementById('custom-task-note');
+  const wikiInput = document.getElementById('custom-task-wiki');
+  const resetSelect = document.getElementById('custom-task-reset');
+  const alertInput = document.getElementById('custom-task-alert');
+  const timerBlock = document.getElementById('custom-task-timer-block');
+  const timerMinsInput = document.getElementById('custom-task-timer-mins');
+
+  const hasModal = !!(
+    modalEl &&
+    saveBtn &&
+    nameInput &&
+    noteInput &&
+    wikiInput &&
+    resetSelect &&
+    alertInput &&
+    timerBlock &&
+    timerMinsInput
+  );
+  const bootstrapModal = hasModal && window.bootstrap?.Modal ? window.bootstrap.Modal.getOrCreateInstance(modalEl) : null;
+
+  if (!bootstrapModal) {
+    addBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      promptAddCustomTask();
+    });
+    return;
+  }
+
+  function syncTimerVisibility() {
+    const isTimer = resetSelect.value === 'timer';
+    timerBlock.style.display = isTimer ? '' : 'none';
+    timerBlock.style.visibility = isTimer ? 'visible' : 'hidden';
+  }
+
+  function clearValidation() {
+    nameInput.classList.remove('is-invalid');
+  }
+
+  resetSelect.addEventListener('change', () => {
+    syncTimerVisibility();
+  });
+
+  addBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    promptAddCustomTask();
+
+    clearValidation();
+    nameInput.value = '';
+    noteInput.value = '';
+    wikiInput.value = '';
+    resetSelect.value = 'daily';
+    alertInput.value = '0';
+    timerMinsInput.value = '60';
+    syncTimerVisibility();
+
+    bootstrapModal.show();
+    setTimeout(() => nameInput.focus(), 50);
+  });
+
+  saveBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    clearValidation();
+
+    const rawName = String(nameInput.value || '').trim();
+    if (!rawName) {
+      nameInput.classList.add('is-invalid');
+      nameInput.focus();
+      return;
+    }
+
+    const rawNote = String(noteInput.value || '').trim();
+    const rawWiki = String(wikiInput.value || '').trim();
+    const rawReset = String(resetSelect.value || 'daily').trim().toLowerCase();
+
+    let alertDaysBeforeReset = parseInt(String(alertInput.value || '0'), 10);
+    if (!Number.isFinite(alertDaysBeforeReset) || alertDaysBeforeReset < 0) {
+      alertDaysBeforeReset = 0;
+    }
+
+    const allowed = ['daily', 'weekly', 'monthly', 'timer'];
+
+    const task = {
+      id: `custom-${slugify(rawName)}-${Date.now()}`,
+      name: rawName,
+      note: rawNote,
+      wiki: rawWiki,
+      reset: allowed.includes(rawReset) ? rawReset : 'daily',
+      alertDaysBeforeReset
+    };
+
+    if (task.reset === 'timer') {
+      let minutes = parseInt(String(timerMinsInput.value || '60'), 10);
+      if (!Number.isFinite(minutes) || minutes < 1) minutes = 60;
+      task.cooldownMinutes = minutes;
+      task.reset = 'daily';
+      task.note = task.note
+        ? `${task.note} | Repeating timer: ${minutes}m`
+        : `Repeating timer: ${minutes}m`;
+    }
+
+    const tasks = getCustomTasks();
+    tasks.push(task);
+    saveCustomTasks(tasks);
+
+    bootstrapModal.hide();
+    renderApp();
   });
 }
 
