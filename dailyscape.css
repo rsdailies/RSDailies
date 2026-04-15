@@ -54,7 +54,7 @@ body {
     visibility: hidden;
     position: absolute;
     right: 0;
-    min-width: 295px;
+    min-width: 320px;
     background: #333;
     padding: 8px;
     z-index: 100;
@@ -98,8 +98,7 @@ body {
 #profile-button span.expanding_text,
 #settings-button span.expanding_text,
 #layout-button span.expanding_text,
-#token-button span.expanding_text,
-#farming-button span.expanding_text {
+#token-button span.expanding_text {
     font-size: 1rem;
     font-weight: normal;
 }
@@ -172,24 +171,31 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
     color: #fff;
 }
 
+.activity_table {
+    table-layout: fixed;
+    width: 100%;
+}
+
 .activity_table th {
     font-size: 1.5em;
     vertical-align: top;
-    width: 70%;
+    width: 64%;
     border: none;
 }
 
 .activity_table thead td {
     text-align: right;
     position: relative;
+    width: 36%;
 }
 
 .activity_table td.activity_name {
     padding: 0;
-    height: 100%;
-    width: 70%;
-    min-height: 69px;
+    width: 64%;
+    min-height: 72px;
+    height: 72px;
     position: relative;
+    vertical-align: stretch;
 }
 
 .activity_table td.activity_name::before {
@@ -206,15 +212,18 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
 .activity_table td.activity_name a:visited {
     color: #fff;
     position: absolute;
-    display: block;
+    display: flex;
+    align-items: center;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    padding: 1rem 4.25rem 1rem 1rem;
-    line-height: 1rem;
+    padding: 0 6.25rem 0 1rem;
+    line-height: 1.1rem;
     text-decoration: none;
     z-index: 1;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .activity_table td.activity_name a:hover {
@@ -236,14 +245,21 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
 
 .activity_table td.activity_color {
     cursor: pointer;
+    width: 36%;
+    vertical-align: top;
+    padding: 0;
+    overflow: hidden;
 }
 
-.activity_table td.activity_color .activity_check_off {
-    margin-right: 5px;
+.activity_table td.activity_color .activity_check_off,
+.activity_table td.activity_color .activity_check_on {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 8px;
+    margin-top: 2px;
 }
 
 .activity_table td.activity_color .activity_check_on {
-    margin-right: 5px;
     display: none;
     visibility: hidden;
 }
@@ -358,24 +374,53 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
 }
 
 .activity_desc {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 72px;
+    padding: 10px 14px;
     white-space: normal;
+    line-height: 1.25rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .activity_note_line {
     display: block;
     margin-top: 4px;
     color: #c3c3c3;
-    opacity: 0.85;
+    opacity: 0.9;
     line-height: 1.25rem;
 }
 
 .item_profit {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 0;
+    margin-top: 4px;
     white-space: nowrap;
     font-weight: 700;
     color: #c1991c;
+}
+
+.activity_inline_actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.activity_inline_actions .btn {
+    white-space: nowrap;
+}
+
+.inline-danger {
+    order: 2;
+}
+
+.inline-primary {
+    order: 1;
 }
 
 .compact .activity_tables {
@@ -409,7 +454,8 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
 }
 
 .compact .activity_table td.activity_name {
-    min-height: 48px;
+    min-height: 52px;
+    height: 52px;
     display: flex;
     flex-direction: row-reverse;
 }
@@ -419,17 +465,18 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
 .compact .activity_table td.activity_name a:link,
 .compact .activity_table td.activity_name a:visited {
     position: relative;
+    padding-right: 6.25rem;
 }
 
 .compact .activity_color {
     text-align: center;
-    min-height: 48px;
-    min-width: 48px;
+    min-height: 52px;
+    min-width: 52px;
 }
 
 .compact .activity_desc {
-    display: none;
-    visibility: hidden;
+    min-height: 52px;
+    padding: 8px 10px;
 }
 
 .compact .activity_table td.activity_color .activity_check_off,
@@ -445,119 +492,19 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
     right: 52px;
 }
 
+.compact .activity_inline_actions {
+    margin-top: 4px;
+}
+
 .countdown {
     font-size: 1rem;
     white-space: nowrap;
+    display: inline-block;
 }
 
 .dragover {
     opacity: 0.4;
     border: 3px dotted #666;
-}
-
-.utility_panel {
-    margin-bottom: 25px;
-}
-
-.panel-inner {
-    background: #212529;
-    border: 1px solid #495057;
-    border-radius: 0.35rem;
-    padding: 1rem;
-}
-
-.panel-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.panel-sub {
-    color: #adb5bd;
-    margin-bottom: 10px;
-}
-
-.panel-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.herb-locations {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 8px;
-}
-
-.herb-location {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #111;
-    border: 1px solid #495057;
-    border-radius: 0.35rem;
-    padding: 8px 10px;
-}
-
-.farming-row {
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 10px 12px;
-    border: 1px solid #495057;
-    border-radius: 0.35rem;
-    background: #111;
-    margin-bottom: 10px;
-}
-
-.farming-left {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 220px;
-}
-
-.farming-title {
-    font-weight: 700;
-    color: #fff;
-}
-
-.farming-source {
-    font-size: 12px;
-    color: #7db9ff;
-    width: fit-content;
-}
-
-.farming-meta,
-.farming-status {
-    font-size: 12px;
-    color: #adb5bd;
-}
-
-.farming-right {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-end;
-    flex: 1;
-}
-
-.farming-select {
-    background: #212529;
-    border: 1px solid #495057;
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 0.35rem;
-    max-width: 420px;
-}
-
-.farming-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
 }
 
 .hidden {
@@ -596,17 +543,29 @@ footer a img {
         width: 50%;
     }
 
-    .activity_table a {
+    .activity_table thead td,
+    .activity_table td.activity_color {
+        width: 50%;
+    }
+
+    .activity_table td.activity_name {
+        min-height: 80px;
+        height: 80px;
+    }
+
+    .activity_table td.activity_name a,
+    .activity_table td.activity_name a:active,
+    .activity_table td.activity_name a:link,
+    .activity_table td.activity_name a:visited {
+        padding-right: 5.5rem;
+        font-size: 0.95rem;
         text-decoration: underline;
     }
 
-    .farming-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .farming-right {
-        align-items: flex-start;
+    .activity_desc {
+        min-height: 80px;
+        padding: 8px 10px;
+        font-size: 0.95rem;
     }
 }
 
@@ -621,8 +580,7 @@ footer a img {
     #profile-button,
     #settings-button,
     #layout-button,
-    #token-button,
-    #farming-button {
+    #token-button {
         padding: 10px;
     }
 
@@ -637,6 +595,11 @@ footer a img {
     .activity_table td.activity_name {
         width: 60%;
     }
+
+    .activity_table thead td,
+    .activity_table td.activity_color {
+        width: 40%;
+    }
 }
 
 @media (min-width: 992px) {
@@ -644,6 +607,11 @@ footer a img {
     .activity_table th,
     .activity_table td.activity_name {
         width: 66%;
+    }
+
+    .activity_table thead td,
+    .activity_table td.activity_color {
+        width: 34%;
     }
 }
 

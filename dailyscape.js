@@ -89,10 +89,24 @@ function formatCountdown(targetDate) {
 
 function formatDurationMs(ms) {
   const clamped = Math.max(0, ms);
-  const hours = Math.floor(clamped / 3600000);
-  const minutes = Math.floor((clamped % 3600000) / 60000);
-  const seconds = Math.floor((clamped % 60000) / 1000);
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  const totalMinutes = Math.floor(clamped / 60000);
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+  if (days > 0) return `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
+
+function formatDateTimeLocal(ts) {
+  const d = new Date(ts);
+  return d.toLocaleString([], {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
 }
 
 function updateCountdowns() {
@@ -393,13 +407,58 @@ function cleanupReadyFarmingTimers() {
     if (task?.alertOnReady && !timer.alerted) {
       maybeBrowserNotify('RSDailies', `${task.name} is ready.`);
       maybeWebhookNotify(`RSDailies: ${task.name} is ready.`);
+      timer.alerted = true;
     }
 
-    delete timers[timer.id];
-    changed = true;
+    if (task?.autoClearOnReady !== false) {
+      delete timers[timer.id];
+      changed = true;
+    } else {
+      changed = true;
+    }
   });
 
   if (changed) saveFarmingTimers(timers);
+}
+
+function getTaskAlertConfig(task) {
+  const days = Number.isFinite(task?.alertDaysBeforeReset) ? Math.max(0, task.alertDaysBeforeReset) : 0;
+  return {
+    alertDaysBeforeReset: days
+  };
+}
+
+function getTaskNextReset(task) {
+  const reset = String(task?.reset || '').toLowerCase();
+  if (reset === 'weekly') return nextWeeklyBoundary();
+  if (reset === 'monthly') return nextMonthlyBoundary();
+  return nextDailyBoundary();
+}
+
+function getTaskAlertTarget(task) {
+  const nextReset = getTaskNextReset(task);
+  const { alertDaysBeforeReset } = getTaskAlertConfig(task);
+  return new Date(nextReset.getTime() - alertDaysBeforeReset * 86400000);
+}
+
+function maybeNotifyTaskAlert(task, sectionKey) {
+  const target = getTaskAlertTarget(task);
+  if (Date.now() < target.getTime()) return;
+
+  const notified = load(`notified:${sectionKey}`, {});
+  const stamp = target.toISOString();
+
+  if (notified[task.id] === stamp) return;
+
+  maybeBrowserNotify('RSDailies', `${task.name} is due.`);
+  maybeWebhookNotify(`RSDailies: ${task.name} is due.`);
+
+  notified[task.id] = stamp;
+  save(`notified:${sectionKey}`, notified);
+}
+
+function cleanupTaskNotificationsForReset(sectionKey) {
+  removeKey(`notified:${sectionKey}`);
 }
 
 function createRow(sectionKey, task, isCustom = false) {
@@ -430,6 +489,16 @@ function createRow(sectionKey, task, isCustom = false) {
     desc.appendChild(noteLine);
   }
 
+  if (sectionKey !== 'rs3farming' && task.reset) {
+    const target = getTaskAlertTarget(task);
+    const meta = document.createElement('span');
+    meta.className = 'activity_note_line';
+    meta.textContent = task.alertDaysBeforeReset && task.alertDaysBeforeReset > 0
+      ? `Alert target: ${formatDateTimeLocal(target)}`
+      : `Reset target: ${formatDateTimeLocal(target)}`;
+    desc.appendChild(meta);
+  }
+
   if (task.profit && task.profit.item && task.profit.qty) {
     const profit = document.createElement('span');
     profit.className = 'item_profit';
@@ -438,6 +507,9 @@ function createRow(sectionKey, task, isCustom = false) {
     profit.textContent = '…';
     desc.appendChild(profit);
   }
+
+  const inlineActions = document.createElement('div');
+  inlineActions.className = 'activity_inline_actions';
 
   if (sectionKey === 'rs3farming') {
     const timers = getFarmingTimers();
@@ -448,7 +520,7 @@ function createRow(sectionKey, task, isCustom = false) {
     if (state) {
       statusLine.textContent = `Timer running — ready in ${formatDurationMs(state.readyAt - Date.now())}`;
     } else {
-      statusLine.textContent = `Click the right column to start this timer.`;
+      statusLine.textContent = 'Click the right column to start this timer.';
     }
 
     desc.appendChild(statusLine);
@@ -456,7 +528,7 @@ function createRow(sectionKey, task, isCustom = false) {
 
   if (typeof task.cooldownMinutes === 'number' && task.cooldownMinutes > 0) {
     const cdBtn = document.createElement('button');
-    cdBtn.className = 'btn btn-warning btn-sm ms-2 cooldown-inline-btn';
+    cdBtn.className = 'btn btn-warning btn-sm inline-primary cooldown-inline-btn';
     cdBtn.type = 'button';
     cdBtn.dataset.taskId = task.id;
     cdBtn.dataset.cooldownMinutes = String(task.cooldownMinutes);
@@ -466,7 +538,40 @@ function createRow(sectionKey, task, isCustom = false) {
       e.stopPropagation();
       startCooldown(task.id, task.cooldownMinutes);
     });
-    desc.appendChild(cdBtn);
+    inlineActions.appendChild(cdBtn);
+  }
+
+  if (isCustom) {
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn btn-danger btn-sm inline-danger';
+    delBtn.type = 'button';
+    delBtn.textContent = 'Delete';
+    delBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const remove = confirm(`Delete custom task "${task.name}"?`);
+      if (!remove) return;
+
+      const next = getCustomTasks().filter(t => t.id !== task.id);
+      saveCustomTasks(next);
+
+      const completed = load('completed:custom', {});
+      const hiddenRows = load('hiddenRows:custom', {});
+      const notified = load('notified:custom', {});
+      delete completed[task.id];
+      delete hiddenRows[task.id];
+      delete notified[task.id];
+      save('completed:custom', completed);
+      save('hiddenRows:custom', hiddenRows);
+      save('notified:custom', notified);
+
+      renderApp();
+    });
+    inlineActions.appendChild(delBtn);
+  }
+
+  if (inlineActions.children.length > 0) {
+    desc.appendChild(inlineActions);
   }
 
   hideBtn.addEventListener('click', (e) => {
@@ -481,10 +586,13 @@ function createRow(sectionKey, task, isCustom = false) {
 
       const completed = load('completed:custom', {});
       const hiddenRows = load('hiddenRows:custom', {});
+      const notified = load('notified:custom', {});
       delete completed[task.id];
       delete hiddenRows[task.id];
+      delete notified[task.id];
       save('completed:custom', completed);
       save('hiddenRows:custom', hiddenRows);
+      save('notified:custom', notified);
     } else {
       hideTask(sectionKey, task.id);
     }
@@ -569,20 +677,30 @@ function renderApp() {
   document.body.classList.toggle('combine-daily-sections', !settings.splitDailyTables);
   document.body.classList.toggle('combine-weekly-sections', !settings.splitWeeklyTables);
 
+  renderSection('custom', sections.custom);
   renderSection('rs3daily', sections.rs3daily);
   renderSection('rs3dailyshops', sections.rs3dailyshops);
   renderSection('rs3farming', sections.rs3farming);
   renderSection('rs3weekly', sections.rs3weekly);
   renderSection('rs3weeklyshops', sections.rs3weeklyshops);
   renderSection('rs3monthly', sections.rs3monthly);
-  renderSection('custom', sections.custom);
 
   document.getElementById('rs3dailyshops_nav').style.display = settings.splitDailyTables ? '' : 'none';
   document.getElementById('rs3weeklyshops_nav').style.display = settings.splitWeeklyTables ? '' : 'none';
 
+  const customNav = document.getElementById('custom_nav');
+  if (customNav) customNav.style.display = '';
+
   fetchProfits();
   renderCooldownButtons();
   updateProfileHeader();
+
+  sections.custom.forEach(task => maybeNotifyTaskAlert(task, 'custom'));
+  sections.rs3daily.forEach(task => maybeNotifyTaskAlert(task, 'rs3daily'));
+  sections.rs3dailyshops.forEach(task => maybeNotifyTaskAlert(task, 'rs3dailyshops'));
+  sections.rs3weekly.forEach(task => maybeNotifyTaskAlert(task, 'rs3weekly'));
+  sections.rs3weeklyshops.forEach(task => maybeNotifyTaskAlert(task, 'rs3weeklyshops'));
+  sections.rs3monthly.forEach(task => maybeNotifyTaskAlert(task, 'rs3monthly'));
 }
 
 function bindSectionControls(sectionKey, opts = { sortable: false }) {
@@ -910,6 +1028,7 @@ function renderCooldownButtons() {
       btn.textContent = 'Start Cooldown';
       btn.classList.remove('btn-success');
       btn.classList.add('btn-warning');
+      btn.onclick = null;
       return;
     }
 
@@ -928,12 +1047,14 @@ function renderCooldownButtons() {
       };
     } else {
       btn.textContent = `Cooldown ${formatDurationMs(ms)}`;
+      btn.onclick = null;
     }
   });
 }
 
 function clearCompletionFor(sectionKey) {
   save(`completed:${sectionKey}`, {});
+  cleanupTaskNotificationsForReset(sectionKey);
 }
 
 function resetCustomCompletions(kind) {
@@ -950,6 +1071,7 @@ function resetCustomCompletions(kind) {
   });
 
   if (changed) save('completed:custom', completed);
+  cleanupTaskNotificationsForReset('custom');
 }
 
 function checkAutoReset() {
@@ -1024,16 +1146,30 @@ function promptAddCustomTask() {
 
   const note = prompt('Task note (optional):') || '';
   const wiki = prompt('Wiki / URL (optional):') || '';
-  const reset = (prompt('Reset type? daily / weekly / monthly', 'daily') || 'daily').trim().toLowerCase();
+  const reset = (prompt('Reset type? daily / weekly / monthly / timer', 'daily') || 'daily').trim().toLowerCase();
+  const alertDaysBeforeResetRaw = prompt('Alert how many days before reset? (0 for same day)', '0') || '0';
+  let alertDaysBeforeReset = parseInt(alertDaysBeforeResetRaw, 10);
+  if (!Number.isFinite(alertDaysBeforeReset) || alertDaysBeforeReset < 0) alertDaysBeforeReset = 0;
 
-  const allowed = ['daily', 'weekly', 'monthly'];
+  const allowed = ['daily', 'weekly', 'monthly', 'timer'];
+
   const task = {
     id: `custom-${slugify(name)}-${Date.now()}`,
     name: name.trim(),
     note: note.trim(),
     wiki: wiki.trim(),
-    reset: allowed.includes(reset) ? reset : 'daily'
+    reset: allowed.includes(reset) ? reset : 'daily',
+    alertDaysBeforeReset
   };
+
+  if (task.reset === 'timer') {
+    const minsRaw = prompt('Timer repeat interval in minutes?', '60') || '60';
+    let minutes = parseInt(minsRaw, 10);
+    if (!Number.isFinite(minutes) || minutes < 1) minutes = 60;
+    task.cooldownMinutes = minutes;
+    task.reset = 'daily';
+    task.note = task.note ? `${task.note} | Repeating timer: ${minutes}m` : `Repeating timer: ${minutes}m`;
+  }
 
   const tasks = getCustomTasks();
   tasks.push(task);
@@ -1049,13 +1185,13 @@ function setupCustomAdd() {
 }
 
 function setupSectionBindings() {
+  bindSectionControls('custom');
   bindSectionControls('rs3daily');
   bindSectionControls('rs3dailyshops', { sortable: true });
   bindSectionControls('rs3farming');
   bindSectionControls('rs3weekly');
   bindSectionControls('rs3weeklyshops', { sortable: true });
   bindSectionControls('rs3monthly');
-  bindSectionControls('custom');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
