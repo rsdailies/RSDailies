@@ -91,14 +91,22 @@ function nextMonthlyBoundary(now = new Date()) {
 }
 
 function formatCountdown(targetDate) {
-  const diff = targetDate.getTime() - Date.now();
-  if (diff <= 0) return '00:00:00';
+  const diff = Math.max(0, targetDate.getTime() - Date.now());
+  const totalMinutes = Math.floor(diff / 60000);
 
-  const hours = Math.floor(diff / 3600000);
-  const minutes = Math.floor((diff % 3600000) / 60000);
-  const seconds = Math.floor((diff % 60000) / 1000);
+  if (totalMinutes < 60) {
+    return `${totalMinutes}`;
+  }
 
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+
+  if (days > 0) {
+    return `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  }
+
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 }
 
 function formatDurationMs(ms) {
