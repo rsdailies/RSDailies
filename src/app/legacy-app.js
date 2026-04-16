@@ -47,8 +47,69 @@ import {
   formatDurationMs as formatDurationMsCore,
   formatDateTimeLocal as formatDateTimeLocalCore
 } from '../core/time/formatters.js';
-import { slugify as slugifyCore } from '../core/utils/strings.js';
+/* -----------------------------
+   Section state
+----------------------------- */
 
+function getSectionState(sectionKey) {
+  return getSectionStateFeature(sectionKey, load);
+}
+
+function getCollapsedBlocks() {
+  return getCollapsedBlocksFeature(load);
+}
+
+function setCollapsedBlock(blockId, collapsed) {
+  setCollapsedBlockFeature(blockId, collapsed, load, save);
+}
+
+function isCollapsedBlock(blockId) {
+  return isCollapsedBlockFeature(blockId, load);
+}
+
+function getCustomTasks() {
+  return getCustomTasksFeature(load);
+}
+
+function saveCustomTasks(tasks) {
+  saveCustomTasksFeature(tasks, save);
+}
+
+function getFarmingTimers() {
+  return getFarmingTimersFeature(load);
+}
+
+function saveFarmingTimers(timers) {
+  saveFarmingTimersFeature(timers, save);
+}
+
+function getCooldowns() {
+  return getCooldownsFeature(load);
+}
+
+function saveCooldowns(data) {
+  saveCooldownsFeature(data, save);
+}
+
+function migrateLegacyViewModeToPageMode() {
+  migrateLegacyViewModeToPageModeFeature();
+}
+
+function getPageMode() {
+  return getPageModeFeature();
+}
+
+function setPageMode(mode) {
+  setPageModeFeature(mode);
+}
+
+function getOverviewPins() {
+  return getOverviewPinsFeature(load);
+}
+
+function saveOverviewPins(pins) {
+  saveOverviewPinsFeature(pins, save);
+}
 let dragRow = null;
 
 /* -----------------------------
@@ -164,84 +225,6 @@ function applySettingsToDom() {
 
 function collectSettingsFromDom() {
   return collectSettingsFromDomFeature(document);
-}
-
-/* -----------------------------
-   Section state
------------------------------ */
-
-function getSectionState(sectionKey) {
-  return {
-    completed: load(`completed:${sectionKey}`, {}),
-    hiddenRows: load(`hiddenRows:${sectionKey}`, {}),
-    order: load(`order:${sectionKey}`, []),
-    sort: load(`sort:${sectionKey}`, 'default'),
-    hideSection: load(`hideSection:${sectionKey}`, false),
-    showHidden: load(`showHidden:${sectionKey}`, false)
-  };
-}
-
-function getCollapsedBlocks() {
-  return load('collapsedBlocks', {});
-}
-
-function setCollapsedBlock(blockId, collapsed) {
-  const blocks = getCollapsedBlocks();
-  if (collapsed) {
-    blocks[blockId] = true;
-  } else {
-    delete blocks[blockId];
-  }
-  save('collapsedBlocks', blocks);
-}
-
-function isCollapsedBlock(blockId) {
-  const blocks = getCollapsedBlocks();
-  return !!blocks[blockId];
-}
-
-function getCustomTasks() {
-  return load('customTasks', []);
-}
-
-function saveCustomTasks(tasks) {
-  save('customTasks', tasks);
-}
-
-function getFarmingTimers() {
-  return load('farmingTimers', {});
-}
-
-function saveFarmingTimers(timers) {
-  save('farmingTimers', timers);
-}
-
-function getCooldowns() {
-  return load('cooldowns', {});
-}
-
-function saveCooldowns(data) {
-  save('cooldowns', data);
-}
-
-function migrateLegacyViewModeToPageMode() {
-  migrateLegacyViewModeToPageModeFeature();
-}
-
-function getPageMode() {
-  return getPageModeFeature();
-}
-
-function setPageMode(mode) {
-  setPageModeFeature(mode);
-}
-
-function getOverviewPins() {
-  return load('overviewPins', {});
-}
-
-function saveOverviewPins(pins) {
-  save('overviewPins', pins);
 }
 
 /* -----------------------------
@@ -680,68 +663,15 @@ function renderCooldownButtons() {
    Tooltip
 ----------------------------- */
 
-function getTooltipEl() {
-  return document.getElementById('tooltip');
-}
-
-function showTooltip(text, anchorRect) {
-  const tooltip = getTooltipEl();
-  if (!tooltip || !text) return;
-
-  tooltip.textContent = text;
-  tooltip.style.display = 'block';
-  tooltip.style.visibility = 'visible';
-
-  const pad = 10;
-  const width = tooltip.offsetWidth;
-  const height = tooltip.offsetHeight;
-
-  let left = anchorRect.left + window.scrollX;
-  let top = anchorRect.bottom + window.scrollY + 8;
-
-  const maxLeft = window.scrollX + document.documentElement.clientWidth - width - pad;
-  if (left > maxLeft) left = maxLeft;
-  if (left < pad) left = pad;
-
-  const maxTop = window.scrollY + document.documentElement.clientHeight - height - pad;
-  if (top > maxTop) {
-    top = anchorRect.top + window.scrollY - height - 8;
-  }
-
-  tooltip.style.left = `${left}px`;
-  tooltip.style.top = `${top}px`;
-}
-
 function hideTooltip() {
-  const tooltip = getTooltipEl();
-  if (!tooltip) return;
-  tooltip.style.display = 'none';
-  tooltip.style.visibility = 'hidden';
-  tooltip.textContent = '';
-}
-
-function buildTooltipText(task) {
-  const parts = [];
-  if (task.name) parts.push(task.name);
-  if (task.note) parts.push(task.note);
-  return parts.join('\n');
+  hideTooltipFeature(document);
 }
 
 function attachTooltip(targetEl, task) {
-  const text = buildTooltipText(task);
-  if (!targetEl || !text) return;
-
-  targetEl.dataset.tooltipText = text;
-
-  const onEnter = () => showTooltip(text, targetEl.getBoundingClientRect());
-  const onLeave = () => hideTooltip();
-  const onMove = () => showTooltip(text, targetEl.getBoundingClientRect());
-
-  targetEl.addEventListener('mouseenter', onEnter);
-  targetEl.addEventListener('mouseleave', onLeave);
-  targetEl.addEventListener('mousemove', onMove);
-  targetEl.addEventListener('focus', onEnter);
-  targetEl.addEventListener('blur', onLeave);
+  attachTooltipFeature(targetEl, task, {
+    documentRef: document,
+    windowRef: window
+  });
 }
 
 /* -----------------------------
@@ -1931,28 +1861,28 @@ function setupSectionBindings() {
   bindSectionControls('rs3monthly');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initProfileContext();
-  migrateLegacyViewModeToPageMode();
-  applySettingsToDom();
-  checkAutoReset();
-  updateCountdowns();
-
-  setInterval(updateCountdowns, 1000);
-  setInterval(() => {
-    const resetChanged = checkAutoReset();
-    const farmingChanged = cleanupReadyFarmingTimers();
-    const cooldownChanged = cleanupReadyCooldowns();
-    if (resetChanged || farmingChanged || cooldownChanged) renderApp();
-  }, 1000);
-
-  setupSectionBindings();
-  setupProfileControl();
-  setupSettingsControl();
-  setupViewsControl();
-  setupGlobalClickCloser();
-  setupImportExport();
-  setupCustomAdd();
-
-  renderApp();
+initApp({
+  documentRef: document,
+  initProfileContext,
+  migrateLegacyViewModeToPageMode,
+  applySettingsToDom,
+  checkAutoReset,
+  updateCountdowns,
+  startRunLoops: () =>
+    startAppLoops({
+      updateCountdowns,
+      checkAutoReset,
+      cleanupReadyFarmingTimers,
+      cleanupReadyCooldowns,
+      renderApp,
+      intervalRef: window.setInterval.bind(window),
+    }),
+  setupSectionBindings,
+  setupProfileControl,
+  setupSettingsControl,
+  setupViewsControl,
+  setupGlobalClickCloser,
+  setupImportExport,
+  setupCustomAdd,
+  renderApp,
 });
