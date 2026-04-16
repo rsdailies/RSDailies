@@ -210,17 +210,11 @@
     t('monthly-dnd-check', 'Monthly D&D Sweep', 'https://runescape.wiki/w/Distractions_and_Diversions', 'Check monthly-limited activities')
   ].map((task) => Object.assign({ reset: 'monthly', alertDaysBeforeReset: 0 }, task));
 
-  const test= [ 
-      t('test-daily', 'Test Daily', 'https://example.com/daily', 'This is a test daily task', { reset: 'daily', alertDaysBeforeReset: 0 })
-  ].map((task) => Object.assign({ reset: 'monthly', alertDaysBeforeReset: 0 }, task));
-
-
   window.TASKS_CONFIG = {
     dailies,
     gathering,
     weeklies,
     weeklyGathering,
-    monthlies,
-    test
+    monthlies
   };
 })();

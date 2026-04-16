@@ -2,7 +2,7 @@
 
 Static RS3 task checklist for tracking dailies, weeklies, monthlies, and your own custom tasks. Designed to run on GitHub Pages with no backend.
 
-Live: `https://zahzr.github.io/RSDailies/`
+Live: `https://rsdailies.github.io/RSDailies/`
 
 ## What Works
 
@@ -13,7 +13,7 @@ Live: `https://zahzr.github.io/RSDailies/`
 - Import/Export token (backup/migrate local data)
 - Herb Run timer:
   - Aligns to RS3 farming growth ticks (20-minute cycles, UTC)
-  - Supports 3-tick vs 4-tick herbs via Settings
+  - Supports Speedy Growth upgrade timing via Settings
   - Optional checklist panel for common herb patch locations
 - Farming Timers panel:
   - Multiple concurrent timers (per patch type)

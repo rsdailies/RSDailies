@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RSDailies - RS3 Dailies, Weeklies, Monthlies Task Checklist for RuneScape</title>
-    <link rel="shortcut icon" href="./img/favicon.ico">
+    <link rel="icon" type="image/png" href="./img/dailyscape.png">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="dailyscape.css?v=8">
+    <link rel="stylesheet" href="dailyscape.css?v=9">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <meta name="description"
@@ -36,7 +36,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -64,11 +64,11 @@
                         </div>
                     </li>
                 </ul>
-            
+
                 <ul class="navbar-nav nav-pills ms-auto nav-right">
                     <li class="nav-item dropdown">
                         <a class="nav-link expanding_button" href="#" id="profile-button" title="Profiles">
-                            <span id="profile-name" style="display:none; visibility:hidden;"></span>㉾<span
+                            <span id="profile-name" style="display:none; visibility:hidden;"></span>&#128100;<span
                                 class="expanding_text">&nbsp;Profiles</span>
                         </a>
                         <div id="profile-control" style="display:none; visibility:hidden;" data-display="none">
@@ -88,71 +88,71 @@
                             </form>
                         </div>
                     </li>
-            
+
                     <li class="nav-item dropdown">
                         <a class="nav-link expanding_button" href="#" id="settings-button" title="Settings">
-                            ⚙<span class="expanding_text">&nbsp;Settings</span>
+                            &#9881;<span class="expanding_text">&nbsp;Settings</span>
                         </a>
                         <div id="settings-control" style="display:none; visibility:hidden;" data-display="none">
                             <strong>Settings</strong>
-            
+
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="setting-split-daily-tables" checked>
                                 <label class="form-check-label" for="setting-split-daily-tables">
                                     Split Dailies and Gathering
                                 </label>
                             </div>
-            
+
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="setting-split-weekly-tables" checked>
                                 <label class="form-check-label" for="setting-split-weekly-tables">
                                     Split Weeklies inside Gathering
                                 </label>
                             </div>
-            
+
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="setting-3tick-herbs">
                                 <label class="form-check-label" for="setting-3tick-herbs">
-                                    3-tick herb patches
+                                    Speedy Growth upgrade
                                 </label>
                             </div>
-            
+
                             <div class="form-group settings-block">
                                 <label for="setting-growth-offset">Farming tick offset (minutes)</label>
                                 <input type="number" class="form-control" id="setting-growth-offset" min="-60" max="60" step="1"
                                     placeholder="0">
                             </div>
-            
+
                             <div class="form-check settings-block">
                                 <input class="form-check-input" type="checkbox" id="setting-browser-notif">
                                 <label class="form-check-label" for="setting-browser-notif">
                                     Browser notifications on reset / ready timers
                                 </label>
                             </div>
-            
+
                             <div class="form-group settings-block">
                                 <label for="setting-webhook-url">Discord Webhook URL (optional)</label>
                                 <input type="text" class="form-control" id="setting-webhook-url"
                                     placeholder="https://discord.com/api/webhooks/...">
                             </div>
-            
+
                             <div class="settings-actions">
                                 <button id="save-settings-btn" type="button" class="btn btn-primary btn-sm">Save
                                     Settings</button>
                             </div>
                         </div>
                     </li>
-            
+
                     <li class="nav-item">
                         <a class="nav-link expanding_button" href="#" id="token-button" title="Import / Export"
                             data-bs-toggle="modal" data-bs-target="#token-modal">
-                            🖪 <span class="expanding_text">&nbsp;Import / Export</span>
+                            &#8646;<span class="expanding_text">&nbsp;Import / Export</span>
                         </a>
                     </li>
-                </ul>      
+                </ul>
             </div>
         </div>
-    </nav>  
+    </nav>
 
     <div class="container-xl">
         <div id="overview-panel" class="overview_panel" data-view="all">
@@ -161,16 +161,16 @@
                 <div class="overview_actions">
                     <button id="views-button-panel" type="button" class="btn btn-secondary btn-sm expanding_button active"
                         title="Views" aria-label="Open page views">
-                        ☰<span class="expanding_text">&nbsp;Views</span>
+                        &#9776;<span class="expanding_text">&nbsp;Views</span>
                     </button>
                 </div>
-            
+
                 <div id="views-control" style="display:none; visibility:hidden;" data-display="none">
                     <strong>Views</strong>
                     <ul id="views-list"></ul>
-                </div>      
+                </div>
             </div>
-            <div id="overview-content" class="overview_content"></div>        
+            <div id="overview-content" class="overview_content"></div>
         </div>
     </div>
 
@@ -181,26 +181,26 @@
                 <thead>
                     <tr>
                         <th>Custom Tasks</th>
-                        <td>
+                        <td colspan="2">
                             <span class="text-nowrap">
                                 <button id="custom_add_button" class="btn btn-primary btn-sm active"
                                     title="Add custom task">+ Add</button>
                                 <button id="custom_reset_button"
                                     class="reset_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Reset hiding and order to default">↺<span
+                                    title="Reset hiding and order to default">&#8634;<span
                                         class="expanding_text">Reset</span></button>
                                 <button id="custom_sort_button"
                                     class="sort_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Sort by alpha/default">⇅<span class="expanding_text">Sort</span></button>
+                                    title="Sort by alpha/default">&#8645;<span class="expanding_text">Sort</span></button>
                                 <button id="custom_show_hidden_button"
                                     class="show_hidden_button expanding_button btn btn-secondary btn-sm active"
                                     title="Show hidden rows">+<span class="expanding_text">Show Hidden</span></button>
                                 <button id="custom_hide_button"
                                     class="hide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Hide section">▲<span class="expanding_text">Hide</span></button>
+                                    title="Hide section">&#9660;<span class="expanding_text">Hide</span></button>
                                 <button id="custom_unhide_button"
                                     class="unhide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Unhide section">▼<span class="expanding_text">Unhide</span></button>
+                                    title="Unhide section">&#9654;<span class="expanding_text">Unhide</span></button>
                             </span>
                         </td>
                     </tr>
@@ -215,21 +215,21 @@
                 <thead>
                     <tr>
                         <th>Farming Timers</th>
-                        <td>
+                        <td colspan="2">
                             <span class="text-nowrap">
                                 <button id="rs3farming_reset_button"
                                     class="reset_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Reset hiding, order, and running timers">↺<span
+                                    title="Reset hiding, order, and running timers">&#8634;<span
                                         class="expanding_text">Reset</span></button>
                                 <button id="rs3farming_show_hidden_button"
                                     class="show_hidden_button expanding_button btn btn-secondary btn-sm active"
                                     title="Show hidden rows">+<span class="expanding_text">Show Hidden</span></button>
                                 <button id="rs3farming_hide_button"
                                     class="hide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Hide section">▲<span class="expanding_text">Hide</span></button>
+                                    title="Hide section">&#9660;<span class="expanding_text">Hide</span></button>
                                 <button id="rs3farming_unhide_button"
                                     class="unhide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Unhide section">▼<span class="expanding_text">Unhide</span></button>
+                                    title="Unhide section">&#9654;<span class="expanding_text">Unhide</span></button>
                             </span>
                         </td>
                     </tr>
@@ -244,22 +244,22 @@
                 <thead>
                     <tr>
                         <th>Dailies <span id="countdown-rs3daily" class="countdown"></span></th>
-                        <td>
+                        <td colspan="2">
                             <span id="rs3daily_totalprofit"></span>
                             <span class="text-nowrap">
                                 <button id="rs3daily_reset_button"
                                     class="reset_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Reset hiding and order to default">↺<span
+                                    title="Reset hiding and order to default">&#8634;<span
                                         class="expanding_text">Reset</span></button>
                                 <button id="rs3daily_show_hidden_button"
                                     class="show_hidden_button expanding_button btn btn-secondary btn-sm active"
                                     title="Show hidden rows">+<span class="expanding_text">Show Hidden</span></button>
                                 <button id="rs3daily_hide_button"
                                     class="hide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Hide section">▲<span class="expanding_text">Hide</span></button>
+                                    title="Hide section">&#9660;<span class="expanding_text">Hide</span></button>
                                 <button id="rs3daily_unhide_button"
                                     class="unhide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Unhide section">▼<span class="expanding_text">Unhide</span></button>
+                                    title="Unhide section">&#9654;<span class="expanding_text">Unhide</span></button>
                             </span>
                         </td>
                     </tr>
@@ -273,26 +273,26 @@
                 data-timeframe="gathering">
                 <thead>
                     <tr>
-                              <th>Gathering</th>
-                              <td>
+                        <th>Gathering</th>
+                        <td colspan="2">
                             <span id="gathering_totalprofit"></span>
                             <span class="text-nowrap">
                                 <button id="gathering_reset_button"
                                     class="reset_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Reset hiding and order to default">↺<span
+                                    title="Reset hiding and order to default">&#8634;<span
                                         class="expanding_text">Reset</span></button>
                                 <button id="gathering_sort_button"
                                     class="sort_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Sort by alpha/default">⇅<span class="expanding_text">Sort</span></button>
+                                    title="Sort by alpha/default">&#8645;<span class="expanding_text">Sort</span></button>
                                 <button id="gathering_show_hidden_button"
                                     class="show_hidden_button expanding_button btn btn-secondary btn-sm active"
                                     title="Show hidden rows">+<span class="expanding_text">Show Hidden</span></button>
                                 <button id="gathering_hide_button"
                                     class="hide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Hide section">▲<span class="expanding_text">Hide</span></button>
+                                    title="Hide section">&#9660;<span class="expanding_text">Hide</span></button>
                                 <button id="gathering_unhide_button"
                                     class="unhide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Unhide section">▼<span class="expanding_text">Unhide</span></button>
+                                    title="Unhide section">&#9654;<span class="expanding_text">Unhide</span></button>
                             </span>
                         </td>
                     </tr>
@@ -307,22 +307,22 @@
                 <thead>
                     <tr>
                         <th>Weeklies <span id="countdown-rs3weekly" class="countdown"></span></th>
-                        <td>
+                        <td colspan="2">
                             <span id="rs3weekly_totalprofit"></span>
                             <span class="text-nowrap">
                                 <button id="rs3weekly_reset_button"
                                     class="reset_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Reset hiding and order to default">↺<span
+                                    title="Reset hiding and order to default">&#8634;<span
                                         class="expanding_text">Reset</span></button>
                                 <button id="rs3weekly_show_hidden_button"
                                     class="show_hidden_button expanding_button btn btn-secondary btn-sm active"
                                     title="Show hidden rows">+<span class="expanding_text">Show Hidden</span></button>
                                 <button id="rs3weekly_hide_button"
                                     class="hide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Hide section">▲<span class="expanding_text">Hide</span></button>
+                                    title="Hide section">&#9660;<span class="expanding_text">Hide</span></button>
                                 <button id="rs3weekly_unhide_button"
                                     class="unhide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Unhide section">▼<span class="expanding_text">Unhide</span></button>
+                                    title="Unhide section">&#9654;<span class="expanding_text">Unhide</span></button>
                             </span>
                         </td>
                     </tr>
@@ -337,21 +337,21 @@
                 <thead>
                     <tr>
                         <th>Monthlies <span id="countdown-rs3monthly" class="countdown"></span></th>
-                        <td>
+                        <td colspan="2">
                             <span class="text-nowrap">
                                 <button id="rs3monthly_reset_button"
                                     class="reset_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Reset hiding and order to default">↺<span
+                                    title="Reset hiding and order to default">&#8634;<span
                                         class="expanding_text">Reset</span></button>
                                 <button id="rs3monthly_show_hidden_button"
                                     class="show_hidden_button expanding_button btn btn-secondary btn-sm active"
                                     title="Show hidden rows">+<span class="expanding_text">Show Hidden</span></button>
                                 <button id="rs3monthly_hide_button"
                                     class="hide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Hide section">▲<span class="expanding_text">Hide</span></button>
+                                    title="Hide section">&#9660;<span class="expanding_text">Hide</span></button>
                                 <button id="rs3monthly_unhide_button"
                                     class="unhide_button expanding_button btn btn-secondary btn-sm active"
-                                    title="Unhide section">▼<span class="expanding_text">Unhide</span></button>
+                                    title="Unhide section">&#9654;<span class="expanding_text">Unhide</span></button>
                             </span>
                         </td>
                     </tr>
@@ -366,13 +366,15 @@
             <td class="activity_name" draggable="false">
                 <a target="_blank" rel="noopener noreferrer" draggable="false">Name</a>
                 <button type="button" class="pin-button btn btn-secondary btn-sm active" title="Pin to Overview"
-                    aria-label="Pin to Overview">☆</button>
-                <button class="hide-button btn btn-danger btn-sm active" title="Hide row">⊘</button>
+                    aria-label="Pin to Overview">&#9734;</button>
+                <button class="hide-button btn btn-danger btn-sm active" title="Hide row">&times;</button>
             </td>
-            <td class="activity_color">
-                <span class="activity_check_off">☐</span>
-                <span class="activity_check_on">☑</span>
+            <td class="activity_notes">
                 <span class="activity_desc">&nbsp;</span>
+            </td>
+            <td class="activity_status">
+                <span class="activity_check_off">&#9744;</span>
+                <span class="activity_check_on">&#9745;</span>
             </td>
         </tr>
     </template>
@@ -499,7 +501,7 @@
 
     <script src="tasks-config.js"></script>
     <script src="farming-config.js"></script>
-    <script src="dailyscape.js?v=8"></script>
+    <script src="dailyscape.js?v=9"></script>
 </body>
 
 </html>

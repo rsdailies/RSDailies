@@ -35,10 +35,11 @@
             'farm-herbs',
             'Herb Run',
             'https://runescape.wiki/w/Herb_patch',
-            'Primary herb timer. Uses your 3-tick herb setting automatically.',
+            'Primary herb timer. Uses your Speedy Growth upgrade setting automatically.',
             {
               cycleMinutes: 20,
               stages: 4,
+              durationNote: 'Growth: 80 min base / 60 min with Speedy Growth',
               useHerbSetting: true,
               alertOnReady: true,
               autoClearOnReady: false,
@@ -72,6 +73,7 @@
             {
               cycleMinutes: 10,
               stages: 4,
+              durationNote: 'Growth: 40 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -83,7 +85,10 @@
           plot('allotment-falador', 'Falador', 'https://runescape.wiki/w/Allotment_patch'),
           plot('allotment-catherby', 'Catherby', 'https://runescape.wiki/w/Allotment_patch'),
           plot('allotment-ardougne', 'Ardougne', 'https://runescape.wiki/w/Allotment_patch'),
-          plot('allotment-port-phasmatys', 'Port Phasmatys', 'https://runescape.wiki/w/Allotment_patch')
+          plot('allotment-port-phasmatys', 'Port Phasmatys', 'https://runescape.wiki/w/Allotment_patch'),
+          plot('allotment-havenhythe', 'Havenhythe', 'https://runescape.wiki/w/Allotment_patch', {
+            locationNote: 'Havenhythe allotment patch.'
+          })
         ]
       },
 
@@ -100,6 +105,7 @@
             {
               cycleMinutes: 10,
               stages: 4,
+              durationNote: 'Growth: 40 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -128,6 +134,7 @@
             {
               cycleMinutes: 40,
               stages: 8,
+              durationNote: 'Growth: 320 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -149,6 +156,7 @@
             {
               cycleMinutes: 160,
               stages: 6,
+              durationNote: 'Growth: 960 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -171,6 +179,7 @@
             {
               cycleMinutes: 40,
               stages: 8,
+              durationNote: 'Growth: 320 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -191,6 +200,7 @@
             {
               cycleMinutes: 160,
               stages: 6,
+              durationNote: 'Growth: 960 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -208,6 +218,7 @@
             {
               cycleMinutes: 320,
               stages: 7,
+              durationNote: 'Growth: 2240 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -235,6 +246,7 @@
             {
               cycleMinutes: 20,
               stages: 4,
+              durationNote: 'Growth: 80 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -255,6 +267,7 @@
             {
               cycleMinutes: 80,
               stages: 1,
+              durationNote: 'Growth: 80 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -273,6 +286,7 @@
             {
               cycleMinutes: 40,
               stages: 6,
+              durationNote: 'Growth: 240 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -290,6 +304,7 @@
             {
               cycleMinutes: 20,
               stages: 4,
+              durationNote: 'Growth: 80 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -307,6 +322,7 @@
             {
               cycleMinutes: 80,
               stages: 6,
+              durationNote: 'Growth: 480 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -324,6 +340,7 @@
             {
               cycleMinutes: 320,
               stages: 7,
+              durationNote: 'Growth: 2240 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -341,6 +358,7 @@
             {
               cycleMinutes: 240,
               stages: 1,
+              durationNote: 'Growth: 240 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -358,6 +376,7 @@
             {
               cycleMinutes: 20,
               stages: 4,
+              durationNote: 'Growth: 80 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,
@@ -375,6 +394,7 @@
             {
               cycleMinutes: 20,
               stages: 4,
+              durationNote: 'Growth: 80 minutes',
               alertOnReady: true,
               autoClearOnReady: false,
               vanishOnStart: true,

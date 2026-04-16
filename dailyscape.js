@@ -92,15 +92,19 @@ function nextMonthlyBoundary(now = new Date()) {
 
 function formatCountdown(targetDate) {
   const diff = Math.max(0, targetDate.getTime() - Date.now());
-  const totalMinutes = Math.floor(diff / 60000);
+  return formatMinutesCountdown(Math.floor(diff / 60000));
+}
 
-  if (totalMinutes < 60) {
-    return `${totalMinutes}`;
+function formatMinutesCountdown(totalMinutes) {
+  const safeMinutes = Math.max(0, totalMinutes);
+
+  if (safeMinutes < 60) {
+    return `${safeMinutes}`;
   }
 
-  const days = Math.floor(totalMinutes / 1440);
-  const hours = Math.floor((totalMinutes % 1440) / 60);
-  const minutes = totalMinutes % 60;
+  const days = Math.floor(safeMinutes / 1440);
+  const hours = Math.floor((safeMinutes % 1440) / 60);
+  const minutes = safeMinutes % 60;
 
   if (days > 0) {
     return `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
@@ -111,16 +115,7 @@ function formatCountdown(targetDate) {
 
 function formatDurationMs(ms) {
   const clamped = Math.max(0, ms);
-  const totalMinutes = Math.floor(clamped / 60000);
-  const days = Math.floor(totalMinutes / 1440);
-  const hours = Math.floor((totalMinutes % 1440) / 60);
-  const minutes = totalMinutes % 60;
-
-  if (days > 0) {
-    return `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-  }
-
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  return formatMinutesCountdown(Math.floor(clamped / 60000));
 }
 
 function formatDateTimeLocal(ts) {
@@ -885,7 +880,7 @@ function appendRowText(desc, task, sectionKey) {
     const meta = document.createElement('span');
     meta.className = 'activity_note_line';
     meta.textContent = task.alertDaysBeforeReset > 0
-      ? `⚠ Do before reset: ${formatDateTimeLocal(target)}`
+      ? `\u26A0 Do before reset: ${formatDateTimeLocal(target)}`
       : `Reset: ${formatDateTimeLocal(target)}`;
     desc.appendChild(meta);
   }
@@ -895,8 +890,22 @@ function appendRowText(desc, task, sectionKey) {
     profit.className = 'item_profit';
     profit.dataset.item = task.profit.item;
     profit.dataset.qty = String(task.profit.qty);
-    profit.textContent = '…';
+    profit.textContent = '\u2026';
     desc.appendChild(profit);
+  }
+
+  if (task.durationNote) {
+    const durationLine = document.createElement('span');
+    durationLine.className = 'activity_duration_note';
+    durationLine.textContent = task.durationNote;
+    desc.appendChild(durationLine);
+  }
+
+  if (task.locationNote) {
+    const locationLine = document.createElement('span');
+    locationLine.className = 'activity_location_note';
+    locationLine.textContent = task.locationNote;
+    desc.appendChild(locationLine);
   }
 }
 
@@ -919,19 +928,22 @@ function createBaseRow(sectionKey, task, options = {}) {
   const nameLink = nameCell.querySelector('a');
   const pinBtn = nameCell.querySelector('.pin-button');
   const hideBtn = nameCell.querySelector('.hide-button');
-  const colorCell = row.querySelector('.activity_color');
+  const notesCell = row.querySelector('.activity_notes');
+  const statusCell = row.querySelector('.activity_status');
   const desc = row.querySelector('.activity_desc');
-  const checkOff = row.querySelector('.activity_check_off');
-  const checkOn = row.querySelector('.activity_check_on');
+  const checkOff = statusCell.querySelector('.activity_check_off');
+  const checkOn = statusCell.querySelector('.activity_check_on');
 
   attachTooltip(row, task);
-  attachTooltip(colorCell, task);
+  attachTooltip(notesCell, task);
+  attachTooltip(statusCell, task);
 
   if (renderNameOnRight) {
     nameLink.textContent = '';
     nameLink.href = '#';
     nameLink.addEventListener('click', (e) => e.preventDefault());
 
+    desc.textContent = '';
     const nameLine = document.createElement('span');
     nameLine.className = 'activity_note_line activity_child_name';
     nameLine.textContent = task.name;
@@ -960,7 +972,7 @@ function createBaseRow(sectionKey, task, options = {}) {
     const pins = getOverviewPins();
     const pinned = !!pins[pinId];
 
-    pinBtn.textContent = pinned ? '★' : '☆';
+    pinBtn.textContent = pinned ? '\u2605' : '\u2606';
     pinBtn.title = pinned ? 'Unpin from Overview' : 'Pin to Overview';
     pinBtn.setAttribute('aria-label', pinBtn.title);
 
@@ -1008,7 +1020,7 @@ function createBaseRow(sectionKey, task, options = {}) {
     renderApp();
   });
 
-  colorCell.addEventListener('click', (e) => {
+  const toggleTask = (e) => {
     e.preventDefault();
 
     const state = getTaskState(sectionKey, taskId, task);
@@ -1034,7 +1046,10 @@ function createBaseRow(sectionKey, task, options = {}) {
 
     setTaskCompleted(sectionKey, taskId, state !== 'true');
     renderApp();
-  });
+  };
+
+  notesCell.addEventListener('click', toggleTask);
+  statusCell.addEventListener('click', toggleTask);
 
   row.addEventListener('dragstart', () => {
     dragRow = row;
@@ -1097,7 +1112,9 @@ function makeCollapseButton(blockId) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'btn btn-secondary btn-sm mini-collapse-btn';
-  btn.textContent = isCollapsedBlock(blockId) ? '▼' : '▲';
+  const collapsed = isCollapsedBlock(blockId);
+  btn.textContent = collapsed ? '\u25B6' : '\u25BC';
+  btn.setAttribute('aria-label', collapsed ? 'Expand section' : 'Collapse section');
   btn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -1123,7 +1140,8 @@ function createHeaderRow(label, blockId, options = {}) {
   left.innerHTML = `<span class="header_like_text">${label}</span>`;
 
   const right = document.createElement('td');
-  right.className = 'activity_color header_like_color';
+  right.className = 'activity_notes header_like_color';
+  right.colSpan = 2;
 
   const rightInner = document.createElement('div');
   rightInner.className = 'header_like_inner';
@@ -1173,33 +1191,50 @@ function getFarmingHeaderStatus(task) {
   return running ? `Ready in ${formatDurationMs(running.readyAt - Date.now())}` : 'Start timer';
 }
 
+function formatFarmingDurationNote(timerTask) {
+  if (timerTask.durationNote) return timerTask.durationNote;
+
+  const cycleMinutes = Number(timerTask.cycleMinutes || 0);
+  const stages = Number(timerTask.stages || 1);
+
+  if (timerTask.useHerbSetting) {
+    const baseMinutes = cycleMinutes * stages;
+    const upgradedMinutes = cycleMinutes * 3;
+    return `Growth: ${baseMinutes} min base / ${upgradedMinutes} min with Speedy Growth`;
+  }
+
+  return cycleMinutes > 0 ? `Growth: ${cycleMinutes * stages} minutes` : '';
+}
+
+function buildFarmingLocationTask(timerTask, plotTask) {
+  const timers = getFarmingTimers();
+  const timer = timers[plotTask.id];
+  const status = timer ? `Ready in ${formatDurationMs(timer.readyAt - Date.now())}` : 'Start timer';
+
+  return {
+    id: plotTask.id,
+    name: plotTask.name,
+    wiki: plotTask.wiki || timerTask.wiki || '',
+    note: status,
+    durationNote: plotTask.durationNote || timerTask.durationNote || formatFarmingDurationNote(timerTask),
+    locationNote: plotTask.locationNote || '',
+    isTimerParent: true,
+    cycleMinutes: timerTask.cycleMinutes,
+    stages: timerTask.stages,
+    useHerbSetting: timerTask.useHerbSetting,
+    vanishOnStart: timerTask.vanishOnStart !== false,
+    timerKind: timerTask.timerKind || 'run',
+    alertOnReady: timerTask.alertOnReady,
+    autoClearOnReady: timerTask.autoClearOnReady
+  };
+}
+
 function renderGroupedFarming(tbody, groups) {
   const groupsById = new Map((Array.isArray(groups) ? groups : []).map((g) => [g.id, g]));
-  const timers = getFarmingTimers();
-
-  function makeLocationTimerTask(timerTask, plotTask) {
-    const timer = timers[plotTask.id];
-    const status = timer ? `Ready in ${formatDurationMs(timer.readyAt - Date.now())}` : 'Start timer';
-
-    return {
-      id: plotTask.id,
-      name: plotTask.name,
-      wiki: plotTask.wiki || timerTask.wiki || '',
-      note: status,
-      isTimerParent: true,
-      cycleMinutes: timerTask.cycleMinutes,
-      stages: timerTask.stages,
-      useHerbSetting: timerTask.useHerbSetting,
-      vanishOnStart: timerTask.vanishOnStart !== false,
-      timerKind: timerTask.timerKind || 'run',
-      alertOnReady: timerTask.alertOnReady,
-      autoClearOnReady: timerTask.autoClearOnReady
-    };
-  }
 
   function renderLocations(timerTask, plots) {
     (Array.isArray(plots) ? plots : []).forEach((plotTask) => {
-      const locTask = makeLocationTimerTask(timerTask, plotTask);
+      const locTask = buildFarmingLocationTask(timerTask, plotTask);
       tbody.appendChild(createRow('rs3farming', locTask, false, 'farming-location-row'));
     });
   }
@@ -1402,6 +1437,24 @@ function sectionLabel(sectionKey) {
   }[sectionKey] || sectionKey;
 }
 
+function flattenFarmingOverviewTasks(groups) {
+  const list = [];
+
+  (Array.isArray(groups) ? groups : []).forEach((group) => {
+    (Array.isArray(group.timers) ? group.timers : []).forEach((timerTask) => {
+      const plots = Array.isArray(timerTask.plots) && timerTask.plots.length
+        ? timerTask.plots
+        : (Array.isArray(group.plots) ? group.plots : []);
+
+      plots.forEach((plotTask) => {
+        list.push(buildFarmingLocationTask(timerTask, plotTask));
+      });
+    });
+  });
+
+  return list;
+}
+
 function formatOverviewCountdown(kind, targetMs) {
   const diff = targetMs - Date.now();
   if (diff <= 0) return kind === 'ready' ? 'Ready now' : 'Due now';
@@ -1426,6 +1479,7 @@ function collectOverviewItems(sections) {
 
   [
     ['custom', sections.custom],
+    ['rs3farming', flattenFarmingOverviewTasks(sections.rs3farming)],
     ['rs3daily', sections.rs3daily],
     ['gathering', sections.gathering],
     ['rs3weekly', sections.rs3weekly],
@@ -1487,9 +1541,7 @@ function collectOverviewItems(sections) {
 
 function applyPageModeVisibility(mode) {
   const panel = document.getElementById('overview-panel');
-  const tables = document.querySelector('.activity_tables');
-
-  if (!panel || !tables) return;
+  if (!panel) return;
 
   panel.dataset.view = mode;
 
@@ -1523,32 +1575,8 @@ function applyPageModeVisibility(mode) {
 }
 
 function ensureOverviewLayout() {
-  const panel = document.getElementById('overview-panel');
   const content = document.getElementById('overview-content');
-  if (!panel || !content) return null;
-
-  content.classList.remove('overview_content');
-
-  let summary = document.getElementById('overview-summary');
-  if (!summary) {
-    summary = document.createElement('div');
-    summary.id = 'overview-summary';
-    summary.className = 'overview_content';
-    content.prepend(summary);
-  }
-
-  [...content.children].forEach((child) => {
-    if (child !== summary && child.classList?.contains('overview_empty')) {
-      child.remove();
-    }
-  });
-
-  const tables = document.querySelector('.activity_tables');
-  if (tables && tables.parentElement !== content) {
-    content.appendChild(tables);
-  }
-
-  return summary;
+  return content || null;
 }
 
 function renderOverviewPanel(sections) {
@@ -1582,7 +1610,7 @@ function renderOverviewPanel(sections) {
 
     const meta = document.createElement('div');
     meta.className = 'overview_row_meta';
-    meta.textContent = `${sectionLabel(item.sectionKey)} • ${formatOverviewCountdown(item.kind, item.nextActionAtMs)}`;
+    meta.textContent = `${sectionLabel(item.sectionKey)} \u2022 ${formatOverviewCountdown(item.kind, item.nextActionAtMs)}`;
 
     row.appendChild(title);
     row.appendChild(meta);
@@ -1631,7 +1659,7 @@ function setupViewsControl() {
       const link = document.createElement('a');
       link.href = '#';
       link.className = 'profile-link';
-      link.textContent = view.mode === current ? `${view.label} (active)` : view.label;
+      link.textContent = view.label;
       link.addEventListener('click', (e) => {
         e.preventDefault();
         setPageMode(view.mode);

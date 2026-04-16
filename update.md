@@ -18,843 +18,829 @@ https://dailyscape.github.io
 
 ---
 
-Below is the strict handoff guide for your coder.
-I re-stabilized this against the current path you chose in chat: keep the static DailyScape-style architecture, keep the theme, keep the right-side utility buttons, keep the newer compact “Overview / All” style direction, and improve it instead of rewriting it. The original DailyScape repo is still a static site with no build step, centered on red/green right-column interactions, countdowns, localStorage persistence, drag-and-drop ordering, compact mode, and hide/show behavior, so that remains the baseline you should mirror where appropriate. (GitHub) The RuneScape Wiki’s API docs confirm Weird Gloop-backed endpoints are available for GE prices/history, Voice of Seren, Travelling Merchant stock, and news, which makes them good optional helper integrations later, not core dependencies. (RuneScape Wiki) For Penguins, the wiki says the activity involves 12 penguins weekly plus a Polar Bear, and the spawn-location content includes hint-style guidance; the spawn-location page also notes collaboration with the World60Pengs community, so that source is appropriate as an optional helper feed, not a hard dependency. (RuneScape Wiki) If you want the site at rsdailies.github.io, GitHub’s docs say the repository must be owned by the target user or organization and must be named exactly <user>.github.io or <organization>.github.io. (GitHub Docs)
+1. Correct. We need to fix this where Task Name and Notes are the two bigger ones (90% so 45/45% split) and checkbox is a small column width at 10% of it's original size so it's just a box that shows. I'm using percentages as examples but realistically should help make sense. Please understand I am giving examples, and things need to adhere to it's current size, and adjust all the same appropriately so things aren't butchered. we're just in relative terms shrinking them and then applying a task to the other side. 
+2. collapsed = ▲ - change this arrow to point to the right please. / when open and expanded = ▼
+3. They do! Just remove the (active) that appears in the menu near the one selected. 
+4. I've yet to check the pinned section yet and test that. 
+5. Timers feel right in the right spot now (visual ones). The timers for scripts and farming for example, I need a note to detail how long it takes in the new 3-column view so we can have a note about time length as well as any notes we extracted from the wiki for that location/city. 
+6. It is!
+7. I want this
 
-Non-negotiable rules
-Do not rewrite this into React, Vite, Tailwind, Next, or a backend app.
-Do not abandon the current theme.
-Do not turn the UI into cards.
-Do not break the original “left info / right interaction” visual language.
-Do not keep timers or floating checkbox text inside the wrong area.
-Do not reintroduce top tabs for section navigation once the new compact page-switcher is in.
-Do not make external APIs required for the app to function.
-Do not hardcode dynamic weekly penguin results into static config forever.
-Do not ship more behavior changes without verifying index.html, dailyscape.css, dailyscape.js, and the current live page together.
-Keep everything static-site compatible.
-The four references the coder must compare every time
-Your coder must open and compare these four references before touching layout behavior:
+- Some refresh buttons also don't work. We need a file by file top to button trouble shoot and debug to double check everything works accordingly. Same goes for some rows and favoriting and not syncing to the overview section up top. Farming is one of them that does not pin. 
 
-your current repo
-your current live site
-original DailyScape repo
-original DailyScape live behavior
-The purpose is not to clone blindly. It is to preserve the original interaction model while applying your intentional divergences.
+- collapsed = ▲ - change this arrow to point to the right please. 
+You stated this:
+Also, on the farming setting question: the RuneScape Wiki says herb patches normally grow in 4 × 20-minute cycles (80 minutes), reduced to 3 × 20-minute cycles (60 minutes) with the relevant upgrade, so if your farming table is now explicitly modeled per location/timer row, that old global toggle is no longer the best UI and can be removed.
 
-Current intentional divergences that must be preserved
-These are not regressions. They are intentional:
+So that means 3-tick setting should be renamed to the name of the upgrade itself so if turned on, it updates the timer settings. That makes more sense. 
 
-compact Overview/All-style shell direction
-right-side utility buttons stay
-top section tabs can be removed later
-menu-button-based page switching is preferred
-Farming is not flat; it is parent headers with child rows
-Penguins need child rows and notes
-child rows should render name/content on the right side
-cooldown buttons should be removed from visible UI
-timer rows should vanish while active and return when ready
-Overview should be empty until the user explicitly selects items into it
-row/header height should be denser than original
-Master execution order
-Do these in this order.
-Step 0: Freeze and verify baseline before changing anything
-Goal
-Make sure the coder is changing the real current state, not an older mental model.
+I WANT ALL THIS DONE IN ONE GO FOR EACH FILE SO WE CAN PUSH IT ALL AT ONCE AND THEN TEST AND FIX MORE PRECISELY. WHY ARE WE UPDATING A FILE JUST TO UPDATE IT AGAIN LATER
 
-Files
-index.html
-dailyscape.css
-dailyscape.js
-tasks-config.js
-farming-config.js
-Required checks
-open browser console
-verify there are no syntax errors
-verify current screenshot issues still match expectations
-verify current menu button and Overview/All shell exist
-verify the latest dailyscape.js already includes tooltip plumbing, farming header rows, and current penguin helper merge path
-Deliverable
-A short baseline note saved in the PR/commit description:
+You need to re-check my github state so you don't conflict with old logic and see where we've updated to. 
 
-what currently works
-what is still broken
-what this pass will and will not touch
-Step 1: Replace the top tabs with the new compact page-switch system
-Goal
-Move away from Custom Tasks / Farming / Dailies / Gathering / Weeklies / Monthlies top nav tabs.
-Keep:
+Can you make this a handoff report to give to claude to give me precisely file by file overwrite only, no other context needed, and just focus on these changes, things needed, things missing, issues still present. Give me a full repository review prior to handoff. Review every single file and make a task list of all fixes. If there is a way we can compress the main files and break them down into parent/subfolder heirarchy where we can split components for easier management and configurability, would be ideal. 
 
-More Resources dropdown
-right-side utility buttons
-Use:
+We need best practices forward, research HEAVY, code blocks, metadata, logic, context, explainations, subtasks and reasonings, everything. visuals included. Please re-research just my page and my github at this point. We've altered entirely away from the original clone by this point so we can solely focus on us now. I need additions, things to add that's runescape based. I need to double check and review and ensure we properly added all things. Please give me a grand report properly start to finish, all requests, restraints, mention subagent usage, tools, MCP servers, everything an AI can use (Claude and Codex precisely) to be able to fix, rebuild, revise, optimize, and fix and get us finished. We should be testing things, understanding we're on these two pages only so when I say things like git push and then review page, THAT is how we test as we dont have a local setup. We should include dev ways to be able to do more technical stuff and alleviate troubleshooting and debugging issues. Is there a way to fix this entire repository in a way while staying entirely intact 100% as it does cover 90% of everything we want, we're just hitting some bumps. 
 
-the existing menu/hamburger button style as the page switcher
-New model
-There should be a single “view selector” control using the menu button style.
-Pages/views:
+Like a buddy just told me there's a new allotment in Havenhythe I can add to the timer but I have zero idea. 
 
-Overview
-All
-Custom Tasks
-Farming
-Dailies
-Gathering
-Weeklies
-Monthlies
-Behavior
-Overview = only overview panel
-All = current stacked page
-section page = only that section + overview panel if desired
-More Resources remains top nav
-right-side utility buttons remain unchanged
-Files
-index.html
-dailyscape.js
-dailyscape.css
-Short-form code instructions
-Find the current top nav section links block in index.html.
-Replace the separate section links with a single dropdown/menu control.
-Find:
+My other buddy mentioned astroJS is pure HTML in a way, and probably way more easier with syntax and variables to be able to learn to code as a novice/non-coder aspect. Help fix, restructure, and re-design logic while keeping my web page entirely 100% intact the way it is other than the very specific and precise fixes we've requested. 
 
-<ul class="navbar-nav mr-auto">
-  ...
-  <a href="#custom-tasks" ...
-  <a href="#farming" ...
-  ...
-</ul>
-Change to:
+Below is the handoff report for Claude/Codex.
 
-<ul class="navbar-nav mr-auto">
-  <li class="nav-item dropdown">
-    <a class="nav-link expanding_button" href="#" id="page-menu-button" title="Pages">
-      ☰<span class="expanding_text">&nbsp;Pages</span>
-    </a>
-    <div id="page-menu-control" class="dropdown-menu-like" data-display="none">
-      <!-- Overview / All / Custom / Farming / Dailies / Gathering / Weeklies / Monthlies -->
-    </div>
-  </li>
+## Repository review summary
 
-  <li class="nav-item dropdown">
-    <!-- More Resources stays -->
-  </li>
-</ul>
-In dailyscape.js, add page-mode state:
-Find:
+Your current repo is now a **custom static-site fork**, not an “original parity” clone anymore. The live structure is centered on:
 
-function getViewMode() {
-  return load('viewMode', 'all');
-}
-Expand it to support:
+* `index.html`
+* `dailyscape.css`
+* `dailyscape.js`
+* `tasks-config.js`
+* `farming-config.js`
 
-overview
-all
-custom
-farming
-dailies
-gathering
-weeklies
-monthlies
-Add helper:
+The current `index.html` now has:
 
-function getPageMode() {
-  return load('pageMode', 'all');
-}
+* top nav with **RSDailies**, **More Resources**, and right-side utility buttons,
+* an **Overview** panel below the navbar,
+* stacked section tables below that,
+* row template with `pin-button`, `hide-button`, and right-column checkbox/description. 
 
-function setPageMode(mode) {
-  const allowed = ['overview', 'all', 'custom', 'farming', 'dailies', 'gathering', 'weeklies', 'monthlies'];
-  save('pageMode', allowed.includes(mode) ? mode : 'all');
-}
-In renderApp(), gate section rendering by page mode.
-Step 2: Make Overview actually good
-Goal
-Overview should not be an ugly placeholder. It should become a compact “Top 5 upcoming” board.
+The current `dailyscape.js` now already includes:
 
-Rules
-show nothing by default until user explicitly marks items for Overview
-show top 5 only
-show timer/due info
-show one note line if present
-show a clean compact row layout
-do not dump all tasks into Overview
-do not automatically fill Overview from every incomplete row
-Data model additions
-Add task flags:
+* page modes,
+* overview pinning,
+* grouped farming rendering,
+* grouped gathering rendering,
+* tooltip plumbing,
+* and a new `formatCountdown()` implementation that is already intended to output minute/hour/day formats instead of the old `HHH:MM:SS`. 
 
-showInOverview
-pinnedToOverview
-maybe overviewPriority
-Files
-tasks-config.js
-dailyscape.js
-dailyscape.css
-Short-form code instructions
-Find:
+The original DailyScape remains a static site, with the classic top tabs, red/green right-column interactions, localStorage persistence, drag/drop ordering, compact mode, and no build step. That is still useful as a historical interaction reference, but this fork has intentionally diverged. ([dailyscape.github.io][1])
 
-function collectOverviewItems() {
-  return [];
-}
-Replace with logic that:
+## Bottom line
 
-scans all sections
-includes only tasks where showInOverview === true
-sorts by next due time / active timer readiness
-returns 5 items max
-Structure:
+Do **not** rewrite the app from scratch.
+Do **not** migrate it yet.
+Do **not** switch frameworks right now.
 
-function collectOverviewItems(sections) {
-  const items = [];
-  // only include tasks explicitly opted in
-  // farming timers included only if opted in or active
-  // sort ascending by due timestamp
-  return items.slice(0, 5);
-}
-Update renderOverviewPanel() so rows render as:
+This repo is already **90% of the way there**. The right move is a controlled cleanup/refactor while preserving the current UI and behavior.
 
-title
-due/timer line
-optional note
-optional source badge (Daily / Weekly / Farming / Custom)
-CSS target
-Make Overview rows look like compact section rows, not plain stacked text blocks.
-Step 3: Fix the right-column layout parity issues still left
-Goal
-Mirror the original DailyScape row behavior more closely without losing your intended custom layout.
+---
 
-What is still wrong
-some checkbox text alignment still feels detached
-the white text and row wrapping still drift from the original
-child rows and subgroup rows are better now, but still need polish
-there are still places where the right-hand content feels like a box pasted on top instead of a native row
-Files
-dailyscape.css
-dailyscape.js
-Required rule
-Do not redesign. Compare directly with the original DailyScape behavior and fix the spacing/flow.
+# Non-negotiable constraints
 
-Short-form code instructions
-In CSS, compare and tune:
+1. Keep the site static.
+2. Keep the current visual theme.
+3. Keep the current URL structure and GitHub Pages deployment flow.
+4. Keep the Overview panel as an in-page shell.
+5. Keep More Resources in the top nav.
+6. Keep the right-side utility buttons.
+7. Do not reintroduce the original DailyScape top section tabs.
+8. Do not rewrite into React/Vite/Next just to “clean it up.”
+9. Do not break localStorage/profile/import-export behavior.
+10. Fix behavior with precise file edits and test by git push + live page review.
 
-.activity_table td.activity_color
-.activity_desc
-.activity_note_line
-.activity_table td.activity_name a
-subgroup/header-like rows
-Likely fix block:
+---
 
-.activity_table td.activity_color {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-}
+# Current confirmed user requirements
 
-.activity_desc {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-In JS, if floating checkbox persists, wrap right-side content in a dedicated inner container:
+## Navigation / layout
 
-const rightWrap = document.createElement('div');
-rightWrap.className = 'activity_right_inner';
-rightWrap.appendChild(checkOff);
-rightWrap.appendChild(checkOn);
-rightWrap.appendChild(desc);
-colorCell.innerHTML = '';
-colorCell.appendChild(rightWrap);
-Step 4: Finalize farming as parent-header timers with child rows only
-Goal
-Keep the direction you wanted and remove all remaining redundancy.
+* Top nav remains a **single header row**.
+* Overview remains inside the page below that header.
+* Background outside tables should be black.
+* More Resources stays in the top nav.
+* Right-side utility buttons stay in the top nav.
+* Views menu controls page modes:
 
-Final farming rules
-no redundant “Herb Timers” click row under a “HERB” header
-the header itself owns the timer
-child rows are the usable checklist rows
-child rows render name on right side
-left side is blacked out and inert for child rows
-subgroup headers for Trees/Specialty must collapse independently
-Files
-farming-config.js
-dailyscape.js
-dailyscape.css
-Short-form code instructions
-Find in renderGroupedFarming() any place where a separate parent task row is still inserted beneath the parent header.
-The target is:
+  * Overview
+  * All
+  * Custom Tasks
+  * Farming
+  * Dailies
+  * Gathering
+  * Weeklies
+  * Monthlies
 
-HERB header row with right-side timer state
-PLOTS / LOCATIONS subgroup row
-child rows only
-No additional “Herb Timers” row.
-If any remaining code builds a “timer row” beneath HERB, remove that row and put its click behavior into the header row’s right cell.
-Step 5: Make timer rows vanish and return correctly
-Goal
-This is one of your highest-priority behavior requests.
+## Single-page mode
 
-Required behavior
-For timer-based rows:
+When selecting a single page like Dailies:
 
-red = ready to start / not running
-clicking starts timer
-row vanishes while timer active
-row returns when timer expires
-For farming parent headers:
+* Overview stays at the top
+* only that section renders below it
+* remove `(active)` text from the Views menu entries
 
-parent header stays visible
-header timer state updates
-child rows may remain visible or collapse by preference
-the actual “run item” should not remain as a redundant visible row
-For generic cooldown-style tasks:
+## Countdown formatting
 
-if kept, they should also vanish while timer active and return when done
-do not show button clutter
-Files
-dailyscape.js
-Short-form code instructions
-Find:
+All visible countdowns must use:
 
-if (task.cooldownMinutes && !task.isChildRow) {
-  ...
-}
-Keep the hidden-on-active behavior, but remove any UI remnants that still imply button-based cooldown workflow.
-Use:
+* `Xd HH:MM` if >= 1 day
+* `HH:MM` if >= 1 hour and < 1 day
+* `MM` if < 1 hour
 
-if (task.cooldownMinutes) {
-  startCooldown(taskId, task.cooldownMinutes);
-  setTaskCompleted(sectionKey, taskId, true);
-  renderApp();
-  return;
-}
-And in getTaskState():
+No visible `HHH:MM:SS`.
 
-if (task?.cooldownMinutes) {
-  const cooldown = getCooldowns()[taskId];
-  if (cooldown && cooldown.readyAt > Date.now()) return 'hide';
-}
-This is the correct vanish/return mechanism for non-farming timer rows.
-Step 6: Finish penguin structure properly
-Goal
-Penguins should become a real weekly module, not just placeholder child rows.
+## Collapse arrows
 
-Facts to respect
-The activity revolves around 12 penguins weekly plus a Polar Bear, and the spawn-location references include hint/area guidance. (RuneScape Wiki)
+* **collapsed** = right arrow
+* **expanded/open** = down arrow
 
-Desired structure
-Penguins
-Penguin 1 … Penguin 12
-Polar Bear
-optional Shadow Realm row later
-each child row can show:
-current location
-disguise
-hint/area note
-manual checkbox
-Files
-tasks-config.js
-dailyscape.js
-new helper script later
-Short-form code instructions
-Keep tasks-config.js as the static fallback.
-Add a new file later:
+The RuneScape Wiki confirms herb patches normally grow in 4 × 20-minute cycles (80 minutes), reduced to 3 × 20-minute cycles (60 minutes) when the **Speedy Growth** upgrade is owned. That means the old “3-tick herbs” setting should be renamed to the actual upgrade name and treated as a real upgrade toggle. ([RuneScape Wiki][2])
 
-penguin-helper.js
-Purpose:
+## Row layout target
 
-fetch or ingest weekly penguin data
-merge into localStorage
-leave fallback rows intact if helper fails
-Helper merge shape:
+For normal rows:
 
-{
-  "penguin-1": { "name": "Penguin 1 - Al Kharid", "note": "Cactus, north of Shantay Pass hint..." },
-  ...
-}
-Use mergePenguinChildRows() as the merge point.
+* 3-column logic per task:
 
-Important rule
-Do not make the page depend on the helper site. The World60Pengs site is useful as a helper reference, not a guaranteed primary source. (jq.world60pengs.com)
-Step 7: Replace hover title with polished tooltip-only behavior everywhere
-Goal
-You already moved toward this. Finish it cleanly.
+  * Task Name
+  * Notes
+  * Checkbox
+* Relative target:
 
-Required behavior
-custom tooltip for rows and row names
-support multi-line notes
-work for child rows and parent rows
-no native browser title tooltip overlap
-Files
-dailyscape.js
-dailyscape.css
-Short-form code instructions
-Find any remaining direct title= writes and remove them in favor of attachTooltip().
-Add CSS for tooltip:
+  * name and notes are the large columns
+  * checkbox is a narrow fixed/small column
+* Do not butcher current sizing; just rebalance it cleanly.
 
-#tooltip {
-  position: absolute;
-  z-index: 9999;
-  max-width: 320px;
-  background: #121212;
-  color: #fff;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 8px 10px;
-  white-space: pre-line;
-  font-size: 0.85rem;
-  line-height: 1.2rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,.35);
-  pointer-events: none;
-}
-Step 8: Restructure the codebase into a template-first static architecture
-Goal
-Make this easier to expand without breaking existing behavior every time.
+## Farming
 
-New file architecture target
-Still static. Still no build step. But split responsibilities.
-Suggested target:
+* Farming location rows must support both:
 
-index.html
-dailyscape.css
-scripts/app-state.js
-scripts/render-core.js
-scripts/render-farming.js
-scripts/render-overview.js
-scripts/render-weeklies.js
-scripts/tooltip.js
-scripts/profiles.js
-scripts/settings.js
-scripts/import-export.js
-scripts/reset-logic.js
-scripts/penguin-helper.js
-config/tasks-config.js
-config/farming-config.js
-config/templates-config.js
-Why
-Your current single-file JS approach is already getting too large and fragile.
+  * duration/time-to-grow note
+  * location/city note
+* Farming pinning to Overview currently does not work correctly and must be fixed.
+* New farming locations should be easy to add in config, e.g. Havenhythe allotment.
 
-Restraint
-Still load them with multiple <script> tags. No bundler required.
-Step 9: Make the config schema actually template-friendly
-Goal
-Rows, headers, subheaders, child rows, notes, overview inclusion, and helper scripts should be data-driven.
+## Overview
 
-New schema pattern
-Instead of only:
+* Overview should only show pinned rows
+* top 5 only
+* cleaner display
+* verify sync from row pin → Overview works everywhere
 
-{ id, name, wiki, note, reset }
-Move toward:
+## Buttons / troubleshooting
 
+* some refresh buttons do not work consistently
+* pin/favorite syncing is inconsistent
+* need a full top-to-bottom repo troubleshooting pass
+
+## Penguins
+
+The RuneScape Wiki states Penguin Hide and Seek includes twelve disguised penguins plus a Polar Bear each week, and the wiki’s penguin content is maintained in collaboration with the World60Pengs community. ([RuneScape Wiki][3])
+That makes Penguins a valid helper-module target, but it should be built with:
+
+* graceful fallback
+* current-location updater
+* notes/hints/requirements support
+* frequent refresh with cache/rate-limit respect
+
+## APIs / helper scripts
+
+The RuneScape Wiki API docs say Weird Gloop-backed APIs expose GE data, Voice of Seren, Travelling Merchant stock, and more, and they explicitly ask for a **descriptive User-Agent** for automated tooling. ([RuneScape Wiki][4])
+
+---
+
+# Recommendation on Astro
+
+Astro is real static-first technology and uses an islands architecture that renders most content as static HTML with smaller interactive islands only where needed. ([Astro Docs][5])
+
+However:
+
+## Recommendation
+
+Do **not** migrate this repo to Astro right now.
+
+## Why
+
+* current app is already live and mostly working
+* current app is plain static HTML/CSS/JS
+* migration risk is high
+* behavior bugs are smaller than framework migration cost
+* you want to keep the page visually 100% intact
+
+## Future option
+
+Only consider Astro **after stabilization**, on a separate branch, and only if the goal is:
+
+* componentized templates
+* easier novice editing
+* more structured config-driven rendering
+
+For now, use a **static multi-file refactor inside the existing repo** instead.
+
+---
+
+# Required file-by-file work
+
+## FILE 1 — `index.html`
+
+### Goal
+
+Stabilize markup and header shell permanently.
+
+### Tasks
+
+1. Confirm the navbar closes **before** the Overview container.
+2. Keep top nav limited to:
+
+   * brand
+   * More Resources
+   * profile/settings/import-export buttons
+3. Keep Overview below nav as a page shell.
+4. Remove any dead/duplicate view controls outside the intended Overview panel control.
+5. Bump asset versions any time CSS/JS changes are pushed.
+
+### Specific checks
+
+* verify `</div></div></nav>` closes before:
+
+  ```html
+  <div class="container-xl">
+  ```
+* verify Overview panel is not nested inside navbar
+* verify no legacy compact-mode markup remains
+* verify no malformed table header lines remain
+
+### Also do
+
+Rename the farming settings label from:
+
+* `3-tick herb patches`
+  to:
+* `Speedy Growth upgrade`
+
+And update the help text or tooltip so the meaning is clear.
+
+---
+
+## FILE 2 — `dailyscape.css`
+
+### Goal
+
+Fix layout, column proportions, and row integrity.
+
+### Problems still present
+
+* row content is still too coupled to old red-cell text flow
+* checkbox column is not yet properly isolated visually
+* some note text still behaves like full red-cell content instead of a dedicated notes column
+* top page shell styling still needs cleanup alignment
+* collapse icon state styling still needs to match the final direction
+
+### Required changes
+
+#### A. Header shell
+
+* body background remains black
+* top nav remains one line
+* Overview panel stays visually inside page, not fused to nav
+* footer must not overlap content
+
+#### B. Row layout
+
+Refactor rows so each task visually behaves like:
+
+* column 1: task name
+* column 2: notes
+* column 3: checkbox
+
+#### C. Width guidance
+
+Use a layout close to:
+
+* name: ~45%
+* notes: ~45%
+* checkbox: ~10%
+
+Do not hardcode those exact percentages if the table needs slight adjustment. Preserve current page width and alignment.
+
+#### D. Checkbox column
+
+* narrow
+* stable
+* visually boxed
+* not floating in text
+* same sizing system everywhere
+
+#### E. Parent/subparent headers
+
+* left and right sides must share row color
+* no random black right cells unless intentionally a child-row style
+* collapse indicator aligned consistently
+
+#### F. Collapse icons
+
+Set visual states for:
+
+* collapsed = right arrow
+* expanded = down arrow
+
+#### G. Remove dead CSS
+
+Remove all remaining compact-mode CSS.
+Remove dead selectors for deleted controls.
+
+### Structural recommendation
+
+Convert `.activity_desc` from a “dump all content inside red column” model to a real grid/flex sublayout:
+
+* wrapper for notes
+* wrapper for checkbox
+* optional metadata lines below note title
+
+---
+
+## FILE 3 — `dailyscape.js`
+
+### Goal
+
+Fix logic, sync behavior, and standardize render flow.
+
+### Critical fixes
+
+#### A. Countdown format
+
+Even though current repo code already contains the intended formatter, verify the rendered output is actually using it everywhere. 
+
+Audit all countdown outputs:
+
+* Dailies
+* Gathering subgroup headers
+* Weeklies
+* Monthlies
+* Farming running timers
+* Overview countdown text
+
+Unify them under one shared formatter contract:
+
+* `Xd HH:MM`
+* `HH:MM`
+* `MM`
+
+#### B. Views menu
+
+* remove `(active)` suffix from selected item labels
+* keep page mode logic
+* confirm single-section rendering shows Overview first, then only selected section
+* ensure `Overview` mode hides section tables below
+
+#### C. Collapse arrows
+
+Change current collapse button text logic from:
+
+* collapsed = `▼`
+* expanded = `▲`
+
+to:
+
+* collapsed = `▶` or `▸`
+* expanded = `▼`
+
+That matches your requested “right when closed, down when open”.
+
+#### D. Overview pinning
+
+Fix Overview sync so pinning works for:
+
+* normal tasks
+* farming tasks
+* child rows if intended
+* custom tasks
+
+Current issue to troubleshoot:
+
+* farming rows not syncing into overview correctly
+
+#### E. Overview rendering
+
+Polish top 5 pinned rows:
+
+* title
+* section label
+* due/ready/reset time
+* note line
+* maybe task source badge
+
+#### F. Refresh button debugging
+
+Audit each section reset/refresh button:
+
+* custom
+* farming
+* dailies
+* gathering
+* weeklies
+* monthlies
+
+Verify each button still correctly resets:
+
+* hidden rows
+* sort state where intended
+* section state
+* running farming timers where intended
+
+#### G. Child row/farming row notes
+
+For farming location rows, show both:
+
+* growth time note
+* location/city note
+* optional wiki-derived tip/hint
+
+#### H. Settings rename
+
+Rename the old herb speed toggle to:
+
+* `Speedy Growth upgrade`
+
+And update logic so this setting feeds herb timing.
+
+#### I. Remove dead legacy logic
+
+Clean out any stale:
+
+* old compact mode hooks
+* old views-button hooks
+* duplicate view-mode migration remnants if no longer needed
+
+#### J. Render safety
+
+Current render path is large. Add guardrails:
+
+* no duplicated event listeners
+* no accidental DOM reparenting side effects
+* no panel/table nesting bugs
+* no row text leaking outside intended container
+
+---
+
+## FILE 4 — `tasks-config.js`
+
+### Goal
+
+Content cleanup + expandability.
+
+### Required tasks
+
+1. Review every configured task for:
+
+   * note quality
+   * reset type
+   * alert offsets
+   * overview suitability
+   * missing RuneScape-specific tasks
+
+2. Add or verify:
+
+   * missing current RS3 upkeep tasks
+   * missing D&D tasks
+   * missing common utility tasks
+
+3. For Penguins:
+
+   * static fallback child rows remain
+   * names/notes should be mergeable from helper script
+   * include hints/requirements schema support
+
+### Schema improvement
+
+Move toward richer task schema:
+
+```javascript
 {
   id,
-  type: 'task' | 'group' | 'child' | 'helper',
   name,
   wiki,
   note,
   reset,
   alertDaysBeforeReset,
-  showInOverview,
   cooldownMinutes,
-  children: [],
-  helper: null,
-  tags: [],
-  templateKey: null
+  section,
+  tags,
+  showInOverviewDefault,
+  helperKey,
+  requirements,
+  locationNote,
+  durationNote
 }
-Files
-tasks-config.js
-farming-config.js
-new templates-config.js
-Why
-You asked for a more templated file form with syntax and variables that make expansion easy.
-Step 10: Add templates properly
-Goal
-Support one-click setup for playstyles and routes.
+```
 
-Minimum initial templates
-Ironman essentials
-Shop run route
-Farming only
-D&D heavy
-Bossing upkeep
-Casual weeklys
-Completionist light
-Skillers
-Fort / Um upkeep
-Merchant / utility checker
-Implementation
-Create templates-config.js:
+---
 
-window.TEMPLATES_CONFIG = {
-  ironman_essentials: {
-    name: 'Ironman Essentials',
-    enableTasks: [...],
-    enableOverview: [...],
-    notes: {...}
-  }
-};
-Then add a template loader in Settings or Profiles.
-Step 11: Add helper-script imports cleanly
-Goal
-Support future scripts like penguin sync without hacking them into the main renderer.
+## FILE 5 — `farming-config.js`
 
-Pattern
-Each helper script should:
+### Goal
 
-fetch external data if available
-normalize the data
-save to localStorage
-trigger re-render
-fail silently without breaking app
-Files
-new scripts/penguin-helper.js
-future scripts/merchant-helper.js
-future scripts/vos-helper.js
-Helper contract
-window.RSDHelpers = {
-  refreshPenguins: async function () { ... }
-};
-Step 12: Make Overview / All / Section pages use one unified shell
-Goal
-You liked the compact style. Lean into it.
+Make farming easy to edit for non-coders.
 
-Final shell concept
-one compact page shell
-page selector via menu button
-top utility buttons stay
-More Resources stays
-same styled container for Overview, All, and single-section pages
-Why
-This is the best path forward that respects your requests without changing theme.
-Step 13: Improve section density without hurting clarity
-Goal
-Shrink page length a bit more while keeping legibility.
+### Required tasks
 
-Files
-dailyscape.css
-Short-form code instructions
-Tune:
+1. Add missing farming locations like Havenhythe as needed.
+2. Add explicit per-location metadata support:
 
-.activity_table td.activity_name
-.activity_table td.activity_color
-.header_like_name .header_like_text
-.activity_note_line
-.overview_row
-Reduce padding by roughly another 6–10%, not more.
-Step 14: Add real manual penguin updater UI before automation
-Goal
-Do not wait for automation to make Penguins useful.
+   * display name
+   * location note
+   * duration note
+   * wiki url
+3. Ensure all groupings are easy to read:
 
-UI idea
-In Settings or a helper panel:
+   * HERB
+   * ALLOTMENT
+   * HOPS
+   * TREES
+   * SPECIALTY
 
-“Paste this week’s penguin data”
-or edit current penguin child rows inline
-Why
-Manual override gives you utility immediately, while the helper script is still being built.
-Step 15: Add “show in overview” to rows
-Goal
-Nothing should appear in Overview until selected.
+### Schema target
 
-Required UI
-A small button on the left side of the remove-row button, as you requested.
+Use a template like:
 
-Behavior
-toggles showInOverview
-no task appears in Overview unless enabled
-task remains in its home section normally
-Files
-dailyscape.js
-dailyscape.css
-Short-form code instructions
-In row creation:
-
-const overviewBtn = document.createElement('button');
-overviewBtn.className = 'overview-pin-btn btn btn-secondary btn-sm';
-overviewBtn.textContent = '★';
-Store per-task:
-
-save(`overview:${sectionKey}`, {...});
-Step 16: Add optional 2-column layout for child-row-heavy sections only
-Goal
-You asked if a 2-column/row style could look cleaner.
-
-Recommendation
-Do not make everything 2-column globally yet.
-Do it selectively for:
-penguin child rows
-farming child rows
-maybe overview rows later
-Why
-Global 2-column conversion risks breaking parity and readability.
-Step 17: Get rsdailies.github.io properly
-Goal
-Move from project-page style to organization/user-page style if desired.
-
-Official requirement
-The repository must be owned by the target account/org and named exactly rsdailies.github.io. (GitHub Docs)
-
-Correct paths
-If using personal/project page:
-
-https://zahzr.github.io/RSDailies/
-If using org/user page:
-
-owner must be rsdailies
-repo must be rsdailies.github.io
-site publishes at https://rsdailies.github.io/
-Migration plan
-create org rsdailies if not already created
-create repo rsdailies.github.io
-copy site files there
-enable Pages on main / root
-verify index.html exists at repo root
-push site files
-wait for deployment
-optionally archive or redirect project-page repo
-Exact “find this / change this” task blocks
-Block A — replace top tabs with page menu
-Find the left-side nav section links in index.html and replace them with a single Pages menu control.
-
-Block B — add pageMode
-In dailyscape.js, add:
-
-function getPageMode() {
-  return load('pageMode', 'all');
+```javascript
+{
+  id: 'allotment-havenhythe',
+  name: 'Havenhythe',
+  wiki: '...',
+  locationNote: 'Teleport / route note',
+  durationNote: '80 minutes / affected by upgrade',
+  tags: ['allotment']
 }
+```
 
-function setPageMode(mode) {
-  const allowed = ['overview', 'all', 'custom', 'farming', 'dailies', 'gathering', 'weeklies', 'monthlies'];
-  save('pageMode', allowed.includes(mode) ? mode : 'all');
-}
-Block C — gate rendering by page mode
-In renderApp(), wrap section renders so only the selected page view renders.
+This avoids burying important notes in ad hoc strings.
 
-Block D — replace empty overview collector
-Find:
+---
 
-function collectOverviewItems() {
-  return [];
-}
-Change to a collector that only returns opted-in tasks and slices to 5.
+# Recommended repo refactor without changing the app
 
-Block E — add showInOverview
-In configs and custom task creation, add showInOverview: false.
+Do not switch frameworks yet.
+Instead, split the current large JS into static subfiles.
 
-Block F — add per-row overview toggle button
-In row creation, insert a button before hide/delete controls.
+## Recommended target structure
 
-Block G — finish tooltip-only behavior
-Remove remaining native title usage and standardize on attachTooltip() + #tooltip.
+```text
+/
+  index.html
+  dailyscape.css
+  /config
+    tasks-config.js
+    farming-config.js
+    templates-config.js
+  /scripts
+    app-state.js
+    render-core.js
+    render-overview.js
+    render-farming.js
+    render-gathering.js
+    render-weeklies.js
+    profiles.js
+    settings.js
+    import-export.js
+    tooltip.js
+    timers.js
+    helpers-penguins.js
+```
 
-Block H — move child-row name fully to right-side renderer
-Keep left side black/inert for child rows and right-side title+note stack.
+## Why
 
-Block I — split JS files
-Create /scripts/*.js modules and move code out of monolithic dailyscape.js by responsibility.
+* easier debugging
+* easier handoff to AI tools
+* easier grep/search
+* safer overwrite strategy
+* easier novice editing
 
-Block J — add templates-config.js
-Create a template registry file and wire a loader in Settings/Profile.
+## Constraint
 
-Block K — add penguin-helper.js
-Create helper contract:
+Keep it as multiple plain `<script>` includes.
+No build step required.
 
-window.RSDHelpers = {
-  refreshPenguins: async function () { ... }
-};
-Block L — add manual penguin updater fallback
-Add a settings/import textarea or JSON editor for weekly penguin data.
-QA checklist for the coder
-Structure
-Overview/All/Section page switching works
-top section tabs are gone
-More Resources still works
-right-side utility buttons still work
-Overview
-shows nothing until rows are opted in
-shows max 5 rows
-rows look clean
-note and due data render cleanly
-no placeholder ugliness
-Farming
-no redundant timer row under HERB / ALLOTMENT / HOPS
-header owns timer
-child rows are right-side checklist rows
-child rows left side is blacked out
-collapse buttons work for group and subgroup levels
-running timer rows vanish and return correctly where intended
-Penguins
-parent row exists
-child rows render
-notes display
-collapse works
-helper merge path works even if no live sync exists
-Layout
-right-column wrapping is clean
-checkbox no longer floats awkwardly
-section headers are denser
-subgroup rows are consistent
-compact mode still works
-Behavior
-hide/show hidden still works
-reset buttons still work
-profiles still work
-import/export still works
-custom tasks still work
-Hosting
-project page still works
-org/user page migration instructions are correct
-no build step introduced
-120 additional ideas
-per-row overview pin
-per-row overview priority
-per-profile overview presets
-overview badges by source
-overview sort by due time
-overview sort by reset type
-overview hide completed toggle
-overview farming-only filter
-overview D&D-only filter
-overview show notes inline toggle
-overview compact cards disabled by default
-overview mini timer chips
-profile-specific task packs
-profile-specific farming routes
-profile-specific penguin notes
-shared profile export
-JSON backup download
-JSON backup upload
-import validation preview
-config schema versioning
-migration helper for old storage keys
-“reset layout” button
-“reset all hidden rows” button
-“clear all timers” button
-per-section default collapsed state
-per-section remember collapse state
-child-row remember collapse state
-hover tooltip delay
-pinned notes on click
-note expand/collapse on rows
-wiki quick-open icon only on hover
-external-link button style parity
-task tags
-filter by tag
-search rows
-search child rows
-search notes
-route templates
-Ironman template
-main-account template
-skiller template
-D&D-heavy template
-farming-only template
-shop-run template
-boss upkeep template
-fort-forinthry template
-city-of-um template
-quest-lock awareness tags
-level-requirement note fields
-optional profit-only view
-optional utility-only view
-optional XP-only view
-optional account-goal packs
-task prerequisites field
-task unlock notes
-task location field
-task route group field
-route sequence numbering
-manual sort within child rows
-duplicate task detection
-broken link checker
-wiki link health checker
-task schema linter script
-farming schema linter script
-template schema linter script
-per-task icon support
-disguise icon support for penguins
-per-task difficulty flag
-per-task category color accents
-per-task “worth doing late” flag
-delay-aware alert copy
-“1 day early” presets
-“2 days early” presets
-monthly-value reminder presets
-merchant helper module
-VOS helper module
-GE price helper module
-Rune Goldberg helper later
-flash event helper later
-penguin helper importer
-penguin helper manual paste importer
-penguin hint autofill fields
-polar bear separate helper
-shadow realm toggle row
-world60pengs manual sync button
-last sync timestamp display
-stale helper data warning
-helper failure silent fallback
-helper caching
-helper refresh cooldown
-data provenance labels
-“official/wiki/community” source badges
-optional browser sound alert
-optional discord bot bridge later
-webhook info help text
-IndexedDB migration later
-external sync later
-public shared preset gallery later
-in-app template picker
-in-app template diff preview
-child-row bulk check
-child-row bulk uncheck
-“complete route” button
-farming run complete button
-herb route checklist ordering UI
-import/export farming route presets
-multi-account template packs
-compact mobile-first child row mode
-desktop split-panel mode later
-onboarding wizard
-first-run setup wizard
-“recommended tasks” suggestions
-release notes panel
-changelog modal
-README auto-generated from config
-issue-report link in footer
-debug mode toggle
-localStorage inspector panel
-performance telemetry debug only
-script registry for helper modules
-Recommended refactor target
-Do this after the page-switch and overview work:
+---
 
-Phase 1 split
-scripts/state.js
-scripts/render-main.js
-scripts/render-farming.js
-scripts/render-weeklies.js
-scripts/render-overview.js
-scripts/tooltip.js
-Phase 2 split
-scripts/helpers/penguins.js
-scripts/helpers/wiki.js
-scripts/helpers/weirdgloop.js
-Phase 3 config split
-config/tasks-config.js
-config/farming-config.js
-config/templates-config.js
-config/routes-config.js
-This keeps the current static model intact while making the app much safer to expand.
-If you want, I can turn this next into a coder-facing checklist formatted exactly as “Task / Files / Find / Replace / Test” so it can be followed linearly.
+# Suggested helper scripts
 
-- I updated the latest prompt (dailyscape.js) and git pushed. From this point on with our planning, please provide me a strict handoff guide, step by step, covering everything we're needing to still cover with detail, metadata, code, context, all detail, what to do, how, where, why, everything. I want to hand this off to my coder now. Give the fixes/blocks to change in short form where find this and change it to this block fix. Make sure to re-review the latest commit and changes to re-stabilize yourself. Audit our chat for anything missed in requests still, adhere to the things we did change or strayed from on purpose. Adhere to rules and restraints. Make these rules as well to review the specific 4 pages for copy/mirror as well as understanding where I'm at/have altered too. 
-- Please include additional ideas (at least 100)
-- We should optimize and improve, find ways to restructure it. Include ideas and suggestions to rewrite file(s) to achieve this.
-- We want more of a templated file form and theme with syntax and variables able to easily expand, add rows, headers, everything start to finish to be able to configure things, as well as utilize and import scripts like the penguin helper script we will need to make and implement to scrape/update/automatically fix the page to match among many other scripts and things we may need to make. 
-- Looking at my web page again, I really like the Overview/All style template you did. Are we able to actually just merge each sectioned Custom Tasks/Farming/Dailies/Gathering inside their own button/page the same way as Overview/All 
-- we can ultimately remove the header tabs off the top row Custom Tasks Farming Dailies Gathering Weeklies Monthlies since we have a more compacted view style and we can leave More Resources as the only thing left/how it is. 
-- We can leave the buttons on the right side as well as they're amazing. 
-- Change it from the Two buttons being visible like Overview/All and instead of adding all the others in this form, take the menu button we have in the header row, copy it, and use that to make an expandable row to select and switch. 
+## `helpers-penguins.js`
 
-We do NOT want to deter from our current theme and style. We want to just IMPROVE it. Only thing we are changing is what is stated in this prompt to adhere to the new compacted template style we got from Overview / All. 
+Purpose:
 
-- We need to fix the Overview page to adhere to the restraitns and ideas we suggested. 
-- It looks terrible in format first of all, needs massively improved.
-- It should only display Top 5 coming up showing their timer, as well as notes etc in a clean row format
-- None should appear prior to not selecting any off the new button we add to the left side of remove row button. 
+* ingest current penguin locations
+* merge names + notes into `penguinWeeklyData`
+* refresh every 1–5 minutes
+* fail gracefully
+* show last updated timestamp
+
+### Data source rules
+
+* prefer structured/fallback-safe source
+* use community/world60/wiki-derived mapping carefully
+* do not hard-fail if external source is down
+* cache last successful response
+* expose manual override UI
+
+## `helpers-weirdgloop.js`
+
+Purpose:
+
+* optional future support for:
+
+  * Travelling Merchant
+  * Voice of Seren
+  * GE utilities
+* set a descriptive User-Agent in any external tool or server-side fetch process, per wiki guidance. ([RuneScape Wiki][4])
+
+---
+
+# AI execution guidance for Claude / Codex
+
+Use this as the execution policy.
+
+## Allowed tools/workflows
+
+* GitHub MCP / GitHub integration for file reads/writes
+* browser automation for live-page inspection
+* grep/search across repo
+* HTML/CSS/JS static validation
+* small refactors only
+* incremental PRs / commits
+* screenshot-based UI verification
+* diff-based edits only
+
+## Use subagents / parallel workers for
+
+1. **layout audit subagent**
+
+   * inspect current HTML/CSS layout
+   * identify broken nesting/overflow issues
+
+2. **row renderer subagent**
+
+   * isolate row structure
+   * propose `name | notes | checkbox` render model
+
+3. **state/logic subagent**
+
+   * verify pinning, collapse, refresh, reset, timers
+
+4. **farming data subagent**
+
+   * normalize config schema
+   * add missing farming locations
+   * rename Speedy Growth setting logic
+
+5. **penguin helper subagent**
+
+   * define helper data model
+   * fetch/caching/manual override design
+
+6. **QA subagent**
+
+   * test each section after each commit
+   * verify live page after push
+
+## Do not let AI do this
+
+* no framework migration in the same pass
+* no global rewrite
+* no “cleanup” that changes UX without instruction
+* no replacing static site with SPA
+* no deleting localStorage schema without migration
+
+---
+
+# Testing workflow
+
+You said your real test loop is:
+
+* edit
+* git push
+* review live page
+
+So optimize for that.
+
+## Minimum workflow per change
+
+1. edit one file or one tightly related pair
+2. commit
+3. push
+4. open live site
+5. verify exact visual/behavior issue
+6. capture screenshot
+7. only then continue
+
+## Add this dev workflow too
+
+Even if you do not use it daily, include:
+
+* `python3 -m http.server 8000`
+* or equivalent static local server
+* Chrome DevTools
+* console error review
+* network tab check for stale assets
+* disable cache when devtools open
+* hard reload after pushing
+
+The original DailyScape repo documents a local setup path for development, but your fork no longer needs to follow its exact data-repo process unless you intentionally adopt their generated-data model. ([GitHub][6])
+
+---
+
+# Priority-ordered task list
+
+## P0 — must do next
+
+1. Fix row layout to `Task | Notes | Checkbox`
+2. Fix checkbox column sizing
+3. Remove `(active)` from Views menu
+4. Fix collapse arrow states to right/down
+5. Audit all refresh/reset buttons
+6. Fix farming pin-to-overview
+
+## P1
+
+7. Rename Speedy Growth setting
+8. Add duration/location notes to farming rows
+9. Verify all countdowns render correctly everywhere
+10. Clean Overview row rendering
+
+## P2
+
+11. Split JS into `/scripts`
+12. Enrich config schemas
+13. Add missing farming locations like Havenhythe
+14. Add manual penguin updater
+15. Add automated penguin helper with cache
+
+## P3
+
+16. Add more RS-specific templates
+17. Add richer helper integrations
+18. Consider Astro on a separate branch only after stabilization
+
+---
+
+# RuneScape-specific additions worth adding
+
+1. Havenhythe allotment if valid in your route
+2. more route notes per farming location
+3. requirement notes for penguins
+4. disguise/hint notes for penguins
+5. route templates:
+
+   * Ironman upkeep
+   * shop run
+   * farming route
+   * D&D weeklies
+   * PvM upkeep
+6. optional helper modules for:
+
+   * Travelling Merchant
+   * Voice of Seren
+   * GE utility rows
+7. optional “late-doing” task flags for activities like Herby Werby
+8. route-specific notes on shop runs and utility loops
+
+---
+
+# Final recommendation
+
+## Do this now
+
+Stay in the current stack.
+Refactor in place.
+Fix behavior first.
+Split files second.
+Add helpers third.
+
+## Do not do now
+
+Do not migrate to Astro yet.
+
+Astro is viable later because it preserves static-first rendering and can reduce JS sprawl with islands, but it is not the right move while you are still stabilizing row rendering, pins, timers, and layout fidelity. ([Astro Docs][5])
+
+---
+
+# Copy/paste instruction for Claude/Codex
+
+Use this exact objective:
+
+```text
+Review the current rsdailies/RSDailies repository as a live static GitHub Pages app. Do not rewrite frameworks. Do not change the visual theme. Keep the current page intact except for the specific fixes below.
+
+Primary goals:
+1. Fix row layout to Task | Notes | Checkbox, with checkbox as a narrow column.
+2. Remove (active) from Views menu.
+3. Ensure page modes render Overview first, then only the selected section.
+4. Set collapse icons to right-arrow when collapsed and down-arrow when expanded.
+5. Rename the herb-speed setting to Speedy Growth upgrade and wire it to herb timing.
+6. Fix farming and pinned-row sync into Overview.
+7. Audit and fix all refresh/reset buttons.
+8. Add farming row support for both duration notes and location/city notes.
+9. Keep site static and GitHub Pages compatible.
+10. Refactor the large JS into smaller /scripts files only if behavior remains identical.
+
+Work file by file. Prefer diff-based edits. After each change, state exactly which file changed and what to verify on the live page after git push.
+```
+
+If you want, I can next turn this into a **strict file-by-file overwrite checklist** for Claude, starting with `dailyscape.js`, then `dailyscape.css`, then `farming-config.js`.
+
+[1]: https://dailyscape.github.io/ "DailyScape - RS3 Dailies, Weeklies, Monthlies Task Checklist for RuneScape"
+[2]: https://runescape.wiki/w/Herb_patch?utm_source=chatgpt.com "Herb patch - The RuneScape Wiki"
+[3]: https://runescape.wiki/w/Distractions_and_Diversions/Locations/Penguin_Hide_and_Seek?utm_source=chatgpt.com "Penguin Hide and Seek - The RuneScape Wiki"
+[4]: https://runescape.wiki/w/RuneScape%3AAPIs?utm_source=chatgpt.com "Help:APIs - The RuneScape Wiki"
+[5]: https://docs.astro.build/en/concepts/islands/?utm_source=chatgpt.com "Islands architecture | Docs"
+[6]: https://github.com/dailyscape/dailyscape.github.io "GitHub - dailyscape/dailyscape.github.io: RS3 Dailies, Weeklies, Monthlies · GitHub"
