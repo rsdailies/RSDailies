@@ -65,17 +65,6 @@
                     </li>
                 </ul>
 
-                <ul class="navbar-nav nav-pills ms-auto nav-right">
-                    <li class="nav-item">
-                        <a class="nav-link expanding_button" href="#" id="views-button" title="Views" style="display:none; visibility:hidden;">
-                            ☰<span class="expanding_text">&nbsp;Views</span>
-                        </a>
-                        <div id="views-control" style="display:none; visibility:hidden;" data-display="none">
-                            <strong>Views</strong>
-                            <ul id="views-list"></ul>
-                        </div>
-                    </li>
-
                     <li class="nav-item dropdown">
                         <a class="nav-link expanding_button" href="#" id="profile-button" title="Profiles">
                             <span id="profile-name" style="display:none; visibility:hidden;"></span>㉾<span
@@ -155,12 +144,6 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link expanding_button" href="#" id="layout-button" title="Toggle Layout">
-                            ⊟ <span class="expanding_text"> Compact Mode</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
                         <a class="nav-link expanding_button" href="#" id="token-button" title="Import / Export"
                             data-bs-toggle="modal" data-bs-target="#token-modal">
                             🖪 <span class="expanding_text">&nbsp;Import / Export</span>
@@ -176,15 +159,18 @@
             <div class="overview_header">
                 <div class="overview_title">Overview</div>
                 <div class="overview_actions">
-                    <button id="views-button-panel" type="button"
-                        class="btn btn-secondary btn-sm expanding_button active" title="Views">
+                    <button id="views-button-panel" type="button" class="btn btn-secondary btn-sm expanding_button active" title="Views"
+                        aria-label="Open page views">
                         ☰<span class="expanding_text">&nbsp;Views</span>
                     </button>
                 </div>
+                
+                <div id="views-control" style="display:none; visibility:hidden;" data-display="none">
+                    <strong>Views</strong>
+                    <ul id="views-list"></ul>          
+                </div>
             </div>
             <div id="overview-content" class="overview_content">
-                <div class="overview_empty">Overview mode will be wired next.</div>
-            </div>
         </div>
     </div>
 
@@ -287,8 +273,7 @@
                 data-timeframe="gathering">
                 <thead>
                     <tr>
-                        <th>Gathering <span id="countdown-rs3dailyshops" class="countdown"></span> <span
-                                id="countdown-rs3weeklyshops" class="countdown"></span></th>
+                              <th>Gathering</th>                                id="countdown-rs3weeklyshops" class="countdown"></span></th>
                         <td>
                             <span id="gathering_totalprofit"></span>
                             <span class="text-nowrap">

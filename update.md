@@ -6,7 +6,7 @@ https://github.com/rsdailies/RSDailies
 
 ## My Website
 
-https://rsdailies.github.io/RSDailies/#custom-tasks
+https://rsdailies.github.io/RSDailies/
 
 ## Original/Cloned GitHub
 
