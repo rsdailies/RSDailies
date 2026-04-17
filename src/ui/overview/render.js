@@ -69,35 +69,21 @@ export function collectOverviewItems(sections, { getOverviewPins, load }) {
 
 export function applyPageModeVisibility(mode) {
   const dashboard = document.getElementById('dashboard-container');
-  const overview = document.getElementById('overview-container');
-  if (!dashboard || !overview) return;
+  const overviewMount = document.getElementById('overview-mount');
+
+  if (!dashboard || !overviewMount) return;
 
   if (mode === 'overview') {
     dashboard.style.display = 'none';
-    overview.style.display = 'block';
+    overviewMount.style.display = '';
   } else {
-    dashboard.style.display = 'block';
-    overview.style.display = 'none';
+    dashboard.style.display = '';
+    overviewMount.style.display = '';
   }
 }
 
 export function ensureOverviewLayout() {
-  let overview = document.getElementById('overview-container');
-  if (overview) return overview;
-
-  overview = document.createElement('div');
-  overview.id = 'overview-container';
-  overview.className = 'container mt-4';
-  overview.style.display = 'none';
-
-  const row = document.createElement('div');
-  row.className = 'row';
-  overview.appendChild(row);
-
-  const main = document.getElementById('dashboard-container')?.parentElement;
-  if (main) main.appendChild(overview);
-
-  return overview;
+  return document.getElementById('overview-content');
 }
 
 export function renderOverviewPanel(sections, {
@@ -112,27 +98,22 @@ export function renderOverviewPanel(sections, {
 }) {
   const mode = getPageMode();
   applyPageModeVisibility(mode);
-  if (mode !== 'overview') return;
 
   const overview = ensureOverviewLayout();
-  const row = overview.querySelector('.row');
-  row.innerHTML = '';
+  if (!overview) return;
+
+  overview.innerHTML = '';
+
+  if (mode !== 'overview') {
+    return;
+  }
 
   const items = collectOverviewItems(sections, { getOverviewPins, load });
 
   if (items.length === 0) {
-    row.innerHTML = '<div class="col-12"><div class="card rs3-card"><div class="card-body text-muted">No pinned items yet.</div></div></div>';
+    overview.innerHTML = '<div class="card rs3-card"><div class="card-body text-muted">No pinned items yet.</div></div>';
     return;
   }
-
-  const col = document.createElement('div');
-  col.className = 'col-12';
-
-  const card = document.createElement('div');
-  card.className = 'card rs3-card';
-
-  const body = document.createElement('div');
-  body.className = 'card-body p-0';
 
   const table = document.createElement('table');
   table.className = 'table table-dark table-hover rs3-table mb-0';
@@ -140,12 +121,10 @@ export function renderOverviewPanel(sections, {
   const tbody = document.createElement('tbody');
 
   items.forEach(({ task, sectionKey }) => {
-    tbody.appendChild(createRow(sectionKey, task, { context }));
+    const row = createRow(sectionKey, task, { context });
+    if (row) tbody.appendChild(row);
   });
 
   table.appendChild(tbody);
-  body.appendChild(table);
-  card.appendChild(body);
-  col.appendChild(card);
-  row.appendChild(col);
+  overview.appendChild(table);
 }

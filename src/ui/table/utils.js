@@ -1,9 +1,11 @@
+import { SECTION_CONTAINER_IDS, SECTION_TABLE_IDS } from '../../core/ids/section-ids.js';
+
 export function getContainerId(sectionKey) {
-  return `table-${sectionKey}`;
+  return SECTION_CONTAINER_IDS[sectionKey] || `table-${sectionKey}`;
 }
 
 export function getTableId(sectionKey) {
-  return `${sectionKey}-table`;
+  return SECTION_TABLE_IDS[sectionKey] || `${sectionKey}-table`;
 }
 
 export function slugify(input) {
@@ -34,7 +36,7 @@ export function applyOrderingAndSort(sectionKey, tasks, { load }) {
     });
   }
 
-  if (sort === 'wiki') {
+  if (sort === 'alpha' || sort === 'wiki') {
     results.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
   }
 
