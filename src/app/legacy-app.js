@@ -63,7 +63,6 @@ import {
   hideTask as hideTaskFeature
 } from '../features/sections/logic.js';
 
-// Bridge Imports
 import {
   load,
   save,
@@ -101,7 +100,7 @@ import { renderApp as renderAppCore } from './ui/render/orchestrator.js';
 
 /* -----------------------------
    Public API / Bridging
- ----------------------------- */
+----------------------------- */
 
 export function migrateLegacyViewModeToPageMode() { migrateLegacyViewModeToPageModeFeature(); }
 export function initProfileContext() { initProfileContextFeature(); }
@@ -128,7 +127,11 @@ export function checkAutoReset() {
 
 export function renderApp() {
   renderAppCore({
-    load, save, getSectionState, getCustomTasks, saveCustomTasks,
+    load,
+    save,
+    getSectionState,
+    getCustomTasks,
+    saveCustomTasks,
     cleanupReadyFarmingTimers: () => cleanupReadyFarmingTimersFeature({ load, save }),
     cleanupReadyCooldowns: () => cleanupReadyCooldownsFeature({ load, save }),
     hideTooltip: () => hideTooltipFeature(document),
@@ -145,50 +148,83 @@ export function renderApp() {
       return completed ? 'true' : 'false';
     },
     getResolvedSections: () => getResolvedSectionsFeature({
-      tasksConfig: TASKS_CONFIG, farmingConfig: FARMING_CONFIG, getCustomTasks, getPenguinWeeklyData: () => load('penguinWeeklyData', {})
+      tasksConfig: TASKS_CONFIG,
+      farmingConfig: FARMING_CONFIG,
+      getCustomTasks,
+      getPenguinWeeklyData: () => load('penguinWeeklyData', {})
     }),
-    getFarmingHeaderStatus: (t) => getFarmingHeaderStatus(t, { load }), hideTask: (key, id) => hideTaskFeature(key, id, { load, save }),
+    getFarmingHeaderStatus: (task) => getFarmingHeaderStatus(task, { load }),
+    hideTask: (key, id) => hideTaskFeature(key, id, { load, save }),
     setTaskCompleted: (key, id, c) => setTaskCompletedFeature(key, id, c, { load, save }),
     clearFarmingTimer: (id) => clearFarmingTimerFeature(id, { load, save }),
     startFarmingTimer: (t) => startFarmingTimerFeature(t, { load, save }),
     startCooldown: (id, m) => startCooldownFeature(id, m, { load, save }),
-    isCollapsedBlock, setCollapsedBlock, fetchProfits,
+    isCollapsedBlock,
+    setCollapsedBlock,
+    fetchProfits,
     updateProfileHeader: () => updateProfileHeaderFeatureBridged({ updateProfileHeaderFeature }),
     maybeNotifyTaskAlert: (t, k) => maybeNotifyTaskAlertFeature(t, k, { load, save }),
-    sectionLabel: (k) => k === 'custom' ? 'Custom Tasks' : (k === 'rs3farming' ? 'Farming Timers' : (k === 'rs3daily' ? 'Dailies' : (k === 'gathering' ? 'Gathering' : (k === 'rs3weekly' ? 'Weeklies' : 'Monthlies')))),
-    bindSectionControls, getPageMode: getPageModeFeature, getOverviewPins
+    sectionLabel: (k) =>
+      k === 'custom' ? 'Custom Tasks'
+        : k === 'rs3farming' ? 'Farming Timers'
+          : k === 'rs3daily' ? 'Dailies'
+            : k === 'gathering' ? 'Gathering'
+              : k === 'rs3weekly' ? 'Weeklies'
+                : 'Monthlies',
+    bindSectionControls,
+    getPageMode: getPageModeFeature,
+    getOverviewPins
   });
 }
 
 /* -----------------------------
    Controls Implementation
- ----------------------------- */
+----------------------------- */
 
 function bindSectionControls(sectionKey, opts = { sortable: false }) {
   bindSectionControlsFeature(sectionKey, opts, {
-    renderApp, getSectionState, saveSectionValue,
+    renderApp,
+    getSectionState,
+    saveSectionValue,
     resetSectionView: (key) => resetSectionViewFeature(key, { load, save, removeKey })
   });
 }
 
 export function setupProfileControl() {
-  setupProfileControlFeatureBridged({ setupProfileControlFeature, renderApp, closeFloatingControls: () => closeFloatingControlsFeature(document) });
+  setupProfileControlFeatureBridged({
+    setupProfileControlFeature,
+    renderApp,
+    closeFloatingControls: () => closeFloatingControlsFeature(document)
+  });
 }
 
 export function setupSettingsControl() {
-  setupSettingsControlFeatureBridged({ setupSettingsControlFeature, renderApp, closeFloatingControls: () => closeFloatingControlsFeature(document) });
+  setupSettingsControlFeatureBridged({
+    setupSettingsControlFeature,
+    renderApp,
+    closeFloatingControls: () => closeFloatingControlsFeature(document)
+  });
 }
 
 export function setupViewsControl() {
-  setupViewsControlFeatureBridged({ setupViewsControlFeature, renderApp, closeFloatingControls: () => closeFloatingControlsFeature(document) });
+  setupViewsControlFeatureBridged({
+    setupViewsControlFeature,
+    renderApp,
+    closeFloatingControls: () => closeFloatingControlsFeature(document)
+  });
 }
 
 export function setupGlobalClickCloser() {
-  setupGlobalClickCloserFeatureBridged({ closeFloatingControls: () => closeFloatingControlsFeature(document) });
+  setupGlobalClickCloserFeatureBridged({
+    closeFloatingControls: () => closeFloatingControlsFeature(document)
+  });
 }
 
 export function setupImportExport() {
-  setupImportExportFeature({ buildExportTokenFeature: () => buildExportTokenFeature(localStorage), importProfileToken: (t) => importProfileToken(t, localStorage) });
+  setupImportExportFeature({
+    buildExportTokenFeature: () => buildExportTokenFeature(localStorage),
+    importProfileToken: (t) => importProfileToken(t, localStorage)
+  });
 }
 
 export function setupCustomAdd() {
@@ -196,13 +232,11 @@ export function setupCustomAdd() {
 }
 
 export function setupSectionBindings() {
-  ['custom', 'rs3farming', 'rs3daily', 'gathering', 'rs3weekly', 'rs3monthly'].forEach(key => bindSectionControls(key, { sortable: true }));
+  ['custom', 'rs3farming', 'rs3daily', 'gathering', 'rs3weekly', 'rs3monthly'].forEach((key) =>
+    bindSectionControls(key, { sortable: true })
+  );
 }
 
-/**
- * Standard initialization sequence for the DailyScape application.
- * Called after the LayoutLoader has prepared the DOM.
- */
 export function initAppRoot() {
   initProfileContext();
   migrateLegacyViewModeToPageMode();
@@ -224,15 +258,17 @@ export function initAppRoot() {
 async function fetchProfits() {
   const nodes = [...document.querySelectorAll('.item_profit[data-item][data-qty]')];
   if (!nodes.length) return;
-  const items = [...new Set(nodes.map(n => n.dataset.item).filter(Boolean))];
+  const items = [...new Set(nodes.map((n) => n.dataset.item).filter(Boolean))];
   try {
     const res = await fetch(`https://runescape.wiki/api.php?action=ask&query=[[Exchange:${items.join('||Exchange:')}]]|?Exchange:Price&format=json&origin=*`);
     const results = (await res.json())?.query?.results || {};
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       const price = results[`Exchange:${node.dataset.item}`]?.printouts?.['Exchange:Price']?.[0]?.num;
       node.textContent = price ? ` ~${Math.round(price * parseInt(node.dataset.qty, 10)).toLocaleString()} gp` : '';
     });
-  } catch { nodes.forEach(n => n.textContent = ''); }
+  } catch {
+    nodes.forEach((n) => n.textContent = '');
+  }
 }
 
 export { cleanupReadyFarmingTimersFeature as cleanupReadyFarmingTimers, cleanupReadyCooldownsFeature as cleanupReadyCooldowns };
