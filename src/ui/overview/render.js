@@ -121,7 +121,12 @@ export function renderOverviewPanel(sections, {
   const tbody = document.createElement('tbody');
 
   items.forEach(({ task, sectionKey }) => {
-    const row = createRow(sectionKey, task, { context });
+    const row = createRow(sectionKey, task, {
+      context: {
+        ...context,
+        isOverviewPanel: true
+      }
+    });
     if (row) tbody.appendChild(row);
   });
 

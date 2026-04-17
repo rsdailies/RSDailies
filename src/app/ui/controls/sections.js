@@ -1,6 +1,23 @@
 /**
  * Controls for individual sections (reset, visibility, sort, etc.)
  */
+
+function rebindButton(documentRef, id, onClick) {
+  const existing = documentRef.getElementById(id);
+  if (!existing) return null;
+
+  const replacement = existing.cloneNode(true);
+  existing.replaceWith(replacement);
+
+  replacement.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onClick(event);
+  });
+
+  return replacement;
+}
+
 export function bindSectionControls(sectionKey, opts = { sortable: false }, deps) {
   const {
     renderApp,
@@ -10,48 +27,29 @@ export function bindSectionControls(sectionKey, opts = { sortable: false }, deps
     documentRef = document
   } = deps;
 
-  const resetBtn = documentRef.getElementById(`${sectionKey}_reset_button`);
-  const showHiddenBtn = documentRef.getElementById(`${sectionKey}_show_hidden_button`);
-  const hideBtn = documentRef.getElementById(`${sectionKey}_hide_button`);
-  const unhideBtn = documentRef.getElementById(`${sectionKey}_unhide_button`);
-  const sortBtn = documentRef.getElementById(`${sectionKey}_sort_button`);
+  rebindButton(documentRef, `${sectionKey}_reset_button`, () => {
+    resetSectionView(sectionKey);
+    renderApp();
+  });
 
-  if (resetBtn) {
-    resetBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      resetSectionView(sectionKey);
-      renderApp();
-    });
-  }
+  rebindButton(documentRef, `${sectionKey}_show_hidden_button`, () => {
+    const next = !getSectionState(sectionKey).showHidden;
+    saveSectionValue(sectionKey, 'showHidden', next);
+    renderApp();
+  });
 
-  if (showHiddenBtn) {
-    showHiddenBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const next = !getSectionState(sectionKey).showHidden;
-      saveSectionValue(sectionKey, 'showHidden', next);
-      renderApp();
-    });
-  }
+  rebindButton(documentRef, `${sectionKey}_hide_button`, () => {
+    saveSectionValue(sectionKey, 'hideSection', true);
+    renderApp();
+  });
 
-  if (hideBtn) {
-    hideBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      saveSectionValue(sectionKey, 'hideSection', true);
-      renderApp();
-    });
-  }
+  rebindButton(documentRef, `${sectionKey}_unhide_button`, () => {
+    saveSectionValue(sectionKey, 'hideSection', false);
+    renderApp();
+  });
 
-  if (unhideBtn) {
-    unhideBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      saveSectionValue(sectionKey, 'hideSection', false);
-      renderApp();
-    });
-  }
-
-  if (sortBtn && opts.sortable) {
-    sortBtn.addEventListener('click', (e) => {
-      e.preventDefault();
+  if (opts.sortable) {
+    rebindButton(documentRef, `${sectionKey}_sort_button`, () => {
       const current = getSectionState(sectionKey).sort;
       const next = current === 'default' ? 'alpha' : 'default';
       saveSectionValue(sectionKey, 'sort', next);

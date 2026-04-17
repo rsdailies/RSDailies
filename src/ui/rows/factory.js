@@ -14,6 +14,50 @@ function childStorageKey(sectionKey, parentId, childId) {
   return `${sectionKey}::${parentId}::${childId}`;
 }
 
+function appendWeeklyCollapseButton(nameCell, task, context = {}) {
+  const {
+    isCollapsedBlock,
+    setCollapsedBlock,
+    renderApp
+  } = context;
+
+  if (!Array.isArray(task?.children) || task.children.length === 0) return;
+  if (!nameCell || !isCollapsedBlock || !setCollapsedBlock || !renderApp) return;
+
+  const blockId = `row-collapse-${task.id}`;
+  const collapsed = isCollapsedBlock(blockId);
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-secondary btn-sm mini-collapse-btn';
+  btn.textContent = collapsed ? '\u25B6' : '\u25BC';
+  btn.title = collapsed ? 'Expand child rows' : 'Collapse child rows';
+  btn.setAttribute('aria-label', btn.title);
+
+  btn.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setCollapsedBlock(blockId, !isCollapsedBlock(blockId));
+    renderApp();
+  });
+
+  nameCell.appendChild(btn);
+}
+
+export function persistOrderFromTable(sectionKey, { getTableId, save }) {
+  if (!getTableId || !save) return;
+
+  const table = document.getElementById(getTableId(sectionKey));
+  const tbody = table?.querySelector('tbody');
+  if (!tbody) return;
+
+  const order = [...tbody.querySelectorAll('tr[data-id]')]
+    .map((tr) => tr.dataset.id)
+    .filter(Boolean);
+
+  save(`order:${sectionKey}`, order);
+}
+
 export function createBaseRow(sectionKey, task, options = {}) {
   const {
     isCustom = false,
@@ -35,25 +79,34 @@ export function createBaseRow(sectionKey, task, options = {}) {
     setTaskCompleted,
     clearFarmingTimer,
     startFarmingTimer,
-    startCooldown
+    startCooldown,
+    getTableId,
+    isOverviewPanel = false
   } = context;
 
   const taskId = customStorageId || task.id;
-  const row = cloneRowTemplate();
+  const row = cloneRowTemplate?.();
+  if (!row) return null;
+
   row.dataset.id = taskId;
   row.dataset.completed = getTaskState(sectionKey, taskId, task);
 
   if (extraClass) row.classList.add(extraClass);
+  if (isOverviewPanel) row.classList.add('overview-row');
 
   const nameCell = row.querySelector('.activity_name');
-  const nameLink = nameCell.querySelector('a');
-  const pinBtn = nameCell.querySelector('.pin-button');
-  const hideBtn = nameCell.querySelector('.hide-button');
+  const nameLink = nameCell?.querySelector('a');
+  const pinBtn = nameCell?.querySelector('.pin-button');
+  const hideBtn = nameCell?.querySelector('.hide-button');
   const notesCell = row.querySelector('.activity_notes');
   const statusCell = row.querySelector('.activity_status');
   const desc = row.querySelector('.activity_desc');
-  const checkOff = statusCell.querySelector('.activity_check_off');
-  const checkOn = statusCell.querySelector('.activity_check_on');
+  const checkOff = statusCell?.querySelector('.activity_check_off');
+  const checkOn = statusCell?.querySelector('.activity_check_on');
+
+  if (!nameCell || !nameLink || !notesCell || !statusCell || !desc || !checkOff || !checkOn) {
+    return row;
+  }
 
   attachTooltipFeature(row, task);
   attachTooltipFeature(notesCell, task);
@@ -85,8 +138,10 @@ export function createBaseRow(sectionKey, task, options = {}) {
     attachTooltipFeature(nameLink, task);
   }
 
+  appendWeeklyCollapseButton(nameCell, task, context);
+
   const actions = createInlineActions(task, isCustom);
-  if (actions) desc.appendChild(actions);
+  if (actions && !isOverviewPanel) desc.appendChild(actions);
 
   if (pinBtn) {
     const pinId = taskId.includes('::') ? taskId : `${sectionKey}::${taskId}`;
@@ -113,33 +168,39 @@ export function createBaseRow(sectionKey, task, options = {}) {
     });
   }
 
-  hideBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (isCustom) {
-      if (!confirm(`Delete custom task "${task.name}"?`)) return;
-
-      const next = getCustomTasksFeature(load).filter((t) => t.id !== task.id);
-      saveCustomTasksFeature(next, save);
-
-      const completed = load('completed:custom', {});
-      const hiddenRows = load('hiddenRows:custom', {});
-      const notified = load('notified:custom', {});
-
-      delete completed[task.id];
-      delete hiddenRows[task.id];
-      delete notified[task.id];
-
-      save('completed:custom', completed);
-      save('hiddenRows:custom', hiddenRows);
-      save('notified:custom', notified);
+  if (hideBtn) {
+    if (isOverviewPanel) {
+      hideBtn.style.display = 'none';
     } else {
-      hideTask(sectionKey, taskId);
-    }
+      hideBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-    renderApp();
-  });
+        if (isCustom) {
+          if (!confirm(`Delete custom task "${task.name}"?`)) return;
+
+          const next = getCustomTasksFeature(load).filter((t) => t.id !== task.id);
+          saveCustomTasksFeature(next, save);
+
+          const completed = load('completed:custom', {});
+          const hiddenRows = load('hiddenRows:custom', {});
+          const notified = load('notified:custom', {});
+
+          delete completed[task.id];
+          delete hiddenRows[task.id];
+          delete notified[task.id];
+
+          save('completed:custom', completed);
+          save('hiddenRows:custom', hiddenRows);
+          save('notified:custom', notified);
+        } else {
+          hideTask(sectionKey, taskId);
+        }
+
+        renderApp();
+      });
+    }
+  }
 
   const toggleTask = (e) => {
     e.preventDefault();
@@ -172,26 +233,28 @@ export function createBaseRow(sectionKey, task, options = {}) {
   notesCell.addEventListener('click', toggleTask);
   statusCell.addEventListener('click', toggleTask);
 
-  row.addEventListener('dragstart', () => {
-    dragRow = row;
-    row.classList.add('dragging');
-  });
+  if (!isOverviewPanel) {
+    row.addEventListener('dragstart', () => {
+      dragRow = row;
+      row.classList.add('dragging');
+    });
 
-  row.addEventListener('dragend', () => {
-    row.classList.remove('dragging');
-    dragRow = null;
-    persistOrderFromTable(sectionKey, { getTableId, save });
-  });
+    row.addEventListener('dragend', () => {
+      row.classList.remove('dragging');
+      dragRow = null;
+      persistOrderFromTable(sectionKey, { getTableId, save });
+    });
 
-  row.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    if (!dragRow || dragRow === row) return;
+    row.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!dragRow || dragRow === row) return;
 
-    const tbody = row.parentElement;
-    const rect = row.getBoundingClientRect();
-    const insertAfter = (e.clientY - rect.top) > rect.height / 2;
-    tbody.insertBefore(dragRow, insertAfter ? row.nextSibling : row);
-  });
+      const tbody = row.parentElement;
+      const rect = row.getBoundingClientRect();
+      const insertAfter = (e.clientY - rect.top) > rect.height / 2;
+      tbody.insertBefore(dragRow, insertAfter ? row.nextSibling : row);
+    });
+  }
 
   if (renderNameOnRight) {
     checkOff.style.display = '';
@@ -199,18 +262,6 @@ export function createBaseRow(sectionKey, task, options = {}) {
   }
 
   return row;
-}
-
-export function persistOrderFromTable(sectionKey, { getTableId, save }) {
-  const table = document.getElementById(getTableId(sectionKey));
-  const tbody = table?.querySelector('tbody');
-  if (!tbody) return;
-
-  const order = [...tbody.querySelectorAll('tr[data-id]')]
-    .map((tr) => tr.dataset.id)
-    .filter(Boolean);
-
-  save(`order:${sectionKey}`, order);
 }
 
 export function createRow(sectionKey, task, options = {}) {

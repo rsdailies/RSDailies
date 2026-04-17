@@ -39,18 +39,20 @@ function setSectionHiddenState(sectionKey, hidden) {
   if (unhideBtn) unhideBtn.style.display = hidden ? '' : 'none';
 }
 
-/**
- * Recovery behavior:
- * For any non-overview page mode, show the full dashboard.
- * This avoids stale legacy pageMode values like "gathering" or "custom"
- * trapping the UI into only one visible section while the new views system
- * is still being stabilized.
- */
 function setSectionModeVisibility(sectionKey, mode) {
   const { container } = getSectionElements(sectionKey);
   if (!container) return false;
 
-  const shouldShow = mode !== 'overview';
+  let shouldShow = true;
+
+  if (mode === 'overview') {
+    shouldShow = false;
+  } else if (mode === 'all') {
+    shouldShow = true;
+  } else {
+    shouldShow = sectionKey === mode;
+  }
+
   container.style.display = shouldShow ? '' : 'none';
   return shouldShow;
 }
@@ -176,7 +178,8 @@ export function renderApp(deps) {
     startCooldown,
     getTableId: (sectionKey) => SECTION_TABLE_IDS[sectionKey],
     isCollapsedBlock,
-    setCollapsedBlock
+    setCollapsedBlock,
+    getPageMode
   };
 
   const sections = getResolvedSections();
@@ -262,7 +265,10 @@ export function renderApp(deps) {
     ensureOverviewLayout: () => document.getElementById('overview-content'),
     collectOverviewItems,
     createRow,
-    context: uiContext
+    context: {
+      ...uiContext,
+      isOverviewPanel: true
+    }
   });
 
   fetchProfits();
