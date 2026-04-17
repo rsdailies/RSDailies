@@ -12,11 +12,11 @@
 
     <meta name="description"
         content="Self-hosted RS3 task tracker. Custom tasks, farming, dailies, gathering, weeklies, and monthlies with profiles and reset timers.">
-    <link rel="stylesheet" href="/src/styles/index.css">
+
+    <link rel="stylesheet" href="../styles/index.css">
 </head>
 
 <body id="app">
-    <!-- Main UI Mount Points -->
     <nav id="main-nav" class="navbar nav-pills fixed-top navbar-expand-lg navbar-dark bg-dark"></nav>
 
     <div class="container-xl" id="overview-mount"></div>
@@ -27,26 +27,24 @@
 
     <footer id="main-footer"></footer>
 
-    <!-- Modals Mount -->
     <div id="modals-mount">
         <div id="token-modal" class="modal fade" tabindex="-1"></div>
         <div id="custom-task-modal" class="modal fade" tabindex="-1"></div>
     </div>
 
-    <!-- Templates Mount -->
     <template id="sample_row"></template>
 
     <div id="tooltip" style="display:none; visibility:hidden;"></div>
 
-    <!-- The Loader script will populate the mounts before initializing the app -->
     <script type="module">
         import { loadLayout } from '../ui/layout/loader.js';
-        import { initAppRoot } from '../app/legacy-app.js';
+        import { bootstrapApp } from '../app/bootstrap.js';
 
         async function bootstrap() {
             await loadLayout();
-            initAppRoot();
+            bootstrapApp();
         }
+
         bootstrap();
     </script>
 </body>
