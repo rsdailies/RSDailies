@@ -137,8 +137,8 @@ export function renderApp() {
       if (state.hiddenRows[id]) return 'hide';
       if (task?.cooldownMinutes && (getCooldowns()[id]?.readyAt > Date.now())) return 'hide';
       if (key === 'rs3farming' && task?.isTimerParent) {
-          const running = !!getFarmingTimers()[id];
-          return (running && task.vanishOnStart && !state.showHidden) ? 'hide' : (running ? 'running' : 'idle');
+        const running = !!getFarmingTimers()[id];
+        return (running && task.vanishOnStart && !state.showHidden) ? 'hide' : (running ? 'running' : 'idle');
       }
       const completed = !!state.completed[id];
       if (completed && task?.reset && !state.showHidden) return 'hide';
@@ -147,13 +147,12 @@ export function renderApp() {
     getResolvedSections: () => getResolvedSectionsFeature({
       tasksConfig: TASKS_CONFIG, farmingConfig: FARMING_CONFIG, getCustomTasks, getPenguinWeeklyData: () => load('penguinWeeklyData', {})
     }),
-    getFarmingHeaderStatus: (t) => getFarmingHeaderStatus(t),
-    hideTask: (key, id) => hideTaskFeature(key, id, { load, save }),
+    getFarmingHeaderStatus: (t) => getFarmingHeaderStatus(t, { load }), hideTask: (key, id) => hideTaskFeature(key, id, { load, save }),
     setTaskCompleted: (key, id, c) => setTaskCompletedFeature(key, id, c, { load, save }),
     clearFarmingTimer: (id) => clearFarmingTimerFeature(id, { load, save }),
     startFarmingTimer: (t) => startFarmingTimerFeature(t, { load, save }),
     startCooldown: (id, m) => startCooldownFeature(id, m, { load, save }),
-    isCollapsedBlock, setCollapsedBlock, fetchProfits, 
+    isCollapsedBlock, setCollapsedBlock, fetchProfits,
     updateProfileHeader: () => updateProfileHeaderFeatureBridged({ updateProfileHeaderFeature }),
     maybeNotifyTaskAlert: (t, k) => maybeNotifyTaskAlertFeature(t, k, { load, save }),
     sectionLabel: (k) => k === 'custom' ? 'Custom Tasks' : (k === 'rs3farming' ? 'Farming Timers' : (k === 'rs3daily' ? 'Dailies' : (k === 'gathering' ? 'Gathering' : (k === 'rs3weekly' ? 'Weeklies' : 'Monthlies')))),
