@@ -54,7 +54,6 @@
     gap: 8px;
 }
 
-/* catch static parent-header button wrappers too */
 .activity_table thead .header_like_inner>div[style*="position:absolute"],
 .activity_table thead td.header_like_color>div>div[style*="position:absolute"] {
     right: 30px !important;
@@ -83,7 +82,6 @@
     white-space: nowrap;
 }
 
-/* main parent headers */
 .activity_table thead td.header_like_color,
 .farming-parent-row td,
 .farming-group-row td {
@@ -93,7 +91,6 @@
     border-radius: 0 !important;
 }
 
-/* farming subgroup headers use same darker header color */
 .farming-subgroup-row td,
 .farming-timer-subgroup-row td,
 .farming-plain-subgroup-row td {
@@ -103,7 +100,6 @@
     border-radius: 0 !important;
 }
 
-/* weekly and gathering subgroups stay slightly lighter */
 .weekly-subgroup-row td,
 .gathering-group-row td,
 .gathering-subgroup-row td {
@@ -124,7 +120,6 @@
     font-size: 0.98rem;
 }
 
-/* black gap under only main section headers */
 .table_container>.activity_table>thead {
     position: relative;
 }
@@ -140,7 +135,6 @@
     pointer-events: none;
 }
 
-/* collapsed/hidden parent sections: only bottom-most visible one gets the curve */
 .table_container.visible-hidden-section:not(.last-visible-section) .activity_table thead td:first-child {
     border-bottom-left-radius: 0 !important;
 }
@@ -159,19 +153,16 @@
     overflow: hidden;
 }
 
-/* reduce stacked hidden-section gap on tasks page */
 .table_container[data-hide="hide"] {
     margin-bottom: 6px;
 }
 
-/* open parent sections stay square */
 .table_container.visible-open-section .activity_table thead td:first-child,
 .table_container.visible-open-section .activity_table thead td:last-child {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
 
-/* normal body rows inset slightly */
 .activity_table tbody tr:not(.farming-parent-row):not(.farming-group-row):not(.farming-subgroup-row):not(.weekly-subgroup-row):not(.gathering-group-row):not(.gathering-subgroup-row) td:first-child {
     border-left: 14px solid #000 !important;
     background-clip: padding-box;
@@ -182,7 +173,6 @@
     background-clip: padding-box;
 }
 
-/* subgroup headers inset to match row width */
 .activity_table tbody tr.farming-subgroup-row td:first-child,
 .activity_table tbody tr.weekly-subgroup-row td:first-child,
 .activity_table tbody tr.gathering-group-row td:first-child,
@@ -199,7 +189,6 @@
     background-clip: padding-box;
 }
 
-/* clean gap between subgroup header and its rows */
 .activity_table tbody tr.farming-subgroup-row+tr td,
 .activity_table tbody tr.weekly-subgroup-row+tr td,
 .activity_table tbody tr.gathering-group-row+tr td,
@@ -208,33 +197,21 @@
     background-clip: padding-box;
 }
 
-/* tiny split gap before next subgroup header */
-.activity_table tbody tr:has(+ tr.farming-subgroup-row) td,
-.activity_table tbody tr:has(+ tr.weekly-subgroup-row) td,
-.activity_table tbody tr:has(+ tr.gathering-group-row) td,
-.activity_table tbody tr:has(+ tr.gathering-subgroup-row) td {
+.activity_table tbody tr.subsection-end-row td {
     border-bottom: 5px solid #000 !important;
     background-clip: padding-box;
 }
 
-/* curve the final row before the next subgroup header */
-.activity_table tbody tr:has(+ tr.farming-subgroup-row) td:first-child,
-.activity_table tbody tr:has(+ tr.weekly-subgroup-row) td:first-child,
-.activity_table tbody tr:has(+ tr.gathering-group-row) td:first-child,
-.activity_table tbody tr:has(+ tr.gathering-subgroup-row) td:first-child {
+.activity_table tbody tr.subsection-end-row td:first-child {
     border-bottom-left-radius: 14px !important;
     overflow: hidden;
 }
 
-.activity_table tbody tr:has(+ tr.farming-subgroup-row) td:last-child,
-.activity_table tbody tr:has(+ tr.weekly-subgroup-row) td:last-child,
-.activity_table tbody tr:has(+ tr.gathering-group-row) td:last-child,
-.activity_table tbody tr:has(+ tr.gathering-subgroup-row) td:last-child {
+.activity_table tbody tr.subsection-end-row td:last-child {
     border-bottom-right-radius: 14px !important;
     overflow: hidden;
 }
 
-/* keep headers square by default */
 .activity_table thead tr td,
 .activity_table tbody tr.farming-parent-row td,
 .activity_table tbody tr.farming-group-row td,
@@ -245,7 +222,16 @@
     border-radius: 0 !important;
 }
 
-/* last real row of any visible section gets the curved bottom */
+.activity_table tbody tr.collapsed-subgroup-row td:first-child {
+    border-bottom-left-radius: 14px !important;
+    overflow: hidden;
+}
+
+.activity_table tbody tr.collapsed-subgroup-row td:last-child {
+    border-bottom-right-radius: 14px !important;
+    overflow: hidden;
+}
+
 .table_container .activity_table tbody tr:last-child td:first-child {
     border-bottom-left-radius: 14px !important;
     overflow: hidden;
@@ -256,31 +242,6 @@
     overflow: hidden;
 }
 
-/* collapsed weekly/gathering subgroup headers should curve */
-.activity_table tbody tr.weekly-subgroup-row:not(:has(+ tr.weekly-child-row)) td:first-child,
-.activity_table tbody tr.gathering-group-row:not(:has(+ tr:not(.gathering-group-row):not(.gathering-subgroup-row))) td:first-child,
-.activity_table tbody tr.gathering-subgroup-row:not(:has(+ tr:not(.gathering-subgroup-row))) td:first-child {
-    border-bottom-left-radius: 14px !important;
-    overflow: hidden;
-}
-
-.activity_table tbody tr.weekly-subgroup-row:not(:has(+ tr.weekly-child-row)) td:last-child,
-.activity_table tbody tr.gathering-group-row:not(:has(+ tr:not(.gathering-group-row):not(.gathering-subgroup-row))) td:last-child,
-.activity_table tbody tr.gathering-subgroup-row:not(:has(+ tr:not(.gathering-subgroup-row))) td:last-child {
-    border-bottom-right-radius: 14px !important;
-    overflow: hidden;
-}
-
-/* if a subgroup has visible children below it, keep it square */
-.activity_table tbody tr.farming-subgroup-row:has(+ tr.farming-child-row) td,
-.activity_table tbody tr.weekly-subgroup-row:has(+ tr.weekly-child-row) td,
-.activity_table tbody tr.gathering-group-row:has(+ tr:not(.gathering-group-row):not(.gathering-subgroup-row)) td,
-.activity_table tbody tr.gathering-subgroup-row:has(+ tr:not(.gathering-subgroup-row)) td {
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-/* custom empty row should match inset body width and curved bottom */
 .activity_table tbody tr.custom-empty-row td {
     border-left: 14px solid #000 !important;
     border-right: 14px solid #000 !important;
@@ -290,17 +251,7 @@
     overflow: hidden;
 }
 
-/* disable hover-created layout jitter around rows/gaps */
-.activity_table tbody tr:hover td.activity_name a::after {
-    display: none !important;
-}
-
-.activity_table tbody tr:hover,
-.activity_table tbody tr:focus-within {
-    transform: none !important;
-}
-
-/* farming child hover-only controls */
+/* remove duplicate farming-only hover system and defer to controls.css */
 .farming-child-row td.activity_name {
     background: #3a4048 !important;
     box-shadow: inset 0 0 0 9999px #3a4048 !important;
@@ -322,26 +273,9 @@
 }
 
 .farming-child-row td.activity_name button.pin-button,
-.farming-child-row td.activity_name button.hide-button {
-    display: inline-flex !important;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    align-items: center;
-    justify-content: center;
-}
-
-.farming-child-row:hover td.activity_name button.pin-button,
-.farming-child-row:hover td.activity_name button.hide-button,
-.farming-child-row:focus-within td.activity_name button.pin-button,
-.farming-child-row:focus-within td.activity_name button.hide-button {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
+.farming-child-row td.activity_name button.hide-button,
 .farming-child-row td.activity_name button.delete-button {
-    display: none !important;
+    display: inline-flex !important;
 }
 
 .farming-child-row td.activity_notes,
@@ -369,7 +303,15 @@
     margin-top: 0;
 }
 
-/* completed rows stay red when they reappear */
+.activity_table tbody tr:hover,
+.activity_table tbody tr:focus-within,
+.activity_table tbody tr:hover td,
+.activity_table tbody tr:focus-within td,
+.activity_table tbody tr:hover td *,
+.activity_table tbody tr:focus-within td * {
+    transform: none !important;
+}
+
 .activity_table tr[data-completed="true"] .activity_notes,
 .activity_table tr[data-completed="true"] .activity_status,
 .activity_table tr:hover[data-completed="true"] .activity_notes,

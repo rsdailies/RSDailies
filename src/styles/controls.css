@@ -150,7 +150,7 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
     color: #fff;
 }
 
-/* stable row action layout to prevent hover jitter */
+/* stable row action layout across all pages/rows */
 .activity_table td.activity_name {
     position: relative;
     overflow: visible;
@@ -165,11 +165,7 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
     z-index: 120;
-    transition: opacity 120ms ease, visibility 120ms ease;
 }
 
 .activity_table td.activity_name button.hide-button {
@@ -184,6 +180,16 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
     right: 76px;
 }
 
+/* default hidden state without relayout */
+.activity_table td.activity_name button.pin-button,
+.activity_table td.activity_name button.hide-button,
+.activity_table td.activity_name button.delete-button {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 120ms ease;
+}
+
 .activity_table tbody tr:hover td.activity_name button.pin-button,
 .activity_table tbody tr:hover td.activity_name button.hide-button,
 .activity_table tbody tr:hover td.activity_name button.delete-button,
@@ -195,13 +201,33 @@ div.table_container[data-show-hidden="true"] .show_hidden_button {
     pointer-events: auto;
 }
 
-/* do not let hover outlines/underlines create layout jumps */
+/* never let hover/focus styling move rows */
+.activity_table tbody tr,
+.activity_table tbody td,
+.activity_table tbody td * {
+    transform: none;
+}
+
+.activity_table tbody tr:hover,
+.activity_table tbody tr:focus-within {
+    transform: none !important;
+}
+
 .activity_table td.activity_name a,
 .activity_table td.activity_name a:hover,
 .activity_table td.activity_name a:focus,
 .activity_table td.activity_name a:active {
-    text-decoration-thickness: 0;
-    text-underline-offset: 0;
+    text-decoration: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.activity_table td.activity_name a::after,
+.activity_table td.activity_name a:hover::after,
+.activity_table td.activity_name a:focus::after,
+.activity_table td.activity_name a:active::after {
+    content: none !important;
+    display: none !important;
 }
 
 .activity_table tbody tr,

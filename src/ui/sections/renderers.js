@@ -131,16 +131,41 @@ function restoreHiddenRow(sectionKey, taskId, context) {
   context.renderApp?.();
 }
 
-function markLastRow(rows) {
-  if (!Array.isArray(rows) || rows.length === 0) return;
-  const last = rows[rows.length - 1];
-  if (last) last.classList.add('subsection-end-row');
-}
-
 function appendRows(tbody, rows) {
   rows.forEach((row) => {
     if (row) tbody.appendChild(row);
   });
+}
+
+function markLastVisibleRow(rows) {
+  if (!Array.isArray(rows) || rows.length === 0) return;
+  rows[rows.length - 1].classList.add('subsection-end-row');
+}
+
+function makeFarmingChildStorageId(timerTaskId, plotId) {
+  return `rs3farming::${timerTaskId}::${plotId}`;
+}
+
+function collectFarmingGroupTaskIds(group) {
+  const ids = [];
+  const subgroups = Array.isArray(group?.subgroups) ? group.subgroups : [];
+
+  subgroups.forEach((subgroup) => {
+    if (subgroup?.isTimer && subgroup?.timerTask) {
+      const timerTaskId = subgroup.timerTask.id;
+      const plots = Array.isArray(subgroup.plots) ? subgroup.plots : [];
+      plots.forEach((plot) => {
+        ids.push(makeFarmingChildStorageId(timerTaskId, plot.id));
+      });
+      return;
+    }
+
+    if (Array.isArray(subgroup?.tasks)) {
+      subgroup.tasks.forEach((task) => ids.push(task.id));
+    }
+  });
+
+  return ids;
 }
 
 export function renderStandardSection(tbody, sectionKey, tasks, {
@@ -158,7 +183,7 @@ export function renderStandardSection(tbody, sectionKey, tasks, {
     if (row) rows.push(row);
   });
 
-  markLastRow(rows);
+  markLastVisibleRow(rows);
   appendRows(tbody, rows);
 }
 
@@ -188,13 +213,17 @@ export function renderWeekliesWithChildren(tbody, tasks, {
     const blockId = `row-collapse-${task.id}`;
     if (isCollapsedBlock(blockId)) return;
 
-    task.children.forEach((child, idx, arr) => {
+    const childRows = [];
+    task.children.forEach((child) => {
       const childRow = createRightSideChildRow('rs3weekly', child, task.id, {
-        extraClass: `weekly-child-row ${idx === arr.length - 1 ? 'subsection-end-row' : ''}`,
+        extraClass: 'weekly-child-row',
         context
       });
-      if (childRow) normalRows.push(childRow);
+      if (childRow) childRows.push(childRow);
     });
+
+    markLastVisibleRow(childRows);
+    normalRows.push(...childRows);
   });
 
   appendRows(tbody, normalRows);
@@ -230,18 +259,19 @@ export function renderWeekliesWithChildren(tbody, tasks, {
   if (collapsed) return;
 
   const penguinRows = [];
-  penguinTask.children.forEach((child, idx, arr) => {
+  penguinTask.children.forEach((child) => {
     const childRow = createRow('rs3weekly', {
       ...child,
       wiki: child.wiki || penguinTask.wiki || ''
     }, {
-      extraClass: `weekly-child-row ${idx === arr.length - 1 ? 'subsection-end-row' : ''}`,
+      extraClass: 'weekly-child-row',
       context
     });
 
     if (childRow) penguinRows.push(childRow);
   });
 
+  markLastVisibleRow(penguinRows);
   appendRows(tbody, penguinRows);
 }
 
@@ -294,19 +324,17 @@ export function renderGroupedGathering(tbody, tasks, {
     if (collapsed) return;
 
     const rows = [];
-    groupTasks.forEach((task, idx) => {
+    groupTasks.forEach((task) => {
       const row = createRow('gathering', task, { context });
-      if (row) {
-        if (idx === groupTasks.length - 1) row.classList.add('subsection-end-row');
-        rows.push(row);
-      }
+      if (row) rows.push(row);
     });
 
+    markLastVisibleRow(rows);
     appendRows(tbody, rows);
   });
 }
 
-function renderFarmingTimerGroupAsSingleHeader(tbody, group, subgroup, subgroupIndex, subgroups, helpers) {
+function renderFarmingSingleTimerGroup(tbody, group, subgroup, helpers) {
   const {
     isCollapsedBlock,
     getFarmingHeaderStatus,
@@ -319,19 +347,18 @@ function renderFarmingTimerGroupAsSingleHeader(tbody, group, subgroup, subgroupI
   } = helpers;
 
   const timerTask = subgroup.timerTask;
-  const childBlockId = `group-collapse-rs3farming-${group.id}`;
-  const collapsed = isCollapsedBlock(childBlockId);
+  const blockId = `group-collapse-rs3farming-single-${group.id}`;
+  const collapsed = isCollapsedBlock(blockId);
   const plotIds = (Array.isArray(subgroup.plots) ? subgroup.plots : [])
-    .map((plot) => `rs3farming::${timerTask.id}::${plot.id}`);
+    .map((plot) => makeFarmingChildStorageId(timerTask.id, plot.id));
   const restoreOptions = buildRestoreEntries('rs3farming', plotIds, context);
   const headerStatus = getFarmingHeaderStatus?.(timerTask) || { note: '', state: 'idle' };
 
-  const groupHeader = createHeaderRow(
+  const headerRow = createHeaderRow(
     centeredHeaderLabel(group.name),
-    childBlockId,
+    blockId,
     {
-      className: `farming-group-row farming-parent-row ${collapsed || subgroupIndex === subgroups.length - 1 ? 'subgroup-last-row' : ''
-        } ${collapsed ? 'collapsed-subgroup-row' : ''}`,
+      className: `farming-group-row farming-parent-row ${collapsed ? 'collapsed-subgroup-row subgroup-last-row' : ''}`,
       rightText: getRenderableHeaderStatus(headerStatus),
       onResetClick: () => {
         context.clearFarmingTimer?.(timerTask.id);
@@ -355,7 +382,7 @@ function renderFarmingTimerGroupAsSingleHeader(tbody, group, subgroup, subgroupI
     }
   );
 
-  tbody.appendChild(groupHeader);
+  tbody.appendChild(headerRow);
 
   if (collapsed) return;
 
@@ -363,15 +390,14 @@ function renderFarmingTimerGroupAsSingleHeader(tbody, group, subgroup, subgroupI
   const plots = Array.isArray(subgroup.plots) ? subgroup.plots : [];
   const rows = [];
 
-  plots.forEach((plot, idx) => {
+  plots.forEach((plot) => {
     const childTask = buildFarmingLocationTask(plot, timerTask, durationNote);
-
     const childRow = createRightSideChildRow(
       'rs3farming',
       childTask,
       timerTask.id,
       {
-        extraClass: `farming-child-row ${idx === plots.length - 1 ? 'subsection-end-row' : ''}`,
+        extraClass: 'farming-child-row',
         context
       }
     );
@@ -379,6 +405,7 @@ function renderFarmingTimerGroupAsSingleHeader(tbody, group, subgroup, subgroupI
     if (childRow) rows.push(childRow);
   });
 
+  markLastVisibleRow(rows);
   appendRows(tbody, rows);
 }
 
@@ -395,7 +422,7 @@ export function renderGroupedFarming(tbody, groups, {
 }) {
   if (!tbody) return;
 
-  groups.forEach((group) => {
+  groups.forEach((group, groupIndex, allGroups) => {
     const subgroups = Array.isArray(group.subgroups) ? group.subgroups : [];
 
     if (
@@ -403,7 +430,7 @@ export function renderGroupedFarming(tbody, groups, {
       subgroups[0]?.isTimer &&
       subgroups[0]?.timerTask
     ) {
-      renderFarmingTimerGroupAsSingleHeader(tbody, group, subgroups[0], 0, subgroups, {
+      renderFarmingSingleTimerGroup(tbody, group, subgroups[0], {
         isCollapsedBlock,
         getFarmingHeaderStatus,
         formatFarmingDurationNote,
@@ -416,14 +443,40 @@ export function renderGroupedFarming(tbody, groups, {
       return;
     }
 
-    const groupBlockId = `group-collapse-rs3farming-${group.id}`;
+    const groupBlockId = `group-collapse-rs3farming-parent-${group.id}`;
     const groupCollapsed = isCollapsedBlock(groupBlockId);
+    const groupTaskIds = collectFarmingGroupTaskIds(group);
+    const groupRestoreOptions = buildRestoreEntries('rs3farming', groupTaskIds, context);
 
     const groupHeader = createHeaderRow(
       centeredHeaderLabel(group.name),
       groupBlockId,
       {
-        className: `farming-group-row farming-parent-row ${groupCollapsed ? 'collapsed-subgroup-row' : ''}`,
+        className: `farming-group-row farming-parent-row ${groupCollapsed && groupIndex === allGroups.length - 1 ? 'subgroup-last-row' : ''
+          } ${groupCollapsed ? 'collapsed-subgroup-row' : ''}`,
+        onResetClick: () => {
+          clearCompletedEntries('rs3farming', groupTaskIds, context);
+
+          const hiddenRows = getHiddenRowsForSection('rs3farming', context);
+          const removedRows = getRemovedRowsForSection('rs3farming', context);
+
+          groupTaskIds.forEach((taskId) => {
+            delete hiddenRows[taskId];
+            delete removedRows[taskId];
+          });
+
+          subgroups.forEach((subgroup) => {
+            if (subgroup?.isTimer && subgroup?.timerTask?.id) {
+              context.clearFarmingTimer?.(subgroup.timerTask.id);
+            }
+          });
+
+          setHiddenRowsForSection('rs3farming', hiddenRows, context);
+          setRemovedRowsForSection('rs3farming', removedRows, context);
+          context.renderApp?.();
+        },
+        restoreOptions: groupRestoreOptions,
+        onRestoreSelect: (taskId) => restoreHiddenRow('rs3farming', taskId, context),
         context
       }
     );
@@ -435,16 +488,16 @@ export function renderGroupedFarming(tbody, groups, {
     subgroups.forEach((subgroup, subgroupIndex) => {
       if (subgroup.isTimer && subgroup.timerTask) {
         const timerTask = subgroup.timerTask;
-        const childBlockId = `row-collapse-${timerTask.id}`;
-        const collapsed = isCollapsedBlock(childBlockId);
+        const blockId = `group-collapse-rs3farming-${group.id}-${timerTask.id}`;
+        const collapsed = isCollapsedBlock(blockId);
         const plotIds = (Array.isArray(subgroup.plots) ? subgroup.plots : [])
-          .map((plot) => `rs3farming::${timerTask.id}::${plot.id}`);
+          .map((plot) => makeFarmingChildStorageId(timerTask.id, plot.id));
         const restoreOptions = buildRestoreEntries('rs3farming', plotIds, context);
         const headerStatus = getFarmingHeaderStatus?.(timerTask) || { note: '', state: 'idle' };
 
         const subgroupHeader = createHeaderRow(
           centeredHeaderLabel(subgroup.name),
-          childBlockId,
+          blockId,
           {
             className: `farming-subgroup-row farming-subheader-row farming-timer-subgroup-row ${collapsed || subgroupIndex === subgroups.length - 1 ? 'subgroup-last-row' : ''
               } ${collapsed ? 'collapsed-subgroup-row' : ''}`,
@@ -479,15 +532,14 @@ export function renderGroupedFarming(tbody, groups, {
         const plots = Array.isArray(subgroup.plots) ? subgroup.plots : [];
         const rows = [];
 
-        plots.forEach((plot, idx) => {
+        plots.forEach((plot) => {
           const childTask = buildFarmingLocationTask(plot, timerTask, durationNote);
-
           const childRow = createRightSideChildRow(
             'rs3farming',
             childTask,
             timerTask.id,
             {
-              extraClass: `farming-child-row ${idx === plots.length - 1 ? 'subsection-end-row' : ''}`,
+              extraClass: 'farming-child-row',
               context
             }
           );
@@ -495,22 +547,20 @@ export function renderGroupedFarming(tbody, groups, {
           if (childRow) rows.push(childRow);
         });
 
+        markLastVisibleRow(rows);
         appendRows(tbody, rows);
         return;
       }
 
       if (Array.isArray(subgroup.tasks) && subgroup.tasks.length > 0) {
-        const subgroupBlockId = `row-collapse-${subgroup.id}`;
-        const collapsed = isCollapsedBlock(subgroupBlockId);
-        const restoreOptions = buildRestoreEntries(
-          'rs3farming',
-          subgroup.tasks.map((task) => task.id),
-          context
-        );
+        const blockId = `group-collapse-rs3farming-${group.id}-${subgroup.id}`;
+        const collapsed = isCollapsedBlock(blockId);
+        const taskIds = subgroup.tasks.map((task) => task.id);
+        const restoreOptions = buildRestoreEntries('rs3farming', taskIds, context);
 
         const subgroupHeader = createHeaderRow(
           centeredHeaderLabel(subgroup.name),
-          subgroupBlockId,
+          blockId,
           {
             className: `farming-subgroup-row farming-subheader-row farming-plain-subgroup-row ${collapsed || subgroupIndex === subgroups.length - 1 ? 'subgroup-last-row' : ''
               } ${collapsed ? 'collapsed-subgroup-row' : ''}`,
@@ -528,14 +578,12 @@ export function renderGroupedFarming(tbody, groups, {
         if (collapsed) return;
 
         const rows = [];
-        subgroup.tasks.forEach((task, idx) => {
+        subgroup.tasks.forEach((task) => {
           const row = createRow('rs3farming', task, { context });
-          if (row) {
-            if (idx === subgroup.tasks.length - 1) row.classList.add('subsection-end-row');
-            rows.push(row);
-          }
+          if (row) rows.push(row);
         });
 
+        markLastVisibleRow(rows);
         appendRows(tbody, rows);
       }
     });
