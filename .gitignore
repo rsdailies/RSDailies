@@ -1,0 +1,41 @@
+rsdata/
+
+# Dependencies / build output
+node_modules/
+dist/
+coverage/
+*.log
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
+.vscode/
+.idea/
+# Agent State
+/antigravity/
+
+# Logs
+*.log
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Local-only / planning artifacts
+convo.txt
+friends-project.txt
+Pasted text.txt
+message*.txt
+/src/test/*.log
+/src/test/*.txt
+
+# Verification files
+googlec7c393bb3b6c202e.html
+**/googlec7c393bb3b6c202e.html
+
+# Private configs (if you create them locally)
+config.json
+credentials.json

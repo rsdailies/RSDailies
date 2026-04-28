@@ -1,0 +1,18 @@
+{
+  "name": "dailyscape3",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "audit:imports": "node tools/audit/check-imports.mjs",
+    "audit:topology": "node tools/audit/verify-topology.mjs",
+    "audit": "npm run audit:imports && npm run audit:topology"
+  },
+  "devDependencies": {
+    "vite": "^5.4.19"
+  },
+  "description": "Configuration-first RuneScape task tracker refactor with canonical UI, domain, data, app, and audit boundaries."
+}
