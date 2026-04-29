@@ -8,6 +8,14 @@
     "id": { "type": "string", "minLength": 1 },
     "name": { "type": "string", "minLength": 1 },
     "note": { "type": "string" },
+    "hoverNote": { "type": "string" },
+    "hover": {
+      "type": "object",
+      "properties": {
+        "note": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
     "wiki": { "type": "string" },
     "reset": { "type": "string" },
     "cadence": { "$ref": "cadence.schema.json" }

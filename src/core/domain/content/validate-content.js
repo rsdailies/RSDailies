@@ -36,6 +36,16 @@ function validateTaskItem(task, pageId, sectionId) {
 
   assertString(task.id, 'task.id', pageId);
   assertString(task.name, 'task.name', pageId);
+  assertOptionalString(task.note, 'task.note', pageId);
+  assertOptionalString(task.hoverNote, 'task.hoverNote', pageId);
+
+  if (task.hover != null && !isObject(task.hover)) {
+    throw new Error(`Invalid optional field "task.hover" for "${pageId || 'unknown'}".`);
+  }
+
+  if (task.hover) {
+    assertOptionalString(task.hover.note, 'task.hover.note', pageId);
+  }
 }
 
 function validateSectionDefinition(section, pageId) {

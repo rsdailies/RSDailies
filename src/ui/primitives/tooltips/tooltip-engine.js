@@ -46,12 +46,13 @@ export function hideTooltip(documentRef = document) {
 export function buildTooltipText(task) {
   if (!task) return '';
 
-  const parts = [];
+  const hoverNote = typeof task.hover?.note === 'string'
+    ? task.hover.note.trim()
+    : typeof task.hoverNote === 'string'
+      ? task.hoverNote.trim()
+      : '';
 
-  if (task.name) parts.push(task.name);
-  if (task.note && task.note !== task.name) parts.push(task.note);
-
-  return parts.join('\n');
+  return hoverNote;
 }
 
 export function attachTooltip(targetElement, task, { documentRef = document, windowRef = window } = {}) {
