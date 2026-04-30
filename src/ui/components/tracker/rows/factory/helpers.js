@@ -31,7 +31,8 @@ export function appendWeeklyCollapseButton(nameCell, task, context = {}) {
     setCollapsedBlock(blockId, !isCollapsedBlock(blockId));
     renderApp();
   });
-  nameCell.appendChild(btn);
+  const actionHost = nameCell.querySelector('.row-actions') || nameCell;
+  actionHost.appendChild(btn);
 }
 
 export function appendSectionBadge(nameCell, sectionKey) {
@@ -46,6 +47,26 @@ export function hideRowActionsForOverview(row) {
   row.querySelectorAll('.hide-button, .mini-collapse-btn').forEach((el) => {
     el.style.display = 'none';
   });
+}
+
+export function syncRowActionLayout(nameCell) {
+  if (!nameCell) return;
+  const actions = nameCell.querySelector('.row-actions');
+  if (!actions) {
+    nameCell.style.removeProperty('--row-action-width');
+    return;
+  }
+
+  const visibleActions = [...actions.children].filter((el) => !el.hidden && el.style.display !== 'none');
+  if (visibleActions.length === 0) {
+    nameCell.style.setProperty('--row-action-width', '0px');
+    return;
+  }
+
+  const actionSize = 32;
+  const actionGap = 6;
+  const actionWidth = (visibleActions.length * actionSize) + ((visibleActions.length - 1) * actionGap);
+  nameCell.style.setProperty('--row-action-width', `${actionWidth}px`);
 }
 
 export function isFarmingChildStorageId(sectionKey, taskId, task) {

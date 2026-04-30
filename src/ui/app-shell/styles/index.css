@@ -2,6 +2,7 @@
 @import url("../../styles/foundations/base.css");
 @import url("./layout.css");
 @import url("../../components/tracker/tables/styles/table.css");
+@import url("../../components/tracker/rows/row.styles.css");
 @import url("../../styles/foundations/states.css");
 @import url("../../components/tracker/farming/styles/farming.css");
 @import url("./controls.css");

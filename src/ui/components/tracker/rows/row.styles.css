@@ -1,1 +1,68 @@
-/* Canonical tracker row styles live here after table UI extraction. */
+.activity_table td.activity_name {
+  --row-action-offset: 8px;
+  --row-action-width: 70px;
+}
+
+.activity_table td.activity_name a,
+.activity_table td.activity_name a:active,
+.activity_table td.activity_name a:link,
+.activity_table td.activity_name a:visited {
+  padding: 0.62rem calc(var(--row-action-width) + var(--row-action-offset) + 14px) 0.62rem 0.85rem;
+}
+
+.activity_table td.activity_name .row-actions {
+  position: absolute;
+  top: 50%;
+  right: var(--row-action-offset);
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  z-index: 2;
+}
+
+.activity_table td.activity_name .row-actions:empty {
+  display: none;
+}
+
+.activity_table td.activity_name .row-actions > .btn,
+.activity_table td.activity_name .row-actions > button {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.activity_table td.activity_name .row-actions > .pin-button,
+.activity_table td.activity_name .row-actions > .hide-button,
+.activity_table td.activity_name .row-actions > .delete-button {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.activity_table tbody tr:hover td.activity_name .row-actions > .pin-button,
+.activity_table tbody tr:hover td.activity_name .row-actions > .hide-button,
+.activity_table tbody tr:hover td.activity_name .row-actions > .delete-button,
+.activity_table tbody tr:focus-within td.activity_name .row-actions > .pin-button,
+.activity_table tbody tr:focus-within td.activity_name .row-actions > .hide-button,
+.activity_table tbody tr:focus-within td.activity_name .row-actions > .delete-button {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  .activity_table td.activity_name a,
+  .activity_table td.activity_name a:active,
+  .activity_table td.activity_name a:link,
+  .activity_table td.activity_name a:visited {
+    padding: 0.58rem calc(var(--row-action-width) + var(--row-action-offset) + 10px) 0.58rem 0.72rem;
+  }
+}

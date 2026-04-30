@@ -1,6 +1,6 @@
 import { attachTooltip as attachTooltipFeature } from '../../../../primitives/tooltips/tooltip-engine.js';
 import { getCustomTimerText, createTimerColumn } from '../columns/index.js';
-import { appendSectionBadge, appendWeeklyCollapseButton, hideRowActionsForOverview } from './helpers.js';
+import { appendSectionBadge, appendWeeklyCollapseButton, hideRowActionsForOverview, syncRowActionLayout } from './helpers.js';
 import { bindRowOrdering } from './ordering.js';
 import { bindPinButton, bindHideButton } from './pin-hide.js';
 import { createToggleTaskHandler } from './toggle.js';
@@ -102,6 +102,8 @@ export function createBaseRow(sectionKey, task, options = {}) {
     checkOff.style.display = '';
     checkOn.style.display = '';
   }
+
+  syncRowActionLayout(nameCell);
 
   return row;
 }

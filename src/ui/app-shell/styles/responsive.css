@@ -16,7 +16,6 @@
     .activity_table td.activity_name a:active,
     .activity_table td.activity_name a:link,
     .activity_table td.activity_name a:visited {
-        padding: 0.58rem 4.4rem 0.58rem 0.72rem;
         font-size: 0.95rem;
     }
 
