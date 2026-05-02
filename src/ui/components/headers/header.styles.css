@@ -61,31 +61,6 @@
   z-index: 5;
 }
 
-.section-panel-header {
-  --section-panel-controls-right: 18px;
-  --section-panel-controls-gap: 6px;
-  padding-right: 0.85rem;
-}
-
-.section-panel-title {
-  width: 100%;
-  text-align: center;
-}
-
-.section-panel-controls {
-  right: var(--section-panel-controls-right);
-  gap: var(--section-panel-controls-gap);
-}
-
-.section-panel-controls .btn {
-  min-height: 32px;
-  white-space: nowrap;
-}
-
-.section-panel-countdown {
-  min-width: 80px;
-}
-
 .header_like_status {
   min-width: 74px;
   min-height: 24px;
@@ -127,9 +102,7 @@
 }
 
 .mini-collapse-btn,
-.mini-reset-btn,
-.section-panel-reset-button,
-.section-panel-toggle-button {
+.mini-reset-btn {
   min-width: 36px;
   width: 36px;
   height: 32px;
@@ -140,35 +113,6 @@
   justify-content: center;
 }
 
-.mini-reset-btn,
-.section-panel-reset-button {
+.mini-reset-btn {
   font-size: 1.1rem;
-}
-
-.activity_table thead td.header_like_color {
-  background: linear-gradient(90deg, var(--ds-panel-header-start), var(--ds-panel-header-end)) !important;
-  border-top: 1px solid var(--ds-panel-header-border) !important;
-  border-bottom: 1px solid var(--ds-panel-header-border) !important;
-}
-
-.activity_table thead .header_like_text {
-  font-size: 1.08rem;
-}
-
-.activity_table tbody .header_like_inner {
-  min-height: 44px;
-  padding-left: 1rem;
-  padding-right: 2.2rem;
-}
-
-div.table_container .section-panel-controls .unhide_button {
-  display: none;
-}
-
-div.table_container[data-hide="hide"] .section-panel-controls .hide_button {
-  display: none;
-}
-
-div.table_container[data-hide="hide"] .section-panel-controls .unhide_button {
-  display: inline-flex;
 }

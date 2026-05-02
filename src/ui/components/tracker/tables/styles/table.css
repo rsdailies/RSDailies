@@ -145,7 +145,6 @@
     display: none;
     visibility: hidden;
 }
-
 .activity_table td.activity_notes a,
 .activity_table td.activity_notes a:active,
 .activity_table td.activity_notes a:link,
@@ -332,6 +331,22 @@
     min-height: var(--ds-row-height);
     overflow-wrap: anywhere;
     word-break: break-word;
+}
+
+.activity_table thead td.header_like_color {
+    background: linear-gradient(90deg, var(--ds-panel-header-start), var(--ds-panel-header-end)) !important;
+    border-top: 1px solid var(--ds-panel-header-border) !important;
+    border-bottom: 1px solid var(--ds-panel-header-border) !important;
+}
+
+.activity_table thead .header_like_text {
+    font-size: 1.08rem;
+}
+
+.activity_table tbody .header_like_inner {
+    min-height: 44px;
+    padding-left: 1rem;
+    padding-right: 2.2rem;
 }
 
 /* Section/Subgroup Bottom Curvature */

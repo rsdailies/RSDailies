@@ -1,39 +1,44 @@
 # Dailyscape Agent Rules
 
 ## Table Of Contents
-1. Project Intent
-2. Repo-Native SSoT Protocol
-3. Canonical Owners
-4. Shell And Tracker Boundaries
-5. Registry And Content Rules
-6. Header And Section Rules
-7. Row Composition Rules
-8. Panel-Control Rules
-9. Tracker Geometry Rules
-10. Completed-Task State Rules
-11. Responsive Rules
-12. Asset And Icon Rules
-13. Figma-to-Code Workflow
-14. Verification Requirements
-15. Change Guardrails
+1. [Project Intent](#project-intent)
+2. [Repo-Native SSoT Protocol](#repo-native-ssot-protocol)
+3. [Canonical Owners](#canonical-owners)
+4. [Shell And Tracker Boundaries](#shell-and-tracker-boundaries)
+5. [Registry And Content Rules](#registry-and-content-rules)
+6. [Header And Section Rules](#header-and-section-rules)
+7. [Row Composition Rules](#row-composition-rules)
+8. [Panel-Control Rules](#panel-control-rules)
+9. [Tracker Geometry Rules](#tracker-geometry-rules)
+10. [Completed-Task State Rules](#completed-task-state-rules)
+11. [Responsive Rules](#responsive-rules)
+12. [Asset And Icon Rules](#asset-and-icon-rules)
+13. [Figma-to-Code Workflow](#figma-to-code-workflow)
+14. [Verification Requirements](#verification-requirements)
+15. [Change Guardrails](#change-guardrails)
+16. [Architectural Anatomy](#architectural-anatomy)
 
 ## Project Intent
-- Preserve the content-authored tracker architecture.
-- Keep RS3 as the content-rich implementation while the shell, registry, and runtime stay game-aware.
-- Prefer thinning existing facades over adding parallel implementations.
-- Optimize for predictable AI-assisted iteration: one owner per concept, stable contracts, token reuse, and testable rendering behavior.
+- **Preserve content-authored tracker architecture**: The system is designed to be data-driven.
+- **RS3 vs. OSRS**: Keep RS3 as the content-rich implementation while ensuring the shell, registry, and runtime stay game-aware and OSRS-compatible.
+- **Thin Facades**: Prefer thinning existing facades over adding parallel implementations.
+- **AI-Assisted Iteration**: Optimize for predictable iteration: one owner per concept, stable contracts, token reuse, and testable rendering behavior.
 
 ## Repo-Native SSoT Protocol
-- Every concept must have one authoritative owner.
-- Ownership depends on concept type:
-  - visual values: tokens
-  - DOM skeletons: shared primitives/templates
-  - feature behavior: feature-domain logic/controllers
-  - authored game/page/section/task content: `src/content/`
-  - page/section routing and visibility: registries/runtime orchestration
-- Stable facade files are allowed when they protect topology, discoverability, or audit expectations.
-- Duplicate active behavior implementations are forbidden.
-- If a concept already has an owner, extend that owner instead of adding a side path.
+Every concept must have **one authoritative owner**. Ownership depends on the concept type:
+
+| Concept Type | Canonical Owner |
+| :--- | :--- |
+| **Visual Values** | Design Tokens (`src/ui/styles/tokens/tokens.css`) |
+| **DOM Skeletons** | Shared Primitives / HTML Templates |
+| **Feature Behavior** | Feature-domain logic/controllers (`src/features/*`) |
+| **Authored Content** | Content directory (`src/content/*`) |
+| **Routing & Visibility** | Registries and Runtime Orchestration |
+
+### Critical Protocol Rules
+- **Stable Facades**: Allowed only when protecting topology, discoverability, or audit expectations.
+- **No Duplication**: Duplicate active behavior implementations are strictly forbidden.
+- **Extension over Addition**: If a concept already has an owner, extend that owner instead of adding a side path.
 
 ## Canonical Owners
 - App shell HTML entrypoint: `src/ui/app-shell/html/index.html`
@@ -59,12 +64,13 @@
 - Do not add tracker behavior to shell renderers when a tracker renderer or helper can own it directly.
 
 ## Registry And Content Rules
-- Keep pages and sections authored in `src/content/`.
-- Do not hardcode RS3-only registry filtering in runtime registry or content resolution files.
-- Game-aware lookup belongs in `src/app/registries/unified-registry.js` and `src/app/runtime/`.
-- Page-mode storage must be scoped by game when behavior differs by game.
-- Default page-mode recovery must resolve through registry definitions, not string literals scattered through the shell.
-- OSRS must use the same shell/workspace system as RS3, even when its content is intentionally blank.
+- **Content Authorship**: All game data must reside in `src/content/`. Use the established schema for tasks (id, name, wiki, reset) and sections (id, kind, tasks/subgroups).
+- **Registry Independence**: Do not hardcode RS3-only registry filtering in runtime registry or content resolution files.
+- **Dynamic Resolution**: Game-aware lookup belongs in `src/app/registries/unified-registry.js` and `src/app/runtime/`.
+- **Storage Scoping**: Page-mode storage must be scoped by game (e.g., `pageMode:rs3`, `pageMode:osrs`) when behavior differs by game.
+- **Normalization**: Default page-mode recovery must resolve through registry definitions, not string literals scattered through the shell.
+- **OSRS Parity**: OSRS must use the same shell/workspace system as RS3, even when its content is intentionally blank, to maintain architectural consistency.
+- **Validation**: Every content change must be validated against the content schemas using the audit tool (`tools/audit/validate-content.mjs`).
 
 ## Header And Section Rules
 - Use `buildSectionPanelHtml` and `renderSectionPanelHeader` for shell section headers.
@@ -81,16 +87,16 @@
 - Tracker render-variant dispatch belongs in `src/ui/renderers/tracker-section-renderer.js` through the renderer map, not a growing switch tree.
 
 ## Row Composition Rules
-- Keep the audit-facing row facade files stable.
-- The shared row flow is:
-  - row shell/template hydration
-  - content population
-  - action/control attachment
-  - status/toggle behavior
-  - custom-task/timer augmentation
-  - overview-mode adjustments
-- If row behavior changes, modify the shared row flow before adding a special-case renderer branch.
-- Parent/subparent surfaces must stay thin and route through shared subgroup/row behavior.
+- **Stable Facades**: Keep the audit-facing row facade files (`row.render.js`) stable to protect external consumers.
+- **The Standard Row Flow**:
+    1.  **Hydration**: Load the row shell/template from `src/ui/components/tracker/rows/templates/`.
+    2.  **Population**: Inject content (name, notes, wiki links) into the DOM.
+    3.  **Attachment**: Attach action handlers (checkbox click, timer reset) via `src/ui/components/tracker/rows/row.actions.js`.
+    4.  **Status Sync**: Apply visibility and completion states based on `dataset.completed`.
+    5.  **Augmentation**: Add specialized overlays (timers, custom task controls) without breaking the base template.
+    6.  **Responsive Adjustments**: Ensure the row adapts to mobile/desktop layouts via CSS tokens.
+- **Minimal Branches**: If row behavior changes, modify the shared row flow before adding a special-case renderer branch.
+- **Thin Surfaces**: Parent/subparent surfaces must stay thin and route through shared subgroup/row behavior. bespoke renderer logic at the row level is forbidden.
 
 ## Panel-Control Rules
 - Views, Profiles, and Settings must share the same floating-panel toggle lifecycle through `src/core/dom/panel-controls.js`.
@@ -164,9 +170,37 @@
 - For visual shell or tracker changes, verify RS3 and OSRS workspaces manually or through browser inspection.
 
 ## Change Guardrails
-- Prefer extending current primitives over introducing parallel implementations.
-- Do not revert unrelated user changes in a dirty worktree.
-- Do not add new hardcoded tracker geometry values.
-- Do not couple shell layout code to tracker row internals.
-- If a visual fix requires cross-layer ownership changes, fix the ownership boundary first and the styling second.
-- Purge or archive only files that create duplicate active owners or obsolete runtime paths. Do not delete reference material solely for aesthetics.
+- **Extend, Don't Parallel**: Prefer extending current primitives over introducing parallel implementations.
+- **Protect Worktree**: Do not revert unrelated user changes in a dirty worktree.
+- **No Hardcoding**: Do not add new hardcoded tracker geometry values.
+- **Loose Coupling**: Do not couple shell layout code to tracker row internals.
+- **Boundary First**: If a visual fix requires cross-layer ownership changes, fix the ownership boundary first and the styling second.
+- **Purge Strategy**: Purge or archive only files that create duplicate active owners or obsolete runtime paths.
+
+---
+
+## Architectural Anatomy
+To assist in rapid orientation, the codebase is structured into clear layers:
+
+### 1. The App Layer (`src/app/`)
+- **Registries**: The "brain" of the app. Maps sections, timers, and pages.
+- **Runtime**: Orchestrates the boot process and render loops.
+- **Boot**: The entry point that initializes storage, settings, and renders the shell.
+
+### 2. The Core Layer (`src/core/`)
+- **Domain**: Game-aware logic for content resolution and task filtering.
+- **DOM**: Low-level UI helpers, panel controls, and tooltip logic.
+- **Storage**: Persistence layer, schema migrations, and key builders.
+
+### 3. The Feature Layer (`src/features/`)
+- **Modularized Logic**: Each feature (Tasks, Timers, Sections, Profiles) owns its domain logic.
+- **State Management**: Features maintain their own internal state and normalization rules.
+
+### 4. The UI Layer (`src/ui/`)
+- **App Shell**: The persistent chrome (nav, panels, layout).
+- **Components**: Atomic UI units (headers, rows, tables).
+- **Renderers**: Pure functions that transform content into DOM nodes.
+- **Styles**: Token-driven CSS architecture.
+
+### 5. The Content Layer (`src/content/`)
+- **SSoT for Data**: All game tasks, section definitions, and page layouts live here as authored JS objects.

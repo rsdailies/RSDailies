@@ -1,9 +1,10 @@
-import { readStorage, writeStorage } from '../storage/Storage.js';
+import { loadJson, saveJson } from '../storage/local-store.js';
+import { STORAGE_ROOT } from '../storage/namespace.js';
 
 export const GAMES = Object.freeze({ RS3: 'rs3', OSRS: 'osrs' });
 
-const GAME_KEY = 'selectedGame';
-const storedGame = readStorage(GAME_KEY, null);
+const GAME_KEY = `${STORAGE_ROOT}:selectedGame`;
+const storedGame = loadJson(GAME_KEY, null);
 let selectedGame = storedGame === GAMES.OSRS || storedGame === GAMES.RS3 ? storedGame : null;
 const listeners = new Set();
 
@@ -19,7 +20,7 @@ export function hasSelectedGame() {
 
 export function setSelectedGame(game) {
   selectedGame = game === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3;
-  writeStorage(GAME_KEY, selectedGame);
+  saveJson(GAME_KEY, selectedGame);
   listeners.forEach((listener) => listener(selectedGame));
   return selectedGame;
 }

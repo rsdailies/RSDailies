@@ -1,5 +1,47 @@
-import { weeklies } from '../../../../../../features/tasks/config/weeklies.js';
+import { createRs3Task, withResetDefaults } from '../../tasks/task-factory.js';
 
-export const rs3WeeklyTasks = weeklies;
+export const rs3WeeklyTasks = withResetDefaults([
+  createRs3Task('thalmunds-wares', "Thalmund's Wares", 'https://runescape.wiki/w/Thalmund%27s_Wares', 'Merchant in the City of Um'),
+  createRs3Task('clan-citadel-cap', 'Clan Citadel Cap', 'https://runescape.wiki/w/Clan_Citadel', 'Get skill XP and bonuses'),
+  createRs3Task('anachronia-totems', 'Charge Anachronia Totems', 'https://runescape.wiki/w/Totem', 'Recharge weekly'),
+  createRs3Task('meg', 'Meg', 'https://runescape.wiki/w/Meg#Meg%27s_questions', 'XP lamp and coins'),
+  createRs3Task('tears-of-guthix', 'Tears of Guthix', 'https://runescape.wiki/w/Tears_of_Guthix', 'XP for your lowest skill'),
+  createRs3Task('herby-werby', 'Herby Werby', 'https://runescape.wiki/w/Herby_Werby', 'Herb bag and totem pieces. Commonly worth doing late for higher-level XP scaling.', { alertDaysBeforeReset: 1 }),
+  createRs3Task('big-top-bonanza', 'Big Top Bonanza', 'https://runescape.wiki/w/Balthazar_Beauregard%27s_Big_Top_Bonanza', 'Circus tricks for XP'),
+  createRs3Task('penguins', 'Penguins', 'https://jq.world60pengs.com', 'Weekly penguin route with compact child checklist rows. Child notes should display inline in the next JS pass.', {
+    alertDaysBeforeReset: 0,
+    childRows: [
+      { id: 'penguin-1', name: 'Penguin 1', note: '1-point or 2-point location row. Replace label/location weekly if you want manual upkeep.' },
+      { id: 'penguin-2', name: 'Penguin 2', note: 'Use note text for area, disguise, hint, or route guidance.' },
+      { id: 'penguin-3', name: 'Penguin 3', note: 'Compact child row intended for mark-off and inline guidance.' },
+      { id: 'penguin-4', name: 'Penguin 4', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-5', name: 'Penguin 5', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-6', name: 'Penguin 6', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-7', name: 'Penguin 7', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-8', name: 'Penguin 8', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-9', name: 'Penguin 9', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-10', name: 'Penguin 10', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-11', name: 'Penguin 11', note: 'Store current weekly location or route clue here.' },
+      { id: 'penguin-12', name: 'Penguin 12', note: 'Shadow Realm / ghost penguin can be tracked here if you want all 12 in one parent block.' },
+      { id: 'penguin-polar-bear', name: 'Polar Bear', note: 'Weekly well location helper row.' },
+    ],
+  }),
+  createRs3Task('wisps-of-the-grove', 'Wisps of the Grove', 'https://runescape.wiki/w/Wisps_of_the_Grove', 'Farming and Hunter XP'),
+  createRs3Task('shattered-worlds', 'Shattered Worlds', 'https://runescape.wiki/w/Shattered_Worlds', 'Weekly anima and challenge progress'),
+  createRs3Task('familiarisation', 'Familiarisation', 'https://runescape.wiki/w/Familiarisation', 'Summoning outfit progress'),
+  createRs3Task('skeletal-horror', 'Skeletal Horror', 'https://runescape.wiki/w/Skeletal_horror', 'Elite or master clue chance'),
+  createRs3Task('aquarium-treasure-chest', 'Aquarium Treasure Chest', 'https://runescape.wiki/w/Treasure_chest_decoration', 'Weekly clue or utility chest'),
+  createRs3Task('agoroth', 'Agoroth', 'https://runescape.wiki/w/Agoroth', '2x/week black pearl reward'),
+  createRs3Task('broken-home', 'Replay Broken Home', 'https://runescape.wiki/w/Broken_Home/Quick_guide', 'No-death speedrun for XP lamp'),
+  createRs3Task('rush-of-blood', 'Rush of Blood', 'https://runescape.wiki/w/Rush_of_Blood', 'Slayer XP and titles'),
+  createRs3Task('water-filtration', 'Water Filtration', 'https://runescape.wiki/w/Water_filtration_system', "Het's Oasis rewards"),
+  createRs3Task('miscellania-weekly', 'Miscellania Weekly Check', 'https://runescape.wiki/w/Calculator:Other/Miscellania', 'Longer interval coffer check'),
+  createRs3Task('invention-machine-weekly', 'Invention Machines Weekly Check', 'https://runescape.wiki/w/Machines', 'Weekly machine refill sweep'),
+  createRs3Task('arc-supplies', 'Arc Supplies Crate', 'https://runescape.wiki/w/Rosie_(supplies)', 'Free supplies from Rosie'),
+  createRs3Task('dream-of-iaia-resource', 'Dream of Iaia (Resources)', 'https://runescape.wiki/w/Dream_of_Iaia', 'Convert stored resources'),
+  createRs3Task('gwd2-bounties', 'GWD2 Bounties', 'https://runescape.wiki/w/Feng,_the_Bounty_Master', 'Up to 5 stored bounties'),
+  createRs3Task('fort-forinthry-bonus-xp', 'Fort Forinthry Bonus XP', 'https://runescape.wiki/w/Town_Hall_(Fort_Forinthry)', 'Claim weekly bonus XP'),
+  createRs3Task('advance-time', 'Advance Time', 'https://runescape.wiki/w/Advance_Time', 'Cast the spell 3 times'),
+], { reset: 'weekly', alertDaysBeforeReset: 0 });
 
 export default rs3WeeklyTasks;

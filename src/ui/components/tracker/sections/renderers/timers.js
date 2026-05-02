@@ -1,106 +1,23 @@
 import {
   appendRows,
-  buildTimerLocationTask,
   centeredHeaderLabel,
-  collectTimerGroupTaskIds,
   finalizeSubgroupBlock,
-  formatTimerDurationNote,
-  getRenderableHeaderStatus,
-  makeTimerChildStorageId,
 } from './common.js';
 import {
+  collectTimerGroupTaskIds,
+  getRenderableHeaderStatus,
+  makeTimerChildStorageId,
+} from './timer-helpers.js';
+import {
   buildRestoreEntries,
-  clearCompletedEntries,
-  getHiddenRowsForSection,
-  getRemovedRowsForSection,
   resetTaskList,
   restoreHiddenRow,
-  setHiddenRowsForSection,
-  setRemovedRowsForSection,
 } from './storage.js';
+import { resetTimerRows } from './timer-reset-logic.js';
+import { buildTimerPlotRows } from './timer-row-builder.js';
+import { renderSingleTimerGroup } from './timer-group-renderer.js';
 
 const TIMER_SECTION_KEY = 'timers';
-
-function resetTimerRows(taskIds, context, timerIds = []) {
-  clearCompletedEntries(TIMER_SECTION_KEY, taskIds, context);
-
-  const hiddenRows = getHiddenRowsForSection(TIMER_SECTION_KEY, context);
-  const removedRows = getRemovedRowsForSection(TIMER_SECTION_KEY, context);
-
-  taskIds.forEach((taskId) => {
-    delete hiddenRows[taskId];
-    delete removedRows[taskId];
-  });
-
-  timerIds.forEach((timerId) => context.clearTimer?.(timerId));
-
-  setHiddenRowsForSection(TIMER_SECTION_KEY, hiddenRows, context);
-  setRemovedRowsForSection(TIMER_SECTION_KEY, removedRows, context);
-  context.renderApp?.();
-}
-
-function buildTimerPlotRows(timerTask, subgroup, createRightSideChildRow, formatDurationMs, statusNote, context) {
-  const durationNote = formatTimerDurationNote(timerTask, {
-    formatDurationMs,
-    getSettingsValue: context.getSettingsValue,
-  });
-  const plots = Array.isArray(subgroup.plots) ? subgroup.plots : [];
-  const rows = [];
-
-  plots.forEach((plot) => {
-    const childTask = buildTimerLocationTask(plot, timerTask, { durationNote, statusNote });
-    const childRow = createRightSideChildRow(TIMER_SECTION_KEY, childTask, timerTask.id, {
-      extraClass: 'farming-child-row',
-      context,
-    });
-    if (childRow) rows.push(childRow);
-  });
-
-  return rows;
-}
-
-function renderSingleTimerGroup(tbody, group, subgroup, deps) {
-  const {
-    isCollapsedBlock,
-    getTimerHeaderStatus,
-    createHeaderRow,
-    createRightSideChildRow,
-    formatDurationMs,
-    context,
-  } = deps;
-
-  const timerTask = subgroup.timerTask;
-  const blockId = `group-collapse-timers-${group.id}-${timerTask.id}`;
-  const collapsed = isCollapsedBlock(blockId);
-  const plotIds = (Array.isArray(subgroup.plots) ? subgroup.plots : [])
-    .map((plot) => makeTimerChildStorageId(timerTask.id, plot.id));
-  const restoreOptions = buildRestoreEntries(TIMER_SECTION_KEY, plotIds, context);
-  const headerStatus = getTimerHeaderStatus?.(timerTask) || { note: '', state: 'idle' };
-
-  const plotRows = collapsed
-    ? []
-    : buildTimerPlotRows(
-      timerTask,
-      subgroup,
-      createRightSideChildRow,
-      formatDurationMs,
-      getRenderableHeaderStatus(headerStatus),
-      context
-    );
-
-  const headerRow = createHeaderRow(centeredHeaderLabel(group.name), blockId, {
-    className: 'farming-group-row farming-parent-row',
-    rightText: getRenderableHeaderStatus(headerStatus),
-    onResetClick: () => resetTimerRows(plotIds, context, [timerTask.id]),
-    restoreOptions,
-    onRestoreSelect: (taskId) => restoreHiddenRow(TIMER_SECTION_KEY, taskId, context),
-    context,
-  });
-
-  finalizeSubgroupBlock(headerRow, plotRows, { collapsed });
-  tbody.appendChild(headerRow);
-  if (!collapsed) appendRows(tbody, plotRows);
-}
 
 export function renderGroupedTimers(tbody, groups, deps) {
   const {

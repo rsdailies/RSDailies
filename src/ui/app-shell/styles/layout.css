@@ -145,3 +145,56 @@ div.table_container[data-hide="hide"] table tbody {
     flex-wrap: wrap;
     gap: 14px;
 }
+
+.section-panel-header {
+    --section-panel-controls-right: 18px;
+    --section-panel-controls-gap: 6px;
+    padding-right: 0.85rem;
+}
+
+.section-panel-title {
+    width: 100%;
+    text-align: center;
+}
+
+.section-panel-controls {
+    right: var(--section-panel-controls-right);
+    gap: var(--section-panel-controls-gap);
+}
+
+.section-panel-controls .btn {
+    min-height: 32px;
+    white-space: nowrap;
+}
+
+.section-panel-countdown {
+    min-width: 80px;
+}
+
+.section-panel-reset-button,
+.section-panel-toggle-button {
+    min-width: 36px;
+    width: 36px;
+    height: 32px;
+    padding: 0;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-panel-reset-button {
+    font-size: 1.1rem;
+}
+
+div.table_container .section-panel-controls .unhide_button {
+    display: none;
+}
+
+div.table_container[data-hide="hide"] .section-panel-controls .hide_button {
+    display: none;
+}
+
+div.table_container[data-hide="hide"] .section-panel-controls .unhide_button {
+    display: inline-flex;
+}

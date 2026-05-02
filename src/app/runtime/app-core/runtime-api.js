@@ -10,79 +10,107 @@ import { checkAutoReset as checkAutoResetFeature, hideTask, resetSectionView, se
 import { bindSectionControls } from '../../../ui/components/tracker/sections/controls/section-controls-bindings.js';
 import { setupImportExport as setupImportExportFeature } from '../../../ui/components/import-export/index.js';
 import { setupCustomAdd as setupCustomAddFeature } from '../../../ui/components/custom-tasks/modal/custom-task-controller.js';
-import { nextDailyBoundary, nextWeeklyBoundary, nextMonthlyBoundary } from '../../../core/time/boundaries.js';
-import { formatDurationMs } from '../../../core/time/formatters.js';
 import { hideTooltip } from '../../../ui/primitives/tooltips/tooltip-engine.js';
 import { load, save, removeKey, saveSectionValue, getSectionState, isCollapsedBlock, setCollapsedBlock, getCustomTasks, saveCustomTasks, getTimers, getCooldowns, getOverviewPins } from '../storage-bridge.js';
 import { setupProfileControl as setupProfileControlBridge, setupSettingsControl as setupSettingsControlBridge, setupViewsControl as setupViewsControlBridge, closeFloatingControls as closeFloatingControlsBridge, setupGlobalClickCloser as setupGlobalClickCloserBridge, updateProfileHeader as updateProfileHeaderBridge } from '../floating-controls.js';
 import { renderApp as renderAppCore } from '../render-orchestrator.js';
-import { setupFeatureControls } from './setup-controls.js';
 import { fetchProfits } from './fetch-profits.js';
-import { createRenderAppRunner } from './render-deps.js';
-import { applySettingsToDomBridge, checkAutoResetBridge, updateCountdowns as updateCountdownsBridge } from './core-actions.js';
-import { resolveTrackerSections } from '../../../core/domain/content/resolve-tracker-content.js';
-import { getTrackerSectionIds } from '../../registries/unified-registry.js';
 import { migrateStorageShape } from '../../../core/storage/migrations.js';
 import { buildExportToken, importProfileToken } from '../../../features/profiles/domain/model.js';
-import { GAMES, getSelectedGame } from '../../../core/state/GameContext.js';
+import { createRuntimeMaintenance } from './runtime-api/maintenance.js';
+import { createRuntimeRenderApp } from './runtime-api/render-app.js';
+import { bindRuntimeSections } from './runtime-api/section-bindings.js';
+import { createRuntimeControls } from './runtime-api/control-surfaces.js';
 
 const getStorageDeps = () => ({ load, save, removeKey });
-export { initProfileContext, syncStoredViewModeToPageMode };
-export const applySettingsToDom = () => applySettingsToDomBridge(applySettingsToDomFeature, getSettings, document);
-export const checkAutoReset = () => checkAutoResetBridge(checkAutoResetFeature, getStorageDeps);
-export const updateCountdowns = () => updateCountdownsBridge(document, { nextDailyBoundary, nextWeeklyBoundary, nextMonthlyBoundary, formatDurationMs });
+
+export { initProfileContext, syncStoredViewModeToPageMode, migrateStorageShape };
+
+const maintenance = createRuntimeMaintenance({
+  applySettingsToDomFeature,
+  getSettings,
+  checkAutoResetFeature,
+  getStorageDeps,
+  documentRef: document,
+});
+
+export const applySettingsToDom = maintenance.applySettingsToDom;
+export const checkAutoReset = maintenance.checkAutoReset;
+export const updateCountdowns = maintenance.updateCountdowns;
 export const cleanupReadyTimers = () => cleanupReadyTimersFeature({ load, save });
 export const cleanupReadyCooldowns = () => cleanupReadyCooldownsFeature({ load, save });
 
-const renderApp = createRenderAppRunner(renderAppCore, {
-  load, save,
-  getSectionState: (sectionKey) => getSectionState(sectionKey, load),
-  getCustomTasks: () => getCustomTasks(load),
-  saveCustomTasks: (tasks) => saveCustomTasks(tasks, save),
-  getCooldowns: () => getCooldowns(load),
-  getTimers: () => getTimers(load),
-  cleanupReadyTimers: () => cleanupReadyTimersFeature({ load, save }),
-  cleanupReadyCooldowns: () => cleanupReadyCooldownsFeature({ load, save }),
-  hideTooltip: () => hideTooltip(document),
-  getResolvedSections: (game = null) => resolveTrackerSections({
-    game: game || (getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3),
-    getCustomTasks: () => getCustomTasks(load),
-    getPenguinWeeklyData: () => load('penguinWeeklyData', {}),
-  }),
-  getTimerHeaderStatus: (task) => getTimerHeaderStatus(task, { load }),
-  hideTask: (sectionKey, taskId) => hideTask(sectionKey, taskId, { load, save }),
-  setTaskCompleted: (sectionKey, taskId, complete) => setTaskCompleted(sectionKey, taskId, complete, { load, save }),
-  clearTimer: (taskId) => clearTimer(taskId, { load, save }),
-  startTimer: (task) => startTimer(task, { load, save }),
-  startCooldown: (taskId, minutes) => startCooldown(taskId, minutes, { load, save }),
-  isCollapsedBlock: (blockId) => isCollapsedBlock(blockId, load),
-  setCollapsedBlock: (blockId, collapsed) => setCollapsedBlock(blockId, collapsed, load, save),
+const renderApp = createRuntimeRenderApp({
+  renderAppCore,
+  load,
+  save,
+  getSectionState,
+  getCustomTasks,
+  saveCustomTasks,
+  getCooldowns,
+  getTimers,
+  cleanupReadyTimers: cleanupReadyTimersFeature,
+  cleanupReadyCooldowns: cleanupReadyCooldownsFeature,
+  hideTooltip,
+  getTimerHeaderStatus,
+  hideTask,
+  setTaskCompleted,
+  clearTimer,
+  startTimer,
+  startCooldown,
+  isCollapsedBlock,
+  setCollapsedBlock,
   fetchProfits,
   updateProfileHeaderBridge,
   updateProfileHeaderFeature: updateProfileHeader,
-  maybeNotifyTaskAlert: (task, sectionKey) => maybeNotifyTaskAlert(task, sectionKey, { load, save, maybeBrowserNotify, maybeWebhookNotify }),
-  bindSectionControls: (sectionKey, opts) => bindSectionControls(sectionKey, opts, { renderApp, getSectionState: (key) => getSectionState(key, load), saveSectionValue: (key, name, value) => saveSectionValue(key, name, value, save), resetSectionView: (key) => resetSectionView(key, { load, save, removeKey }) }),
+  maybeNotifyTaskAlert: (task, sectionKey, deps) => maybeNotifyTaskAlert(task, sectionKey, { ...deps, maybeBrowserNotify, maybeWebhookNotify }),
+  bindSectionControls,
+  saveSectionValue,
+  resetSectionView,
   getPageMode,
-  getOverviewPins: () => getOverviewPins(load)
+  getOverviewPins,
 });
+
 export { renderApp };
 
 export function setupSectionBindings() {
-  getTrackerSectionIds().forEach((sectionKey) => bindSectionControls(sectionKey, { sortable: true }, { renderApp, getSectionState: (key) => getSectionState(key, load), saveSectionValue: (key, name, value) => saveSectionValue(key, name, value, save), resetSectionView: (key) => resetSectionView(key, { load, save, removeKey }) }));
+  bindRuntimeSections({
+    bindSectionControls,
+    renderApp,
+    getSectionState,
+    saveSectionValue,
+    resetSectionView,
+    load,
+    save,
+    removeKey,
+  });
 }
 
-const controlEntries = setupFeatureControls({
-  setupProfileControlBridge, setupProfileControlFeature, setupSettingsControlBridge, setupSettingsControlFeature,
-  setupViewsControlBridge, setupViewsControlFeature, closeFloatingControlsBridge, closeFloatingControls,
-  setupGlobalClickCloserBridge, setupImportExportFeature, buildExportToken, importProfileToken, setupCustomAddFeature,
-  renderApp, getCustomTasks: () => getCustomTasks(load), saveCustomTasks: (tasks) => saveCustomTasks(tasks, save),
-  documentRef: document, windowRef: window
+const runtimeControls = createRuntimeControls({
+  setupProfileControlBridge,
+  setupProfileControlFeature,
+  setupSettingsControlBridge,
+  setupSettingsControlFeature,
+  setupViewsControlBridge,
+  setupViewsControlFeature,
+  closeFloatingControlsBridge,
+  closeFloatingControls,
+  setupGlobalClickCloserBridge,
+  setupImportExportFeature,
+  buildExportToken,
+  importProfileToken,
+  setupCustomAddFeature,
+  renderApp,
+  getCustomTasks: () => getCustomTasks(load),
+  saveCustomTasks: (tasks) => saveCustomTasks(tasks, save),
+  documentRef: document,
+  windowRef: window,
 });
 
-export const setupProfileControl = () => controlEntries.setupProfile();
-export const setupSettingsControl = () => controlEntries.setupSettings();
-export const setupViewsControl = () => controlEntries.setupViews();
-export const setupGlobalClickCloser = () => controlEntries.setupCloser();
-export const setupImportExport = () => controlEntries.setupImportExport();
-export const setupCustomAdd = () => controlEntries.setupCustomAdd();
+export const setupProfileControl = runtimeControls.setupProfileControl;
+export const setupSettingsControl = runtimeControls.setupSettingsControl;
+export const setupViewsControl = runtimeControls.setupViewsControl;
+export const setupGlobalClickCloser = runtimeControls.setupGlobalClickCloser;
+export const setupImportExport = runtimeControls.setupImportExport;
+export const setupCustomAdd = runtimeControls.setupCustomAdd;
 export const startPenguinSync = () => syncPenguinWeeklyData({ load, save, renderApp });
