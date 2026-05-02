@@ -1,6 +1,7 @@
 # Dailyscape Agent Rules
 
 ## Table Of Contents
+
 1. [Project Intent](#project-intent)
 2. [Repo-Native SSoT Protocol](#repo-native-ssot-protocol)
 3. [Canonical Owners](#canonical-owners)
@@ -19,12 +20,14 @@
 16. [Architectural Anatomy](#architectural-anatomy)
 
 ## Project Intent
+
 - **Preserve content-authored tracker architecture**: The system is designed to be data-driven.
 - **RS3 vs. OSRS**: Keep RS3 as the content-rich implementation while ensuring the shell, registry, and runtime stay game-aware and OSRS-compatible.
 - **Thin Facades**: Prefer thinning existing facades over adding parallel implementations.
 - **AI-Assisted Iteration**: Optimize for predictable iteration: one owner per concept, stable contracts, token reuse, and testable rendering behavior.
 
 ## Repo-Native SSoT Protocol
+
 Every concept must have **one authoritative owner**. Ownership depends on the concept type:
 
 | Concept Type | Canonical Owner |
@@ -36,11 +39,13 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 | **Routing & Visibility** | Registries and Runtime Orchestration |
 
 ### Critical Protocol Rules
+
 - **Stable Facades**: Allowed only when protecting topology, discoverability, or audit expectations.
 - **No Duplication**: Duplicate active behavior implementations are strictly forbidden.
 - **Extension over Addition**: If a concept already has an owner, extend that owner instead of adding a side path.
 
 ## Canonical Owners
+
 - App shell HTML entrypoint: `src/ui/app-shell/html/index.html`
 - Global UI tokens: `src/ui/styles/tokens/tokens.css`
 - Global foundations: `src/ui/styles/foundations/base.css`, `src/ui/styles/foundations/states.css`
@@ -56,6 +61,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - Feature behavior and storage rules: `src/features/*`
 
 ## Shell And Tracker Boundaries
+
 - `layout.css` owns page/container spacing and outer shell chrome only.
 - `table.css` owns tracker row geometry, subgroup gaps, checkbox border, and terminal-row rounding.
 - `header.styles.css` owns generic header primitives only.
@@ -64,6 +70,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - Do not add tracker behavior to shell renderers when a tracker renderer or helper can own it directly.
 
 ## Registry And Content Rules
+
 - **Content Authorship**: All game data must reside in `src/content/`. Use the established schema for tasks (id, name, wiki, reset) and sections (id, kind, tasks/subgroups).
 - **Registry Independence**: Do not hardcode RS3-only registry filtering in runtime registry or content resolution files.
 - **Dynamic Resolution**: Game-aware lookup belongs in `src/app/registries/unified-registry.js` and `src/app/runtime/`.
@@ -73,6 +80,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - **Validation**: Every content change must be validated against the content schemas using the audit tool (`tools/audit/validate-content.mjs`).
 
 ## Header And Section Rules
+
 - Use `buildSectionPanelHtml` and `renderSectionPanelHeader` for shell section headers.
 - Use `createTableSectionHeader` for tracker subgroup headers.
 - `src/ui/components/headers/header.frame.js` is the shared header-frame owner for shell and tracker header markup.
@@ -87,18 +95,20 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - Tracker render-variant dispatch belongs in `src/ui/renderers/tracker-section-renderer.js` through the renderer map, not a growing switch tree.
 
 ## Row Composition Rules
+
 - **Stable Facades**: Keep the audit-facing row facade files (`row.render.js`) stable to protect external consumers.
 - **The Standard Row Flow**:
-    1.  **Hydration**: Load the row shell/template from `src/ui/components/tracker/rows/templates/`.
-    2.  **Population**: Inject content (name, notes, wiki links) into the DOM.
-    3.  **Attachment**: Attach action handlers (checkbox click, timer reset) via `src/ui/components/tracker/rows/row.actions.js`.
-    4.  **Status Sync**: Apply visibility and completion states based on `dataset.completed`.
-    5.  **Augmentation**: Add specialized overlays (timers, custom task controls) without breaking the base template.
-    6.  **Responsive Adjustments**: Ensure the row adapts to mobile/desktop layouts via CSS tokens.
+    1. **Hydration**: Load the row shell/template from `src/ui/components/tracker/rows/templates/`.
+    2. **Population**: Inject content (name, notes, wiki links) into the DOM.
+    3. **Attachment**: Attach action handlers (checkbox click, timer reset) via `src/ui/components/tracker/rows/row.actions.js`.
+    4. **Status Sync**: Apply visibility and completion states based on `dataset.completed`.
+    5. **Augmentation**: Add specialized overlays (timers, custom task controls) without breaking the base template.
+    6. **Responsive Adjustments**: Ensure the row adapts to mobile/desktop layouts via CSS tokens.
 - **Minimal Branches**: If row behavior changes, modify the shared row flow before adding a special-case renderer branch.
 - **Thin Surfaces**: Parent/subparent surfaces must stay thin and route through shared subgroup/row behavior. bespoke renderer logic at the row level is forbidden.
 
 ## Panel-Control Rules
+
 - Views, Profiles, and Settings must share the same floating-panel toggle lifecycle through `src/core/dom/panel-controls.js`.
 - Button replacement and panel open-state behavior should not be re-implemented per feature.
 - Surface-specific work is allowed for:
@@ -108,6 +118,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - Import/export may keep modal-specific logic, but button handling and shell wiring should still reuse shared control helpers where practical.
 
 ## Tracker Geometry Rules
+
 - Always use tokens for tracker geometry.
 - Required tracker tokens:
   - `--ds-section-gap`
@@ -121,6 +132,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - When a row or subgroup is hidden via task state, rounding must move to the next visible terminal surface automatically.
 
 ## Completed-Task State Rules
+
 - The current tracker state model is string-based.
 - Valid row states include:
   - `'true'`
@@ -136,16 +148,19 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - Preserve explicit stored user preferences; do not silently overwrite saved settings.
 
 ## Responsive Rules
+
 - Responsive styles may adjust widths, typography, and shell control layout.
 - Responsive styles must not hardcode alternate tracker geometry that conflicts with tracker tokens.
 - If mobile needs a geometry change, introduce or reuse a token instead of patching row height directly in `responsive.css`.
 
 ## Asset And Icon Rules
+
 - Reuse existing assets from `assets/`.
 - Do not introduce new icon packages for tracker/header controls.
 - Prefer existing glyph/text button conventions unless a broader design-system change is being made intentionally.
 
 ## Figma-to-Code Workflow
+
 - Analyze the codebase before implementing any Figma-derived change.
 - Reuse existing tracker, header, row, panel, and shell primitives before creating new UI structures.
 - Treat Figma output as design intent, not final code style.
@@ -154,6 +169,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - If attached subgroup behavior or tracker section hierarchy appears in a design, implement it through the section engine contract rather than bespoke renderer conditionals.
 
 ## Verification Requirements
+
 - Minimum required checks for shell/tracker UI changes:
   - `npm test`
   - `npm run audit`
@@ -170,6 +186,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - For visual shell or tracker changes, verify RS3 and OSRS workspaces manually or through browser inspection.
 
 ## Change Guardrails
+
 - **Extend, Don't Parallel**: Prefer extending current primitives over introducing parallel implementations.
 - **Protect Worktree**: Do not revert unrelated user changes in a dirty worktree.
 - **No Hardcoding**: Do not add new hardcoded tracker geometry values.
@@ -180,27 +197,33 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 ---
 
 ## Architectural Anatomy
+
 To assist in rapid orientation, the codebase is structured into clear layers:
 
 ### 1. The App Layer (`src/app/`)
+
 - **Registries**: The "brain" of the app. Maps sections, timers, and pages.
 - **Runtime**: Orchestrates the boot process and render loops.
 - **Boot**: The entry point that initializes storage, settings, and renders the shell.
 
 ### 2. The Core Layer (`src/core/`)
+
 - **Domain**: Game-aware logic for content resolution and task filtering.
 - **DOM**: Low-level UI helpers, panel controls, and tooltip logic.
 - **Storage**: Persistence layer, schema migrations, and key builders.
 
 ### 3. The Feature Layer (`src/features/`)
+
 - **Modularized Logic**: Each feature (Tasks, Timers, Sections, Profiles) owns its domain logic.
 - **State Management**: Features maintain their own internal state and normalization rules.
 
 ### 4. The UI Layer (`src/ui/`)
+
 - **App Shell**: The persistent chrome (nav, panels, layout).
 - **Components**: Atomic UI units (headers, rows, tables).
 - **Renderers**: Pure functions that transform content into DOM nodes.
 - **Styles**: Token-driven CSS architecture.
 
 ### 5. The Content Layer (`src/content/`)
+
 - **SSoT for Data**: All game tasks, section definitions, and page layouts live here as authored JS objects.
