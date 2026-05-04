@@ -1,4 +1,4 @@
-import { GAMES, getSelectedGame } from '../../../../core/state/GameContext.js';
+import { GAMES, getSelectedGame } from '../../../../core/state/game-context.js';
 import { resolveTrackerSections } from '../../../../core/domain/content/resolve-tracker-content.js';
 import { createRenderAppRunner } from '../render-deps.js';
 

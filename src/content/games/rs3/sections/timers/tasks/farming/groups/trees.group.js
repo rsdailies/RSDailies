@@ -1,4 +1,6 @@
-export const treesTimerGroup = {
+import { defineTimerGroup } from '../../../../../../../factories/define-timer-group.js';
+
+export const treesTimerGroup = defineTimerGroup({
   id: 'trees',
   label: 'Trees',
   note: 'Tree timers broken into compact child groups.',
@@ -99,8 +101,8 @@ export const treesTimerGroup = {
         { id: 'elder-falador', name: 'Falador', wiki: 'https://runescape.wiki/w/Elder_tree_patch' }
       ]
     }
-  ],
-  plots: []
-};
+  ]
+});
 
 export default treesTimerGroup;
+

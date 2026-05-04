@@ -34,7 +34,7 @@ Pasted text.txt
 message*.txt
 /src/test/*.log
 /src/test/*.txt
-tests/
+
 test-results/
 
 # Copilot screenshot saving for chat reference

@@ -1,4 +1,5 @@
 import { HEADER_CLASSES } from './header.constants.js';
+import { escapeHtml } from '../../../core/dom/utils.js';
 
 function joinClassNames(...tokens) {
   return tokens.filter(Boolean).join(' ');
@@ -14,12 +15,13 @@ export function renderHeaderFrameHtml({
   titleClassName = '',
   controlsClassName = ''
 }) {
+  const safeLabel = escapeHtml(label);
   return `
       <tr${rowClassName ? ` class="${rowClassName}"` : ''}>
         <td colspan="${colspan}" class="${cellClassName}">
           <div class="${joinClassNames(HEADER_CLASSES.bar, barClassName)}">
             <div class="${joinClassNames(HEADER_CLASSES.title, titleClassName)}">
-              <span class="${HEADER_CLASSES.titleText}">${label}</span>
+              <span class="${HEADER_CLASSES.titleText}">${safeLabel}</span>
             </div>
             <div class="${joinClassNames(HEADER_CLASSES.controls, controlsClassName)}">
               ${controlsHtml}
@@ -28,6 +30,7 @@ export function renderHeaderFrameHtml({
         </td>
       </tr>`.trim();
 }
+
 
 export function createHeaderFrameRow({
   label,

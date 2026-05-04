@@ -1,4 +1,6 @@
-export const allotmentsTimerGroup = {
+import { defineTimerGroup } from '../../../../../../../factories/define-timer-group.js';
+
+export const allotmentsTimerGroup = defineTimerGroup({
   id: 'allotments',
   label: 'Allotments',
   note: 'Allotment run timer with patch checklist rows.',
@@ -30,6 +32,7 @@ export const allotmentsTimerGroup = {
       locationNote: 'Havenhythe allotment patch.'
     }
   ]
-};
+});
 
 export default allotmentsTimerGroup;
+

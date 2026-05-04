@@ -24,10 +24,21 @@ export {
 } from './section-definitions.js';
 export { filterByGame } from './shared.js';
 
+const registryCache = new Map();
+
 export function getCanonicalTrackerRegistry(game = null) {
-  return {
+  const cacheKey = game || 'all';
+  if (registryCache.has(cacheKey)) {
+    return registryCache.get(cacheKey);
+  }
+
+  const registry = {
     sections: getTrackerSections(game),
     pageModes: filterByGame(TRACKER_PAGE_MODE_DEFINITIONS, game),
     pages: getTrackerPages(game),
   };
+
+  registryCache.set(cacheKey, registry);
+  return registry;
 }
+

@@ -1,7 +1,31 @@
-PORT ?= 8080
-HOST ?= 127.0.0.1
+# RSDailies Build & Development
+# Replaced legacy python server with standard Vite pipeline
 
-.PHONY: serve
+.PHONY: dev build preview test audit verify
 
-serve:
-	python -m http.server "$(PORT)" --bind "$(HOST)" || python3 -m http.server "$(PORT)" --bind "$(HOST)"
+# Start development server
+dev:
+	npm run dev
+
+# Build for production
+build:
+	npm run build
+
+# Preview production build
+preview:
+	npm run build && npm run preview
+
+# Run unit tests
+test:
+	npm test
+
+# Run quality audits
+audit:
+	npm run audit
+
+# Full verification sweep (Tests, Audits, E2E)
+verify:
+	npm run verify:full
+
+# Compatibility target for old 'serve'
+serve: dev

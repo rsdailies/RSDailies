@@ -1,31 +1,8 @@
 import { loadContentPages } from './load-content.js';
 import { getCanonicalSections } from './catalog.js';
-
-function mergePenguinChildRows(task, weeklyData = {}) {
-  const sourceChildren = Array.isArray(task.childRows)
-    ? task.childRows
-    : Array.isArray(task.children)
-      ? task.children
-      : null;
-
-  if (task.id !== 'penguins' || !sourceChildren) {
-    return task;
-  }
-
-  const mergedChildren = sourceChildren.map((child) => {
-    const override = weeklyData[child.id] || {};
-    return {
-      ...child,
-      name: override.name || child.name,
-      note: override.note || child.note,
-    };
-  });
-
-  return {
-    ...task,
-    children: mergedChildren,
-  };
-}
+import { resolvePenguinTask } from './resolvers/penguin.resolver.js';
+import { resolveTimerGroups } from './resolvers/timer.resolver.js';
+import { resolveCustomTasks } from './resolvers/custom.resolver.js';
 
 function normalizeTaskItems(items, sectionId, penguinWeeklyData) {
   if (!Array.isArray(items)) {
@@ -36,85 +13,16 @@ function normalizeTaskItems(items, sectionId, penguinWeeklyData) {
     return items;
   }
 
-  return items.map((task) => mergePenguinChildRows(task, penguinWeeklyData));
-}
-
-function normalizeTimerEntry(timer, group, index) {
-  const timerId = timer?.id || `${group.id}-timer-${index}`;
-
-  return {
-    ...timer,
-    id: timerId,
-    isTimerParent: true,
-    vanishOnStart: timer?.vanishOnStart ?? true,
-    plots: Array.isArray(timer?.plots) ? timer.plots : [],
-  };
-}
-
-function normalizeStandalonePlots(group) {
-  if (!Array.isArray(group?.plots) || group.plots.length === 0) {
-    return [];
-  }
-
-  if (Array.isArray(group?.timers) && group.timers.length > 0) {
-    return [];
-  }
-
-  return [
-    {
-      id: `${group.id}-plots`,
-      name: group.label || group.name || group.id,
-      isTimer: false,
-      tasks: group.plots.map((plot) => ({
-        ...plot,
-        id: plot.id,
-      })),
-    },
-  ];
-}
-
-function normalizeTimerGroup(group) {
-  const timerSubgroups = Array.isArray(group?.timers)
-    ? group.timers.map((timer, index) => {
-      const timerTask = normalizeTimerEntry(timer, group, index);
-      const plots = Array.isArray(timer?.plots)
-        ? timer.plots
-        : Array.isArray(group?.plots)
-          ? group.plots
-          : [];
-
-      return {
-        id: timerTask.id,
-        name: timerTask.name || group.label || group.name || group.id,
-        isTimer: true,
-        timerTask,
-        plots: plots.map((plot) => ({
-          ...plot,
-          id: plot.id,
-        })),
-      };
-    })
-    : [];
-
-  return {
-    id: group.id,
-    name: group.label || group.name || group.id,
-    note: group.note || '',
-    subgroups: [...timerSubgroups, ...normalizeStandalonePlots(group)],
-  };
-}
-
-function normalizeTimerGroups(groups) {
-  return Array.isArray(groups) ? groups.map(normalizeTimerGroup) : [];
+  return items.map((task) => resolvePenguinTask(task, penguinWeeklyData));
 }
 
 function resolveSectionItems(section, deps) {
   if (section.id === 'custom') {
-    return deps.getCustomTasks();
+    return resolveCustomTasks(deps.getCustomTasks);
   }
 
   if (Array.isArray(section.groups)) {
-    return normalizeTimerGroups(section.groups);
+    return resolveTimerGroups(section.groups);
   }
 
   return normalizeTaskItems(section.items, section.id, deps.getPenguinWeeklyData());
@@ -154,3 +62,4 @@ export function resolveTrackerPage(pageId, {
     })),
   };
 }
+

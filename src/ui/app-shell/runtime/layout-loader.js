@@ -25,15 +25,12 @@ export async function loadLayout() {
   for (const [id, html] of Object.entries(mounts)) {
     const el = document.getElementById(id);
     if (el) {
-      if (id === 'sample_row') {
-        el.innerHTML = html;
-      } else {
-        el.innerHTML = html;
-      }
+      el.innerHTML = html;
     } else {
       console.warn(`[LayoutLoader] Mount point not found: ${id}`);
     }
   }
+
 
   renderAppView();
 

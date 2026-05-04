@@ -1,4 +1,6 @@
-export const herbsTimerGroup = {
+import { defineTimerGroup } from '../../../../../../../factories/define-timer-group.js';
+
+export const herbsTimerGroup = defineTimerGroup({
   id: 'herbs',
   label: 'Herbs',
   note: 'Main herb run timer with individual patch checklist rows.',
@@ -29,6 +31,7 @@ export const herbsTimerGroup = {
     { id: 'herb-wilderness', name: 'Wilderness', wiki: 'https://runescape.wiki/w/Herb_patch' },
     { id: 'herb-garden-of-kharid', name: 'Garden of Kharid', wiki: 'https://runescape.wiki/w/Herb_patch' }
   ]
-};
+});
 
 export default herbsTimerGroup;
+

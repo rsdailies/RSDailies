@@ -1,5 +1,5 @@
 import { getViewsButtonLabel } from '../../../../../ui/components/views/views-menu.js';
-import { GAMES, getSelectedGame } from '../../../../../core/state/GameContext.js';
+import { GAMES, getSelectedGame } from '../../../../../core/state/game-context.js';
 
 export function getActiveGame(game = getSelectedGame()) {
   return game === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3;
@@ -10,6 +10,7 @@ export function syncViewsButtonLabel(button, mode, game) {
 
   const textNode = button.querySelector('.expanding_text');
   if (textNode) {
-    textNode.innerHTML = `&nbsp;${getViewsButtonLabel(mode, game)}`;
+    textNode.textContent = `\u00A0${getViewsButtonLabel(mode, game)}`;
   }
+
 }

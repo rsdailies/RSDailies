@@ -1,4 +1,6 @@
-export const hopsTimerGroup = {
+import { defineTimerGroup } from '../../../../../../../factories/define-timer-group.js';
+
+export const hopsTimerGroup = defineTimerGroup({
   id: 'hops',
   label: 'Hops',
   note: 'Hop run timer with patch checklist rows.',
@@ -24,6 +26,7 @@ export const hopsTimerGroup = {
     { id: 'hops-seers', name: "Seers' Village", wiki: 'https://runescape.wiki/w/Hops_patch' },
     { id: 'hops-entrana', name: 'Entrana', wiki: 'https://runescape.wiki/w/Hops_patch' }
   ]
-};
+});
 
 export default hopsTimerGroup;
+

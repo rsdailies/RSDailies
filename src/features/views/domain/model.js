@@ -6,7 +6,7 @@ import {
   isTrackerPageMode,
   normalizeTrackerPageMode,
 } from '../../../app/registries/unified-registry.js';
-import { GAMES, getSelectedGame } from '../../../core/state/GameContext.js';
+import { GAMES, getSelectedGame } from '../../../core/state/game-context.js';
 
 export const PAGE_MODES = getTrackerPageModes();
 

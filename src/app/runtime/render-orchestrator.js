@@ -16,7 +16,7 @@ import {
 } from './render-orchestrator/panel-helpers.js';
 import { getTrackerPageSectionIds, getTrackerSections } from '../registries/unified-registry.js';
 import { renderTrackerSections } from './render-orchestrator/section-orchestrator.js';
-import { GAMES, getSelectedGame } from '../../core/state/GameContext.js';
+import { GAMES, getSelectedGame } from '../../core/state/game-context.js';
 
 export function renderApp(deps) {
   const {

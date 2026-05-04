@@ -1,4 +1,6 @@
-export const specialtyTimerGroup = {
+import { defineTimerGroup } from '../../../../../../../factories/define-timer-group.js';
+
+export const specialtyTimerGroup = defineTimerGroup({
   id: 'specialty',
   label: 'Specialty',
   note: 'Specialty farming timers with compact location checklists.',
@@ -146,8 +148,8 @@ export const specialtyTimerGroup = {
       timerCategory: 'farming',
       plots: [{ id: 'bloodweed-wilderness', name: 'Wilderness', wiki: 'https://runescape.wiki/w/Bloodweed_patch' }]
     }
-  ],
-  plots: []
-};
+  ]
+});
 
 export default specialtyTimerGroup;
+

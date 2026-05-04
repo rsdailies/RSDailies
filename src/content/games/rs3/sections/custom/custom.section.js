@@ -1,14 +1,13 @@
+import { defineSection } from '../../../../factories/define-section.js';
 import { rs3CustomTasks } from './tasks/custom.tasks.js';
 
-export const rs3CustomSection = {
+export const rs3CustomSection = defineSection({
   id: 'custom',
   label: 'Custom Tasks',
-  shortLabel: 'Custom',
   game: 'rs3',
   displayOrder: 0,
   legacySectionId: 'custom',
   resetFrequency: 'never',
-  renderVariant: 'standard',
   containerId: 'custom-container',
   tableId: 'custom-table',
   includedInAllMode: false,
@@ -21,6 +20,7 @@ export const rs3CustomSection = {
     showCountdown: false,
   },
   items: rs3CustomTasks,
-};
+});
+
 
 export default rs3CustomSection;

@@ -2,7 +2,7 @@ import { getPageMode, syncStoredViewModeToPageMode, setPageMode } from '../model
 import { positionPanel } from '../../../../ui/components/views/view-panel.js';
 import { replaceInteractiveElement, setPanelOpenState } from '../../../../core/dom/controls.js';
 import { bindFloatingPanelTrigger } from '../../../../core/dom/panel-controls.js';
-import { subscribeToGameChanges } from '../../../../core/state/GameContext.js';
+import { subscribeToGameChanges } from '../../../../core/state/game-context.js';
 import { upsertPrimaryNavLinks } from './panel/primary-nav.js';
 import { getActiveGame, syncViewsButtonLabel } from './panel/shared.js';
 import { renderViewsList } from './panel/views-list.js';

@@ -1,4 +1,4 @@
-import { GAMES, getSelectedGame, setSelectedGame, subscribeToGameChanges } from '../../core/state/GameContext.js';
+import { GAMES, getSelectedGame, setSelectedGame, subscribeToGameChanges } from '../../core/state/game-context.js';
 
 function ensureGameSelectionPage(documentRef) {
   let page = documentRef.getElementById('game-selection-page');
@@ -7,16 +7,42 @@ function ensureGameSelectionPage(documentRef) {
   page = documentRef.createElement('main');
   page.id = 'game-selection-page';
   page.className = 'container-xl game-selection-page';
-  page.innerHTML = `
-    <section class="game-selection-card" aria-labelledby="game-selection-title">
-      <img class="game-selection-logo" src="/RSDailies/img/dailyscapebig.png" alt="RSDailies">
-      <h1 id="game-selection-title">Choose Your Dailyscape</h1>
-      <p>Select a game mode to open the matching tracker workspace.</p>
-      <div class="game-selection-actions">
-        <button type="button" class="btn btn-primary btn-lg primitive-btn" data-game-choice="rs3">RuneScape 3</button>
-        <button type="button" class="btn btn-secondary btn-lg primitive-btn" data-game-choice="osrs">Old School RuneScape</button>
-      </div>
-    </section>`;
+
+  const section = documentRef.createElement('section');
+  section.className = 'game-selection-card';
+  section.setAttribute('aria-labelledby', 'game-selection-title');
+
+  const logo = documentRef.createElement('img');
+  logo.className = 'game-selection-logo';
+  logo.src = '/RSDailies/img/dailyscapebig.png';
+  logo.alt = 'RSDailies';
+
+  const title = documentRef.createElement('h1');
+  title.id = 'game-selection-title';
+  title.textContent = 'Choose Your Dailyscape';
+
+  const subtitle = documentRef.createElement('p');
+  subtitle.textContent = 'Select a game mode to open the matching tracker workspace.';
+
+  const actions = documentRef.createElement('div');
+  actions.className = 'game-selection-actions';
+
+  const rs3Btn = documentRef.createElement('button');
+  rs3Btn.type = 'button';
+  rs3Btn.className = 'btn btn-primary btn-lg primitive-btn';
+  rs3Btn.dataset.gameChoice = 'rs3';
+  rs3Btn.textContent = 'RuneScape 3';
+
+  const osrsBtn = documentRef.createElement('button');
+  osrsBtn.type = 'button';
+  osrsBtn.className = 'btn btn-secondary btn-lg primitive-btn';
+  osrsBtn.dataset.gameChoice = 'osrs';
+  osrsBtn.textContent = 'Old School RuneScape';
+
+  actions.append(rs3Btn, osrsBtn);
+  section.append(logo, title, subtitle, actions);
+  page.appendChild(section);
+
 
   const overview = documentRef.getElementById('overview-mount');
   overview?.parentNode?.insertBefore(page, overview);
@@ -32,7 +58,21 @@ function createGameButtons(documentRef) {
   const li = documentRef.createElement('li');
   li.id = 'game-switcher-control';
   li.className = 'nav-item d-flex align-items-center gap-2 me-2';
-  li.innerHTML = `<button type="button" class="btn btn-secondary btn-sm primitive-btn" data-game-choice="rs3">RS3</button><button type="button" class="btn btn-secondary btn-sm primitive-btn" data-game-choice="osrs">OSRS</button>`;
+
+  const rs3Btn = documentRef.createElement('button');
+  rs3Btn.type = 'button';
+  rs3Btn.className = 'btn btn-secondary btn-sm primitive-btn';
+  rs3Btn.dataset.gameChoice = 'rs3';
+  rs3Btn.textContent = 'RS3';
+
+  const osrsBtn = documentRef.createElement('button');
+  osrsBtn.type = 'button';
+  osrsBtn.className = 'btn btn-secondary btn-sm primitive-btn';
+  osrsBtn.dataset.gameChoice = 'osrs';
+  osrsBtn.textContent = 'OSRS';
+
+  li.append(rs3Btn, osrsBtn);
+
   navRight.insertBefore(li, navRight.firstChild);
 }
 

@@ -47,12 +47,12 @@ Dailyscape follows a strict anatomical topology. Each layer is isolated and has 
 
 | Layer | Path | Responsibility | Canonical Owner |
 | :--- | :--- | :--- | :--- |
-| **The Brain** | `src/app/` | Orchestration, Registries, and Lifecycle. | `render-orchestrator.js` |
-| **The Heart** | `src/content/` | Authored Tasks, Sections, and Page Layouts. | `src/content/rs3/tasks/` |
-| **The Skeleton** | `src/core/` | Infrastructure, Migrations, and Storage. | `migrations.js`, `storage.js` |
-| **The Muscle** | `src/features/` | Domain-specific logic and state rules. | `timer-math.js`, `logic.js` |
-| **The Skin** | `src/ui/` | Design Tokens, Atomic Components, and Styles. | `tokens.css`, `base.css` |
-| **The Audit** | `tools/` | Topological and content integrity verification. | `verify-topology.mjs` |
+| **The Brain** | `src/app/` | Orchestration, Registries, and Lifecycle. | `src/app/runtime/render-orchestrator.js` |
+| **The Heart** | `src/content/` | Authored Tasks, Sections, and Page Layouts. | `src/content/games/rs3/` |
+| **The Skeleton** | `src/core/` | Infrastructure, Migrations, and Storage. | `src/core/storage/migrations.js` |
+| **The Muscle** | `src/features/` | Domain-specific logic and state rules. | `src/features/timers/domain/timer-math.js` |
+| **The Skin** | `src/ui/` | Design Tokens, Atomic Components, and Styles. | `src/ui/styles/tokens/tokens.css` |
+| **The Audit** | `tools/` | Topological and content integrity verification. | `tools/audit/verify-topology.mjs` |
 
 ---
 
@@ -62,10 +62,10 @@ Dailyscape follows a strict anatomical topology. Each layer is isolated and has 
 
 The transformation from a configuration file to a rendered UI row follows a deterministic pipeline:
 
-1. **Authorship**: A task (e.g., "Vis Wax") is authored as a JS object in `src/content/rs3/tasks/`.
-2. **Hydration**: The `Content Resolver` (`src/core/domain/content/`) scans the authored directory, applying default values and resolving wiki links.
-3. **Registration**: The `Unified Registry` (`src/app/registries/`) maps the task to its assigned section and page based on the active `pageMode`.
-4. **Orchestration**: The `Render Orchestrator` (`src/app/runtime/`) detects a state change or initial boot and triggers the `Section Orchestrator`.
+1. **Authorship**: A task (e.g., "Vis Wax") is authored as a JS object in its respective task file (e.g., `src/content/games/rs3/sections/dailies/tasks/dailies.tasks.js`).
+2. **Hydration**: The `Content Loader` (`src/core/domain/content/load-content.js`) scans the authored manifests, applying default values and resolving wiki links.
+3. **Registration**: The `Unified Registry` (`src/app/registries/unified-registry.js`) maps the task to its assigned section and page based on the active `pageMode`.
+4. **Orchestration**: The `Render Orchestrator` (`src/app/runtime/render-orchestrator.js`) detects a state change or initial boot and triggers the section render loop.
 5. **Rendering**:
     * The `Tracker Section Renderer` selects the appropriate renderer variant (Standard, Timer, Weekly).
     * The `Section Engine` (`section-engine.js`) iterates through the block contract (subgroups or rows).

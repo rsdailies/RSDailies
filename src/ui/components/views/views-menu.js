@@ -4,7 +4,7 @@ import {
   getTrackerPrimaryNavItems,
   getTrackerViewsPanelGroups,
 } from '../../../app/registries/unified-registry.js';
-import { GAMES, getSelectedGame } from '../../../core/state/GameContext.js';
+import { GAMES, getSelectedGame } from '../../../core/state/game-context.js';
 
 function getActiveGame(game = getSelectedGame()) {
   return game === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3;

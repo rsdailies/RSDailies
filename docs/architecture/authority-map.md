@@ -45,11 +45,12 @@ flowchart LR
     B --> C[Content loader and validator]
     C --> D[Content resolver]
     D --> E[Tracker section renderer]
-    E --> F[Rows, parents, subparents, and table UI]
+    E --> F[Standard Rows and Specialized Variants]
 ```
 
 ## Notes
 
 - `src/content/` is the active authored hierarchy for tracker pages and sections.
-- `src/features/tasks/config/` and `src/features/farming/config/` are still valid upstream config sources where content adapters currently draw task or timer collections.
+- Feature behaviors are driven by logic in `src/features/` but all content definitions reside in `src/content/`.
 - Compatibility fields such as `legacyMode` and `legacySectionId` exist to support storage migration and old saved state, not as permission to restore old architecture.
+
