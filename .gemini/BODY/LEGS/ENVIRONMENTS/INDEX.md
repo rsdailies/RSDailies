@@ -1,4 +1,0 @@
-# ENVIRONMENTS Index
-
-Canonical path: BODY/LEGS/ENVIRONMENTS.
-

@@ -1,4 +1,0 @@
-# GUARDRAILS Index
-
-Canonical path: BODY/IMMUNE/GUARDRAILS.
-

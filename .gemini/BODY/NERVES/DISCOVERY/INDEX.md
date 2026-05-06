@@ -1,4 +1,0 @@
-# DISCOVERY Index
-
-Canonical path: BODY/NERVES/DISCOVERY.
-

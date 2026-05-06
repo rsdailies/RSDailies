@@ -1,4 +1,0 @@
-# SUPPLY_CHAIN Index
-
-Canonical path: BODY/IMMUNE/SUPPLY_CHAIN.
-

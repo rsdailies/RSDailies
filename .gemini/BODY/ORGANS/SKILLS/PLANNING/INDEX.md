@@ -1,4 +1,0 @@
-# PLANNING Index
-
-Canonical path: BODY/ORGANS/SKILLS/PLANNING.
-

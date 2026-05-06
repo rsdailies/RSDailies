@@ -1,4 +1,0 @@
-# OPENROUTER Index
-
-Canonical path: BODY/NERVES/OPENROUTER.
-

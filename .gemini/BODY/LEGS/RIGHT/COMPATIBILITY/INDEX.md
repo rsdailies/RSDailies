@@ -1,4 +1,0 @@
-# COMPATIBILITY Index
-
-Canonical path: BODY/LEGS/RIGHT/COMPATIBILITY.
-

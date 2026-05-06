@@ -1,4 +1,0 @@
-# WORKFLOWS Index
-
-Canonical path: BODY/HANDS/LEFT/WORKFLOWS.
-

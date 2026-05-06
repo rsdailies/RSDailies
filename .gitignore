@@ -34,7 +34,8 @@ Pasted text.txt
 message*.txt
 /src/test/*.log
 /src/test/*.txt
-
+.agents/
+.gemini/
 test-results/
 
 # Copilot screenshot saving for chat reference
@@ -47,8 +48,3 @@ googlec7c393bb3b6c202e.html
 # Private configs (if you create them locally)
 config.json
 credentials.json
-
-
-# AI Help
-.agents/
-.gemini/

@@ -48,7 +48,7 @@ export function bindSectionControls(sectionKey, opts = { sortable: false }, deps
     btn.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
-      restoreAllTasks(sectionKey, { load, save });
+      restoreAllTasks(sectionKey, { load: deps.load, save: deps.save });
       renderApp();
     });
   });
@@ -59,7 +59,7 @@ export function bindSectionControls(sectionKey, opts = { sortable: false }, deps
       event.stopPropagation();
       const taskId = btn.dataset.taskId;
       if (taskId) {
-        restoreTask(sectionKey, taskId, { load, save });
+        restoreTask(sectionKey, taskId, { load: deps.load, save: deps.save });
         renderApp();
       }
     });
@@ -69,7 +69,7 @@ export function bindSectionControls(sectionKey, opts = { sortable: false }, deps
     btn.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
-      resetSectionView(sectionKey);
+      deps.clearSectionCompletionsOnly(sectionKey);
       renderApp();
     });
   });

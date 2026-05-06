@@ -23,9 +23,7 @@ export function hideTask(sectionKey, taskId, { load, save }) {
   const section = getSectionStateFeature(sectionKey, { load });
 
   section.hiddenRows[taskId] = true;
-  delete section.completed[taskId];
 
-  saveSectionValueFeature(sectionKey, 'completed', section.completed, { save });
   saveSectionValueFeature(sectionKey, 'hiddenRows', section.hiddenRows, { save });
 
   const order = load(StorageKeyBuilder.sectionOrder(sectionKey), []);

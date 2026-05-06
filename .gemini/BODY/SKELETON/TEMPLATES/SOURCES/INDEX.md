@@ -1,4 +1,0 @@
-# SOURCES Index
-
-Canonical path: BODY/SKELETON/TEMPLATES/SOURCES.
-

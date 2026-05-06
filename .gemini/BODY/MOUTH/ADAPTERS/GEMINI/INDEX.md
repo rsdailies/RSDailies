@@ -1,4 +1,0 @@
-# GEMINI Index
-
-Canonical path: BODY/MOUTH/ADAPTERS/GEMINI.
-

@@ -42,6 +42,11 @@ export function resetSectionView(sectionKey, { load, save, removeKey }) {
   if (sectionKey === 'custom') save('notified:custom', {});
 }
 
+export function clearSectionCompletionsOnly(sectionKey, { load, save }) {
+  // Surgical reset - ONLY clears completions (green highlights)
+  save(StorageKeyBuilder.sectionCompletion(sectionKey), {});
+}
+
 export function checkAutoReset({ load, save, removeKey }) {
   const now = Date.now();
   const lastVisit = load(StorageKeyBuilder.lastVisit(), 0);

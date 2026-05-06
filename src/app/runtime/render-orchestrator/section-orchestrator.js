@@ -52,6 +52,7 @@ export function renderTrackerSections(sections, visibleSectionIds, deps, uiConte
     if (thead) {
       thead.innerHTML = renderSectionHeader(sectionDefinition, colspan, {
         hiddenRows: sectionState.hiddenRows,
+        completed: sectionState.completed,
         sectionTasks: sectionTasks || []
       });
     }

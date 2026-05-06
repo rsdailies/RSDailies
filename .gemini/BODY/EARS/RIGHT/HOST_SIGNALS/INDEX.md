@@ -1,4 +1,0 @@
-# HOST_SIGNALS Index
-
-Canonical path: BODY/EARS/RIGHT/HOST_SIGNALS.
-

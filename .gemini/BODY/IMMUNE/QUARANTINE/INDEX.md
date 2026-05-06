@@ -1,4 +1,0 @@
-# QUARANTINE Index
-
-Canonical path: BODY/IMMUNE/QUARANTINE.
-

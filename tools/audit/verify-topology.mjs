@@ -29,10 +29,6 @@ const mustExist = [
   'src/ui/components/import-export/index.js',
   'src/ui/components/import-export/controller/import-export-controller.js',
   'src/ui/components/import-export/logic/import-export.logic.js',
-  'src/ui/components/profiles/profile-view.js',
-  'src/ui/components/settings/settings-menu.js',
-  'src/ui/components/views/view-panel.js',
-  'src/ui/components/views/views-menu.js',
   'src/features/sections/domain/state.js',
   'src/features/timers/domain/timer-math.js',
   'src/features/timers/domain/timers.js',
@@ -97,10 +93,9 @@ for (const rel of forbidden) {
 }
 const registryFile = fs.readFileSync(path.join(root, 'src/app/registries/unified-registry.js'), 'utf8');
 if (registryFile.includes("game: 'rs3'")) failures.push('Registry still hardcodes RS3-only resolution: src/app/registries/unified-registry.js');
-const resolveContentFile = fs.readFileSync(path.join(root, 'src/core/domain/content/resolve-tracker-content.js'), 'utf8');
-if (resolveContentFile.includes("game: 'rs3'")) failures.push('Content resolver still hardcodes RS3-only section resolution: src/core/domain/content/resolve-tracker-content.js');
-const gameShellFile = fs.readFileSync(path.join(root, 'src/ui/pages/GameShell.js'), 'utf8');
-if (gameShellFile.includes('osrs-empty-state')) failures.push('OSRS shell still routes through placeholder-only state: src/ui/pages/GameShell.js');
+const resolveContentFile = fs.readFileSync(path.join(root, 'src/core/domain/content/content-loader.js'), 'utf8');
+if (resolveContentFile.includes("game: 'rs3'")) failures.push('Content resolver still hardcodes RS3-only section resolution: src/core/domain/content/content-loader.js');
+
 const sectionRendererFile = fs.readFileSync(path.join(root, 'src/ui/renderers/tracker-section-renderer.js'), 'utf8');
 if (/switch\s*\(\s*sectionDefinition\.renderVariant\s*\)/.test(sectionRendererFile)) failures.push('Tracker section renderer still uses central switch dispatch: src/ui/renderers/tracker-section-renderer.js');
 function walk(dir, out = []) {

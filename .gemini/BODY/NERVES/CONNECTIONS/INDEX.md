@@ -1,4 +1,0 @@
-# CONNECTIONS Index
-
-Canonical path: BODY/NERVES/CONNECTIONS.
-

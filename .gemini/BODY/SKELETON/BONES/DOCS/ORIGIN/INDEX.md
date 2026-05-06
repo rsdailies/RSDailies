@@ -1,4 +1,0 @@
-# ORIGIN Index
-
-Canonical path: BODY/SKELETON/BONES/DOCS/ORIGIN.
-

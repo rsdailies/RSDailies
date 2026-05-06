@@ -117,6 +117,7 @@ export const checkAutoReset = maintenance.checkAutoReset;
 export const updateCountdowns = maintenance.updateCountdowns;
 export const cleanupReadyTimers = () => cleanupReadyTimersFeature({ load, save });
 export const cleanupReadyCooldowns = () => cleanupReadyCooldownsFeature({ load, save });
+export const clearSectionCompletionsOnly = (key, deps) => checkAutoResetFeature.clearSectionCompletionsOnly(key, deps);
 
 const renderApp = createRuntimeRenderApp({
   renderAppCore,
@@ -144,6 +145,7 @@ const renderApp = createRuntimeRenderApp({
   bindSectionControls,
   saveSectionValue,
   resetSectionView,
+  clearSectionCompletionsOnly: checkAutoResetFeature.clearSectionCompletionsOnly,
   getPageMode,
   getOverviewPins,
   removeKey,
@@ -158,6 +160,7 @@ export function setupSectionBindings() {
     getSectionState,
     saveSectionValue,
     resetSectionView,
+    clearSectionCompletionsOnly: checkAutoResetFeature.clearSectionCompletionsOnly,
     load,
     save,
     removeKey,

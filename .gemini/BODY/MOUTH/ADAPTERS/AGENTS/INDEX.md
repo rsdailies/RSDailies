@@ -1,4 +1,0 @@
-# AGENTS Index
-
-Canonical path: BODY/MOUTH/ADAPTERS/AGENTS.
-

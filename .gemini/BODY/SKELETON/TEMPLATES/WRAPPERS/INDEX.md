@@ -1,4 +1,0 @@
-# WRAPPERS Index
-
-Canonical path: BODY/SKELETON/TEMPLATES/WRAPPERS.
-

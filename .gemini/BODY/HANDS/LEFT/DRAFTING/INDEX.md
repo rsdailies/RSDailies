@@ -1,4 +1,0 @@
-# DRAFTING Index
-
-Canonical path: BODY/HANDS/LEFT/DRAFTING.
-

@@ -91,10 +91,8 @@ export function restoreHiddenRow(sectionKey, taskId, context) {
 
   delete nextHiddenRows[taskId];
   delete nextRemovedRows[taskId];
-  delete completed[taskId];
 
   setHiddenRowsForSection(sectionKey, nextHiddenRows, context);
   setRemovedRowsForSection(sectionKey, nextRemovedRows, context);
-  context.save?.(StorageKeyBuilder.sectionCompletion(sectionKey), completed);
   context.renderApp?.();
 }

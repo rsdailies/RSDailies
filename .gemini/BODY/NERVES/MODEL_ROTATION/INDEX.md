@@ -1,4 +1,0 @@
-# MODEL_ROTATION Index
-
-Canonical path: BODY/NERVES/MODEL_ROTATION.
-

@@ -1,9 +1,0 @@
-id: plan_mode_lifecycle
-url: "BODY/HEART/POLICIES/PLAN_MODE_POLICY.md"
-title: "Plan-Mode Lifecycle"
-authority: "project_docs"
-last_verified: "2026-05-04"
-volatility: "low"
-claims:
-  - "Every task begins in Plan Mode."
-  - "Transition to Execution requires an explicit Proceed signal."

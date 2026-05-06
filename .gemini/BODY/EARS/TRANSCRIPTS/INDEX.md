@@ -1,4 +1,0 @@
-# TRANSCRIPTS Index
-
-Canonical path: BODY/EARS/TRANSCRIPTS.
-
