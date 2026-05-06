@@ -47,3 +47,8 @@ googlec7c393bb3b6c202e.html
 # Private configs (if you create them locally)
 config.json
 credentials.json
+
+
+# AI Help
+.agents/
+.gemini/
