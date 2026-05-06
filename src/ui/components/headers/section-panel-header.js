@@ -1,112 +1,71 @@
 import { HEADER_CLASSES, HEADER_CONTROL_TEXT } from './header.constants.js';
 import { renderHeaderFrameHtml } from './header.frame.js';
 
-function createControlButton(documentRef, id, className, text, variant = 'secondary', options = {}) {
-  const btn = documentRef.createElement('button');
-  btn.id = id;
-  btn.type = 'button';
-  btn.className = `btn btn-${variant} btn-sm active primitive-btn ${className}`;
-  if (options.dropdown) {
-    btn.classList.add('dropdown-toggle', 'no-caret');
-    btn.setAttribute('data-bs-toggle', 'dropdown');
-    btn.setAttribute('aria-expanded', 'false');
-  }
-  btn.textContent = text;
-  return btn;
+function renderControlButton(id, className, text, variant = 'secondary', options = {}) {
+  const dropdownAttrs = options.dropdown 
+    ? 'class="btn btn-' + variant + ' btn-sm active primitive-btn ' + className + ' dropdown-toggle no-caret" data-bs-toggle="dropdown" aria-expanded="false"'
+    : 'class="btn btn-' + variant + ' btn-sm active primitive-btn ' + className + '"';
+    
+  return `<button id="${id}" type="button" ${dropdownAttrs}>${text}</button>`;
 }
 
-function createRestoreDropdownItems(sectionId, hiddenRows, completed, tasks, documentRef) {
-  const list = documentRef.createElement('ul');
-  list.className = 'dropdown-menu dropdown-menu-dark dropdown-menu-end section-restore-dropdown';
-  list.setAttribute('aria-labelledby', `${sectionId}_reset_button`);
-
-  // 1. Restore All (Top)
-  const restoreAllLi = documentRef.createElement('li');
-  const restoreAllBtn = documentRef.createElement('button');
-  restoreAllBtn.className = 'dropdown-item section-restore-all-btn';
-  restoreAllBtn.type = 'button';
-  restoreAllBtn.textContent = 'Restore All';
-  restoreAllLi.appendChild(restoreAllBtn);
-  list.appendChild(restoreAllLi);
-
-  const topDividerLi = documentRef.createElement('li');
-  topDividerLi.innerHTML = '<hr class="dropdown-divider">';
-  list.appendChild(topDividerLi);
-
-  // 2. Individual X'd out tasks (Middle - filter out completed ones)
+function renderRestoreDropdownItems(sectionId, hiddenRows, completed, tasks) {
   const hiddenIds = Object.keys(hiddenRows).filter(id => !completed[id]);
   
+  let hiddenItemsHtml = '';
   if (hiddenIds.length > 0) {
-    hiddenIds.forEach((id) => {
-      const task = tasks.find((t) => t.id === id) || { name: hiddenRows[id] || id };
-      const li = documentRef.createElement('li');
-      const btn = documentRef.createElement('button');
-      btn.className = 'dropdown-item section-restore-task-btn';
-      btn.type = 'button';
-      btn.dataset.taskId = id;
-      btn.textContent = task.name;
-      li.appendChild(btn);
-      list.appendChild(li);
-    });
-
-    const bottomDividerLi = documentRef.createElement('li');
-    bottomDividerLi.innerHTML = '<hr class="dropdown-divider">';
-    list.appendChild(bottomDividerLi);
+    hiddenItemsHtml = hiddenIds.map(id => {
+      const task = tasks.find(t => t.id === id) || { name: hiddenRows[id] || id };
+      return `<li><button class="dropdown-item section-restore-task-btn" type="button" data-task-id="${id}">${task.name}</button></li>`;
+    }).join('') + '<li><hr class="dropdown-divider"></li>';
   }
 
-  // 3. Clear Completed (Bottom)
-  const resetLi = documentRef.createElement('li');
-  const resetBtn = documentRef.createElement('button');
-  resetBtn.className = 'dropdown-item section-clear-completion-btn';
-  resetBtn.type = 'button';
-  resetBtn.textContent = 'Clear Completed';
-  resetLi.appendChild(resetBtn);
-  list.appendChild(resetLi);
-
-  return list.outerHTML;
+  return `
+<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end section-restore-dropdown" aria-labelledby="${sectionId}_reset_button">
+  <li><button class="dropdown-item section-restore-all-btn" type="button">Restore All</button></li>
+  <li><hr class="dropdown-divider"></li>
+  ${hiddenItemsHtml}
+  <li><button class="dropdown-item section-clear-completion-btn" type="button">Clear Completed</button></li>
+</ul>`.trim();
 }
 
-function createHeaderControls(section, documentRef, deps = {}) {
+function renderHeaderControls(section, deps = {}) {
   const { hiddenRows = {}, completed = {}, sectionTasks = [] } = deps;
   const hiddenCount = Object.keys(hiddenRows).length;
-  const container = documentRef.createElement('div');
   const shell = section.shell || {};
+  let html = '';
 
   if (shell.countdownId) {
-    const countdown = documentRef.createElement('span');
-    countdown.id = shell.countdownId;
-    countdown.className = `${HEADER_CLASSES.status} section-panel-countdown`;
-    countdown.textContent = '--:--:--';
-    container.appendChild(countdown);
+    html += `<span id="${shell.countdownId}" class="${HEADER_CLASSES.status} section-panel-countdown">--:--:--</span>`;
   }
 
   if (shell.showAddButton) {
-    container.appendChild(createControlButton(documentRef, `${section.id}_add_button`, 'section-panel-add-button', '+ Add', 'primary'));
+    html += renderControlButton(`${section.id}_add_button`, 'section-panel-add-button', '+ Add', 'primary');
   }
 
   if (shell.showResetButton) {
     if (hiddenCount >= 2) {
-      const dropdownWrapper = documentRef.createElement('div');
-      dropdownWrapper.className = 'dropdown d-inline-block';
-      dropdownWrapper.appendChild(createControlButton(documentRef, `${section.id}_reset_button`, 'section-panel-reset-button', HEADER_CONTROL_TEXT.reset, 'secondary', { dropdown: true }));
-      dropdownWrapper.innerHTML += createRestoreDropdownItems(section.id, hiddenRows, completed, sectionTasks, documentRef);
-      container.appendChild(dropdownWrapper);
+      html += `
+<div class="dropdown d-inline-block">
+  ${renderControlButton(`${section.id}_reset_button`, 'section-panel-reset-button', HEADER_CONTROL_TEXT.reset, 'secondary', { dropdown: true })}
+  ${renderRestoreDropdownItems(section.id, hiddenRows, completed, sectionTasks)}
+</div>`;
     } else {
-      container.appendChild(createControlButton(documentRef, `${section.id}_reset_button`, 'section-panel-reset-button', HEADER_CONTROL_TEXT.reset));
+      html += renderControlButton(`${section.id}_reset_button`, 'section-panel-reset-button', HEADER_CONTROL_TEXT.reset);
     }
   }
 
-  container.appendChild(createControlButton(documentRef, `${section.id}_hide_button`, 'hide_button section-panel-toggle-button', HEADER_CONTROL_TEXT.hide));
-  container.appendChild(createControlButton(documentRef, `${section.id}_unhide_button`, 'unhide_button section-panel-toggle-button', HEADER_CONTROL_TEXT.show));
+  html += renderControlButton(`${section.id}_hide_button`, 'hide_button section-panel-toggle-button', HEADER_CONTROL_TEXT.hide);
+  html += renderControlButton(`${section.id}_unhide_button`, 'unhide_button section-panel-toggle-button', HEADER_CONTROL_TEXT.show);
 
-  return container.innerHTML; // Still returning innerHTML for compatibility with frame but content is now safe
+  return html;
 }
 
-export function renderSectionPanelHeader(section, colspan, deps = {}, documentRef = document) {
+export function renderSectionPanelHeader(section, colspan, deps = {}) {
   return renderHeaderFrameHtml({
     label: section.label,
     colspan,
-    controlsHtml: createHeaderControls(section, documentRef, deps),
+    controlsHtml: renderHeaderControls(section, deps),
     barClassName: 'section-panel-header',
     titleClassName: 'section-panel-title',
     controlsClassName: 'section-panel-controls'
