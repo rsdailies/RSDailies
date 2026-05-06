@@ -1,0 +1,13 @@
+---
+name: role-schema
+description: validates the MISSION and BOUNDARIES of an anatomical organ.
+---
+
+type: object
+required: [mission, boundaries]
+properties:
+  mission: { type: string }
+  inputs: { type: array, items: { type: string } }
+  outputs: { type: array, items: { type: string } }
+  boundaries: { type: array, items: { type: string } }
+  escalation: { type: string }

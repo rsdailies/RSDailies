@@ -40,7 +40,7 @@ function createRendererContext(sectionDefinition, sectionTasks, deps) {
 }
 
 function renderTimerGroupsSection(tbody, context) {
-  const { sectionTasks, isCollapsedBlock, getTimerHeaderStatus, uiContext } = context;
+  const { sectionTasks, isCollapsedBlock, getTimerHeaderStatus, uiContext, load } = context;
 
   renderGroupedTimers(tbody, sectionTasks, {
     isCollapsedBlock,
@@ -51,7 +51,7 @@ function renderTimerGroupsSection(tbody, context) {
     createRow,
     createRightSideChildRow,
     formatDurationMs: formatDurationMsCore,
-    context: { ...uiContext, getSettingsValue: () => getSettings() },
+    context: { ...uiContext, getSettingsValue: () => getSettings({ load }) },
   });
 }
 

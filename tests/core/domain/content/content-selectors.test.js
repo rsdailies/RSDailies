@@ -5,7 +5,7 @@ import {
   getContentSectionDefinition,
   getContentSectionTaskIds,
   getContentSectionTaskIdsByCadence,
-} from '../../../../src/core/domain/content/content-selectors.js';
+} from '../../../../src/core/domain/content/content-loader.js';
 import rs3AllTasksPage from '../../../../src/content/games/rs3/pages/all.page.js';
 import rs3GatheringPage from '../../../../src/content/games/rs3/pages/gathering.page.js';
 import rs3WeeklyPage from '../../../../src/content/games/rs3/pages/weekly.page.js';

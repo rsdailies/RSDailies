@@ -1,0 +1,27 @@
+# Subagent Schema
+# Validates files in BODY/BRAIN/SUBAGENTS/
+
+type: object
+required:
+  - id
+  - canonical_file
+  - body_owner
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  canonical_file:
+    type: string
+    description: "Path to the canonical .md definition."
+  body_owner:
+    type: string
+    enum: ["BRAIN", "HEART", "EYES", "EARS", "NOSE", "MOUTH", "HANDS", "LEGS", "NERVES", "ORGANS", "IMMUNE", "SKELETON"]
+  tools:
+    type: array
+    items: { type: string }
+  model_policy:
+    type: string
+    enum: ["free_tier_allowed", "premium_preferred", "local_only"]

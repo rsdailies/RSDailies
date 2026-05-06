@@ -5,7 +5,7 @@ export const rs3GatheringPage = definePage({
   id: 'gathering',
   title: 'Gathering',
   game: 'rs3',
-  displayOrder: 5,
+  displayOrder: 3,
   route: '/tracker/gathering',
   aliases: ['gathering'],
   legacyMode: 'gathering',

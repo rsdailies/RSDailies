@@ -1,0 +1,42 @@
+version: 2026-05-06
+canonical_modes:
+  global_framework:
+    canonical_root: BODY
+    bridge_roots:
+      - .agents
+      - .gemini
+  infected_project:
+    canonical_root: .gemini/BODY
+    bridge_roots:
+      - .agents
+      - .gemini
+
+bridges:
+  - id: root_boot_pointer
+    canonical: BODY/SKELETON/BOOT.md
+    outputs:
+      - AGENTS.md
+      - GEMINI.md
+    mode: direct_pointer
+
+  - id: agent_instruction_chain
+    canonical: BODY/SKELETON/BOOT.md
+    outputs:
+      - .agents/instructions.md
+    mode: import_chain
+
+  - id: public_skill_registry
+    canonical: BODY/ORGANS/SKILLS
+    outputs:
+      - .agents/skills
+      - .gemini/skills
+    mode: generated_wrapper
+    generator: BODY/HANDS/SCRIPTS/mirror_body.ps1
+
+  - id: subagent_registry
+    canonical: BODY/BRAIN/SUBAGENTS
+    outputs:
+      - .agents/agents
+      - .gemini/agents
+    mode: generated_wrapper
+    generator: BODY/HANDS/SCRIPTS/mirror_body.ps1

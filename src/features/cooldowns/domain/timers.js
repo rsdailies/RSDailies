@@ -1,21 +1,28 @@
 import { formatDurationMs } from '../../../core/time/formatters.js';
 import { StorageKeyBuilder } from '../../../core/storage/keys-builder.js';
-import { getTrackerSections } from '../../../app/registries/unified-registry.js';
+import { getTrackerSections } from '../../../core/domain/content/content-loader.js';
 
-function getCooldowns(load) {
+/**
+ * Cooldowns Feature Logic
+ * 
+ * Manages individual task cooldowns and their synchronization with section states.
+ * Standardized on the { load, save } dependency injection pattern.
+ */
+
+function getCooldowns({ load }) {
   const value = load(StorageKeyBuilder.cooldowns(), {});
   return value && typeof value === 'object' ? value : {};
 }
 
-function saveCooldowns(data, save) {
+function saveCooldowns(data, { save }) {
   save(StorageKeyBuilder.cooldowns(), data);
 }
 
-function cloneCooldowns(load) {
-  return { ...getCooldowns(load) };
+function cloneCooldowns({ load }) {
+  return { ...getCooldowns({ load }) };
 }
 
-function getSectionState(sectionKey, load) {
+function getSectionState(sectionKey, { load }) {
   return {
     completed: load(StorageKeyBuilder.sectionCompletion(sectionKey), {}),
     hiddenRows: load(StorageKeyBuilder.sectionHiddenRows(sectionKey), {}),
@@ -26,12 +33,12 @@ function getSectionState(sectionKey, load) {
   };
 }
 
-function saveSectionValue(sectionKey, key, value, save) {
+function saveSectionValue(sectionKey, key, value, { save }) {
   save(StorageKeyBuilder.sectionValue(sectionKey, key), value);
 }
 
 function restoreTaskInSection(sectionKey, taskId, { load, save }) {
-  const section = getSectionState(sectionKey, load);
+  const section = getSectionState(sectionKey, { load });
   const completed = { ...(section.completed || {}) };
   const hiddenRows = { ...(section.hiddenRows || {}) };
 
@@ -48,8 +55,8 @@ function restoreTaskInSection(sectionKey, taskId, { load, save }) {
   }
 
   if (changed) {
-    saveSectionValue(sectionKey, 'completed', completed, save);
-    saveSectionValue(sectionKey, 'hiddenRows', hiddenRows, save);
+    saveSectionValue(sectionKey, 'completed', completed, { save });
+    saveSectionValue(sectionKey, 'hiddenRows', hiddenRows, { save });
   }
 
   return changed;
@@ -59,30 +66,30 @@ export function startCooldown(taskId, minutes, { load, save }) {
   if (!taskId) return false;
 
   const durationMinutes = Math.max(1, Math.floor(Number(minutes) || 0));
-  const cooldowns = cloneCooldowns(load);
+  const cooldowns = cloneCooldowns({ load });
 
   cooldowns[taskId] = {
     readyAt: Date.now() + durationMinutes * 60000,
     minutes: durationMinutes
   };
 
-  saveCooldowns(cooldowns, save);
+  saveCooldowns(cooldowns, { save });
   return true;
 }
 
 export function clearCooldown(taskId, { load, save }) {
   if (!taskId) return false;
 
-  const cooldowns = cloneCooldowns(load);
+  const cooldowns = cloneCooldowns({ load });
   if (!cooldowns[taskId]) return false;
 
   delete cooldowns[taskId];
-  saveCooldowns(cooldowns, save);
+  saveCooldowns(cooldowns, { save });
   return true;
 }
 
 export function getCooldownStatus(taskId, { load }) {
-  const cooldowns = getCooldowns(load);
+  const cooldowns = getCooldowns({ load });
   const state = cooldowns[taskId];
 
   if (!state || !state.readyAt) {
@@ -108,7 +115,7 @@ export function getCooldownStatus(taskId, { load }) {
 }
 
 export function cleanupReadyCooldowns({ load, save }) {
-  const cooldowns = cloneCooldowns(load);
+  const cooldowns = cloneCooldowns({ load });
   const sections = getTrackerSections()
     .filter((section) => section.renderVariant !== 'timer-groups')
     .map((section) => section.id);
@@ -126,7 +133,7 @@ export function cleanupReadyCooldowns({ load, save }) {
   });
 
   if (changed) {
-    saveCooldowns(cooldowns, save);
+    saveCooldowns(cooldowns, { save });
   }
 
   return changed;

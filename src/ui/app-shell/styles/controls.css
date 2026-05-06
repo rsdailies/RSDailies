@@ -3,11 +3,11 @@
   margin-bottom: 10px;
 }
 
-.navbar-nav > li > .dropdown-menu > a {
+.navbar-nav > li > .dropdown-menu a {
   color: #fff;
 }
 
-.navbar-nav > li > .dropdown-menu > a:hover {
+.navbar-nav > li > .dropdown-menu a:hover {
   color: #000;
 }
 

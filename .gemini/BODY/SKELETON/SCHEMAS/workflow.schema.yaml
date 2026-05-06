@@ -1,0 +1,25 @@
+# Workflow Schema
+# Validates files in BODY/ORGANS/WORKFLOWS/
+
+type: object
+required:
+  - name
+  - steps
+properties:
+  name:
+    type: string
+  description:
+    type: string
+  trigger:
+    type: string
+  steps:
+    type: array
+    items:
+      type: object
+      required: [action, organ]
+      properties:
+        action: { type: string }
+        organ: { type: string }
+  outputs:
+    type: array
+    items: { type: string }

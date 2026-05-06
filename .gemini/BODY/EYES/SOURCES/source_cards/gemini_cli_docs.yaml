@@ -1,0 +1,12 @@
+id: gemini_cli_docs
+url: "https://google-gemini.github.io/gemini-cli/"
+title: "Gemini CLI Documentation"
+publisher: "Google"
+authority: "official"
+last_verified: "2026-05-04"
+volatility: "medium"
+claims:
+  - "GEMINI.md files provide persistent context."
+  - "Skills are discoverable in .agents/skills/ or .gemini/skills/."
+  - "Subagents are defined via YAML frontmatter in Markdown files."
+  - "MCP servers are configured in settings.json."

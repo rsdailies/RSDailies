@@ -10,8 +10,15 @@ import {
 } from './reset-helpers.js';
 import { cleanupTaskNotificationsForReset } from '../../../notifications/domain/bridge.js';
 import { StorageKeyBuilder } from '../../../../core/storage/keys-builder.js';
-import { getTrackerSections } from '../../../../app/registries/unified-registry.js';
+import { getTrackerSections } from '../../../../core/domain/content/content-loader.js';
 import { TIMER_SECTION_KEY } from '../../../timers/domain/timers.js';
+
+/**
+ * Reset Orchestrator
+ * 
+ * Manages the automatic and manual reset cycles for all tracker sections.
+ * Standardized on the { load, save } dependency injection pattern.
+ */
 
 function getResettableSectionsForFrequency(frequency) {
   return getTrackerSections()
@@ -27,15 +34,25 @@ export function resetSectionView(sectionKey, { load, save, removeKey }) {
   save(StorageKeyBuilder.sectionSort(sectionKey), 'default');
   save(StorageKeyBuilder.sectionShowHidden(sectionKey), false);
   save(StorageKeyBuilder.sectionHidden(sectionKey), false);
-  clearCooldownsForTaskIds(getSectionTaskIds(sectionKey, load), { load, save });
+  
+  clearCooldownsForTaskIds(getSectionTaskIds(sectionKey, { load }), { load, save });
   cleanupTaskNotificationsForReset(sectionKey, { removeKey });
-  if (sectionKey === TIMER_SECTION_KEY) saveTimersFeature({}, save);
+  
+  if (sectionKey === TIMER_SECTION_KEY) saveTimersFeature({}, { save });
   if (sectionKey === 'custom') save('notified:custom', {});
 }
 
 export function checkAutoReset({ load, save, removeKey }) {
   const now = Date.now();
   const lastVisit = load(StorageKeyBuilder.lastVisit(), 0);
+
+  // If this is the first visit (or lost timestamp), just initialize it and return.
+  // This prevents over-aggressive resets on first load or new profiles.
+  if (lastVisit === 0) {
+    save(StorageKeyBuilder.lastVisit(), now);
+    return false;
+  }
+
   let changed = false;
   const prevDaily = nextDailyBoundaryCore(new Date(now - 86400000)).getTime();
   const prevWeekly = nextWeeklyBoundaryCore(new Date(now - 7 * 86400000)).getTime();

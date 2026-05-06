@@ -5,7 +5,7 @@ import {
   saveProfiles,
   setProfile,
   removeProfileStorage
-} from './store.js';
+} from './model.js';
 import { renderProfileHeader, renderProfileRows } from '../../../ui/components/profiles/profile-view.js';
 import { replaceInteractiveElement, setPanelOpenState } from '../../../core/dom/controls.js';
 import { bindFloatingPanelTrigger } from '../../../core/dom/panel-controls.js';

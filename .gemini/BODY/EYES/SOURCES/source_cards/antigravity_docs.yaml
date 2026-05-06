@@ -1,0 +1,12 @@
+id: antigravity_docs
+url: "https://antigravity.im/documentation"
+title: "Antigravity IDE Documentation"
+publisher: "Google / Antigravity"
+authority: "official"
+last_verified: "2026-05-04"
+volatility: "high"
+claims:
+  - "Antigravity is an agent-centric development platform."
+  - "Supports project rules via AGENTS.md."
+  - "Provides manual UI for MCP server connections."
+  - "Saves agent artifacts (screenshots, plans) internally."

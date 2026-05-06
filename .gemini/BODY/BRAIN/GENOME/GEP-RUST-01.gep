@@ -1,0 +1,9 @@
+﻿# 🧬 Strategy Capsule: GEP-RUST-01.gep
+**Lineage**: Inherited from Rust-Optimizer-Alpha
+**Domain**: Low-Level-Performance
+**Weight**: 0.85 (Synergistic)
+
+## 🧠 Captured Strategies
+1. Zero-copy memory safe buffering for deployment scripts.
+2. Async-first I/O orchestration for LEGS environments.
+3. Cryptographic integrity check for inherited DNA.

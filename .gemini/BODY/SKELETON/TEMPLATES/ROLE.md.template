@@ -1,0 +1,26 @@
+# <BODY PART> Role
+
+## Mission
+What this body part owns and its primary objective.
+
+## Inputs
+What this body part reads, receives, or listens to.
+
+## Outputs
+What this body part produces, emits, or exports.
+
+## Boundaries
+What this body part must NOT do or handle.
+
+## Canonical Paths
+- Source: `BODY/<PART>/...`
+- Sub-parts: `BODY/<PART>/<SUB-PART>/...`
+
+## Bridge Surfaces
+- List any wrappers or exports generated from this part.
+
+## Verification
+- How to prove this body part is correctly configured.
+
+## Escalation
+- Who to contact if this part encounters an error it cannot resolve.

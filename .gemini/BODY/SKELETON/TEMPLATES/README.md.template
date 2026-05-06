@@ -1,0 +1,18 @@
+# <BODY PART>
+
+## What this folder is
+A human-readable explanation of this anatomical component.
+
+## How to use this folder
+Instructions for humans and agents interacting with this part.
+
+## Important files
+- `ROLE.md`: The mission statement.
+- `INDEX.md`: Directory of contents.
+- `MANIFEST.yaml`: Machine-readable registry.
+
+## Related BODY parts
+- Connections to other organs or systems.
+
+## Current plan-mode status
+- Status of implementation or promotion.

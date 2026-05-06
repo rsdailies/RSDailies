@@ -1,4 +1,15 @@
-import { loadJson, saveJson } from './local-store.js';
+function loadJson(key, fallback, storage) {
+  try {
+    const raw = storage.getItem(key);
+    return raw !== null ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveJson(key, value, storage) {
+  storage.setItem(key, JSON.stringify(value));
+}
 import { ACTIVE_PROFILE_KEY, GLOBAL_PROFILES_KEY, createProfilePrefix } from './namespace.js';
 import { StorageKeyBuilder } from './keys-builder.js';
 

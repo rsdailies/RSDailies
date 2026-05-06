@@ -33,8 +33,7 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
 }
 
 /* keep completed rows visually red for the current tracker state model */
-.activity_table tr[data-completed="true"] .activity_notes,
-.activity_table tr[data-completed="true"] .activity_status {
+.activity_table tr[data-completed="true"] td {
     background-color: var(--ds-row-complete, #163600);
     box-shadow: inset 0 0 0 9999px var(--ds-row-complete, #163600);
 }
@@ -53,8 +52,7 @@ div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="
     visibility: hidden;
 }
 
-.activity_table tr:hover[data-completed="true"] .activity_notes,
-.activity_table tr:hover[data-completed="true"] .activity_status {
+.activity_table tr:hover[data-completed="true"] td {
     background-color: var(--ds-row-complete-hover, #102700);
     box-shadow: inset 0 0 0 9999px var(--ds-row-complete-hover, #102700);
 }

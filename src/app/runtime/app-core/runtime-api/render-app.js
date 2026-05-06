@@ -1,6 +1,13 @@
 import { GAMES, getSelectedGame } from '../../../../core/state/game-context.js';
-import { resolveTrackerSections } from '../../../../core/domain/content/resolve-tracker-content.js';
+import { resolveTrackerSections } from '../../../../core/domain/content/content-loader.js';
 import { createRenderAppRunner } from '../render-deps.js';
+
+/**
+ * Runtime Render App
+ * 
+ * Factory for the render function that connects UI rendering to feature logic.
+ * Standardized on the { load, save } dependency injection pattern.
+ */
 
 export function createRuntimeRenderApp({
   renderAppCore,
@@ -23,31 +30,31 @@ export function createRuntimeRenderApp({
   isCollapsedBlock,
   setCollapsedBlock,
   fetchProfits,
-  updateProfileHeaderBridge,
-  updateProfileHeaderFeature,
+  updateProfileHeader,
   maybeNotifyTaskAlert,
   bindSectionControls,
   saveSectionValue,
   resetSectionView,
   getPageMode,
   getOverviewPins,
+  removeKey,
 }) {
   let renderApp = () => {};
 
   renderApp = createRenderAppRunner(renderAppCore, {
     load,
     save,
-    getSectionState: (sectionKey) => getSectionState(sectionKey, load),
-    getCustomTasks: () => getCustomTasks(load),
-    saveCustomTasks: (tasks) => saveCustomTasks(tasks, save),
-    getCooldowns: () => getCooldowns(load),
-    getTimers: () => getTimers(load),
+    getSectionState: (sectionKey) => getSectionState(sectionKey, { load }),
+    getCustomTasks: () => getCustomTasks({ load }),
+    saveCustomTasks: (tasks) => saveCustomTasks(tasks, { save }),
+    getCooldowns: () => getCooldowns({ load }),
+    getTimers: () => getTimers({ load }),
     cleanupReadyTimers: () => cleanupReadyTimers({ load, save }),
     cleanupReadyCooldowns: () => cleanupReadyCooldowns({ load, save }),
     hideTooltip: () => hideTooltip(document),
     getResolvedSections: (game = null) => resolveTrackerSections({
       game: game || (getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3),
-      getCustomTasks: () => getCustomTasks(load),
+      getCustomTasks: () => getCustomTasks({ load }),
       getPenguinWeeklyData: () => load('penguinWeeklyData', {}),
     }),
     getTimerHeaderStatus: (task) => getTimerHeaderStatus(task, { load }),
@@ -56,20 +63,19 @@ export function createRuntimeRenderApp({
     clearTimer: (taskId) => clearTimer(taskId, { load, save }),
     startTimer: (task) => startTimer(task, { load, save }),
     startCooldown: (taskId, minutes) => startCooldown(taskId, minutes, { load, save }),
-    isCollapsedBlock: (blockId) => isCollapsedBlock(blockId, load),
-    setCollapsedBlock: (blockId, collapsed) => setCollapsedBlock(blockId, collapsed, load, save),
+    isCollapsedBlock: (blockId) => isCollapsedBlock(blockId, { load }),
+    setCollapsedBlock: (blockId, collapsed) => setCollapsedBlock(blockId, collapsed, { load, save }),
     fetchProfits,
-    updateProfileHeaderBridge,
-    updateProfileHeaderFeature,
+    updateProfileHeader,
     maybeNotifyTaskAlert: (task, sectionKey) => maybeNotifyTaskAlert(task, sectionKey, { load, save }),
     bindSectionControls: (sectionKey, opts) => bindSectionControls(sectionKey, opts, {
       renderApp,
-      getSectionState: (key) => getSectionState(key, load),
-      saveSectionValue: (key, name, value) => saveSectionValue(key, name, value, save),
-      resetSectionView: (key) => resetSectionView(key, { load, save }),
+      getSectionState: (key) => getSectionState(key, { load }),
+      saveSectionValue: (key, name, value) => saveSectionValue(key, name, value, { save }),
+      resetSectionView: (key) => resetSectionView(key, { load, save, removeKey }),
     }),
     getPageMode,
-    getOverviewPins: () => getOverviewPins(load),
+    getOverviewPins: () => getOverviewPins({ load }),
   });
 
   return renderApp;

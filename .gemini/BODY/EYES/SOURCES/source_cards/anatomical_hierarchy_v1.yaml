@@ -1,0 +1,9 @@
+id: anatomical_hierarchy_v1
+url: "BODY/SKELETON/STRUCTURE/anatomy_map.md"
+title: "Anatomical Hierarchy"
+authority: "project_docs"
+last_verified: "2026-05-04"
+volatility: "low"
+claims:
+  - "Defines 12 parts of the agentic body."
+  - "Standardizes the organ base pattern (ROLE, README, etc.)."

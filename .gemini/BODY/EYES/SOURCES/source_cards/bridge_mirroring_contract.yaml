@@ -1,0 +1,9 @@
+id: bridge_mirroring_contract
+url: "BODY/HEART/POLICIES/BRIDGE_POLICY.md"
+title: "Bridge Mirroring Contract"
+authority: "project_docs"
+last_verified: "2026-05-04"
+volatility: "medium"
+claims:
+  - "Bridges are thin pointers (@import) to BODY."
+  - "Mirroring preserves canonical truth while meeting host syntax."

@@ -1,0 +1,68 @@
+version: 2026-05-06
+
+transport_baseline:
+  standard_transports:
+    - stdio
+    - streamable_http
+  remote_http_security:
+    - validate_origin_header
+    - prefer_localhost_for_local_servers
+    - require_authentication_for_remote_access
+    - avoid_legacy_http_sse_for_new_servers
+
+catalog:
+  filesystem:
+    transport: stdio
+    launcher:
+      command: npx
+      args: ["-y", "@modelcontextprotocol/server-filesystem", "c:/Users/antho/.gemini"]
+    auth:
+      required: false
+    loadout_tiers: [minimal, research, implementation]
+    capabilities: [filesystem, local_context]
+  brave_search:
+    transport: stdio
+    launcher:
+      command: npx
+      args: ["-y", "@modelcontextprotocol/server-brave-search"]
+    auth:
+      required: true
+      env: BRAVE_API_KEY
+    loadout_tiers: [research]
+    capabilities: [web_search]
+  github:
+    transport: stdio
+    launcher:
+      command: npx
+      args: ["-y", "@modelcontextprotocol/server-github"]
+    auth:
+      required: true
+      env: GITHUB_PERSONAL_ACCESS_TOKEN
+    loadout_tiers: [implementation]
+    capabilities: [repo_access, pull_requests]
+  notion:
+    transport: stdio
+    launcher:
+      command: npx
+      args: ["-y", "@modelcontextprotocol/server-notion"]
+    auth:
+      required: true
+      env: NOTION_API_KEY
+    loadout_tiers: [research, implementation]
+    capabilities: [knowledge_base]
+  remote_cloudflare_mcp:
+    transport: streamable_http
+    endpoint: https://example.invalid/mcp
+    auth:
+      required: true
+      scheme: oauth_or_bearer
+    loadout_tiers: [implementation]
+    capabilities: [remote_tools, stateful_or_stateless]
+
+active_local_settings:
+  gemini_cli:
+    source_file: settings.json
+    enabled_servers: [filesystem]
+  antigravity:
+    source_file: antigravity/mcp_config.json
+    enabled_servers: [filesystem]

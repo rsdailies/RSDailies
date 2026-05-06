@@ -5,7 +5,7 @@ export const rs3TimerPage = definePage({
   id: 'timers',
   title: 'Timers',
   game: 'rs3',
-  displayOrder: 3,
+  displayOrder: 5,
   route: '/tracker/timers',
   aliases: ['timers', 'rs3timers', 'farming', 'rs3farming'],
   legacyMode: 'rs3farming',

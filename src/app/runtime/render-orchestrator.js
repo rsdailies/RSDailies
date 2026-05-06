@@ -17,6 +17,7 @@ import {
 import { getTrackerPageSectionIds, getTrackerSections } from '../registries/unified-registry.js';
 import { renderTrackerSections } from './render-orchestrator/section-orchestrator.js';
 import { GAMES, getSelectedGame } from '../../core/state/game-context.js';
+import { renderLandingPage } from '../../ui/renderers/landing-renderer.js';
 
 export function renderApp(deps) {
   const {
@@ -34,7 +35,28 @@ export function renderApp(deps) {
   cleanupReadyCooldowns();
   hideTooltip();
 
-  const game = getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3;
+  const game = getSelectedGame();
+  const landingMount = document.getElementById('landing-mount');
+  const overviewMount = document.getElementById('overview-mount');
+  const dashboard = document.getElementById('dashboard-container');
+  
+  if (!game) {
+    if (landingMount) landingMount.style.display = '';
+    if (overviewMount) overviewMount.style.display = 'none';
+    if (dashboard) dashboard.style.display = 'none';
+
+    renderLandingPage({ ...deps, renderApp: () => renderApp(deps) });
+    return;
+  }
+
+  // Clear landing mount when game is selected
+  if (landingMount) {
+    landingMount.style.display = 'none';
+    landingMount.innerHTML = '';
+  }
+  if (overviewMount) overviewMount.style.display = '';
+  if (dashboard) dashboard.style.display = '';
+
   const uiContext = createUiContext(deps, () => renderApp(deps));
   const sections = getResolvedSections(game);
   const sectionDefinitions = getTrackerSections(game);
@@ -45,9 +67,6 @@ export function renderApp(deps) {
 
   reorderDashboardSections(sectionKeys);
   applyPageModeVisibility(mode);
-
-  const dashboard = document.getElementById('dashboard-container');
-  if (dashboard) dashboard.style.display = '';
 
   clearAllSectionBodies(sectionKeys);
 

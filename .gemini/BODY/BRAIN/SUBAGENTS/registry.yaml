@@ -1,0 +1,21 @@
+subagents:
+  - id: sentinel
+    canonical_file: BODY/BRAIN/SUBAGENTS/sentinel.md
+    model: gemini-2.5-flash
+    tools: [read_file, list_dir]
+    max_turns: 5
+    timeout_mins: 2
+
+  - id: researcher
+    canonical_file: BODY/BRAIN/SUBAGENTS/researcher.md
+    model: claude-sonnet-4-20250514
+    tools: [read_file, grep_search, web_search]
+    max_turns: 20
+    timeout_mins: 10
+
+  - id: executor
+    canonical_file: BODY/BRAIN/SUBAGENTS/executor.md
+    model: gpt-5-mini
+    tools: [write_to_file, replace_file_content, run_command]
+    max_turns: 10
+    timeout_mins: 5

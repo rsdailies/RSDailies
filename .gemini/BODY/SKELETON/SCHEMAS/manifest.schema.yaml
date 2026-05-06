@@ -1,0 +1,17 @@
+# Manifest Schema
+# Validates MANIFEST.yaml files across all organs.
+
+type: object
+required: [name, version, contents]
+properties:
+  name: { type: string }
+  version: { type: string }
+  contents:
+    type: array
+    items:
+      type: object
+      required: [path, type]
+      properties:
+        path: { type: string }
+        type: { type: string, enum: ["file", "directory", "bridge"] }
+        purpose: { type: string }

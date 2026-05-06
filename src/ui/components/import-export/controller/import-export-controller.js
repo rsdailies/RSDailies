@@ -6,13 +6,19 @@ import {
 } from '../logic/import-export.logic.js';
 import { replaceInteractiveElement } from '../../../../core/dom/controls.js';
 
+/**
+ * Import-Export Controller
+ * 
+ * Manages the UI lifecycle for importing and exporting user profiles.
+ * Routes operations through injected build/import functions.
+ */
+
 export function setupImportExport({
   documentRef = document,
   navigatorRef = navigator,
   buildExportToken = () => '',
   importProfileToken = () => {},
   onImport = () => window.location.reload(),
-  storage = window.localStorage,
 } = {}) {
   const elements = getImportExportElements(documentRef);
   if (!hasImportExportElements(elements)) return;
@@ -22,7 +28,7 @@ export function setupImportExport({
   const importReplacement = replaceInteractiveElement(elements.tokenImport);
 
   buttonReplacement.addEventListener('click', () => {
-    elements.tokenOutput.value = buildExportToken(storage);
+    elements.tokenOutput.value = buildExportToken();
     elements.tokenInput.classList.remove('is-invalid');
   });
 
@@ -44,7 +50,7 @@ export function setupImportExport({
       return;
     }
 
-    importProfileToken(value, storage);
+    importProfileToken(value);
     onImport(value);
   });
 }

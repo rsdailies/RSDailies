@@ -1,0 +1,4 @@
+# GOVERNANCE Index
+
+Canonical path: BODY/HEART/GOVERNANCE.
+

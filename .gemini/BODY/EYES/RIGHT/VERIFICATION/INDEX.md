@@ -1,0 +1,4 @@
+# VERIFICATION Index
+
+Canonical path: BODY/EYES/RIGHT/VERIFICATION.
+

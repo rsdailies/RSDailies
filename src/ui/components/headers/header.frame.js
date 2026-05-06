@@ -1,5 +1,5 @@
 import { HEADER_CLASSES } from './header.constants.js';
-import { escapeHtml } from '../../../core/dom/utils.js';
+import { escapeHtml } from '../../../core/utils/strings.js';
 
 function joinClassNames(...tokens) {
   return tokens.filter(Boolean).join(' ');

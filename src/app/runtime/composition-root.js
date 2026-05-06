@@ -11,6 +11,7 @@ import {
   setupSectionBindings,
   setupImportExport,
   setupCustomAdd,
+  setupNavigation,
   startPenguinSync,
   updateCountdowns,
   cleanupReadyTimers,
@@ -18,7 +19,6 @@ import {
 } from './app-core/runtime-api.js';
 import { initApp } from '../boot/init-app.js';
 import { startAppLoops } from '../boot/run-loops.js';
-import { setupGameShell } from '../../ui/pages/game-shell.js';
 import { createScheduler } from './scheduler.js';
 import { migrateStorageShape } from '../../core/storage/migrations.js';
 
@@ -50,8 +50,8 @@ export function createCompositionRoot({ rootElement } = {}) {
           setupSectionBindings,
           setupImportExport,
           setupCustomAdd,
+          setupNavigation,
           startPenguinSync,
-          setupGameShell,
           startRunLoops: () =>
             startAppLoops({
               updateCountdowns,

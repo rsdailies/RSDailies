@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { resolveTrackerPage, resolveTrackerSections } from '../../../../src/core/domain/content/resolve-tracker-content.js';
+import { resolveTrackerPage, resolveTrackerSections } from '../../../../src/core/domain/content/content-loader.js';
 
 const pages = [
   {

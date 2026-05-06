@@ -1,0 +1,4 @@
+# MANIFESTS Index
+
+Canonical path: BODY/SKELETON/MANIFESTS.
+

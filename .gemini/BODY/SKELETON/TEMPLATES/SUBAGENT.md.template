@@ -1,0 +1,23 @@
+---
+id: {{id}}
+name: {{name}}
+description: {{description}}
+kind: local
+tools: {{tools}}
+model: {{model}}
+---
+
+# 🤖 Subagent: {{name}}
+
+## Mission
+{{mission}}
+
+## Allowed Tools
+{{tools}}
+
+## Boundaries
+- {{boundary1}}
+- {{boundary2}}
+
+---
+*Canonical definition for host discovery.*

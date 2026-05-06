@@ -3,6 +3,7 @@
  * Parent section headers should NOT inject inline restore UI.
  * Restore belongs only to subgroup header dropdowns in src/ui/components/headers/.
  */
+import { restoreTask, restoreAllTasks } from '../../../../../features/sections/domain/logic.js';
 import { replaceInteractiveElement } from '../../../../../core/dom/controls.js';
 
 function rebindButton(documentRef, id, onClick) {
@@ -41,10 +42,47 @@ export function bindSectionControls(sectionKey, opts = { sortable: false }, deps
 
   removeSectionRestoreControls(sectionKey, { documentRef });
 
-  rebindButton(documentRef, `${sectionKey}_reset_button`, () => {
-    resetSectionView(sectionKey);
-    renderApp();
+  const container = documentRef.getElementById(sectionKey)?.closest('.table_container') || documentRef;
+
+  container.querySelectorAll('.section-restore-all-btn').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      restoreAllTasks(sectionKey, { load, save });
+      renderApp();
+    });
   });
+
+  container.querySelectorAll('.section-restore-task-btn').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const taskId = btn.dataset.taskId;
+      if (taskId) {
+        restoreTask(sectionKey, taskId, { load, save });
+        renderApp();
+      }
+    });
+  });
+
+  container.querySelectorAll('.section-clear-completion-btn').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      resetSectionView(sectionKey);
+      renderApp();
+    });
+  });
+
+  const resetBtn = documentRef.getElementById(`${sectionKey}_reset_button`);
+  const isDropdown = resetBtn?.classList.contains('dropdown-toggle');
+
+  if (!isDropdown) {
+    rebindButton(documentRef, `${sectionKey}_reset_button`, () => {
+      resetSectionView(sectionKey);
+      renderApp();
+    });
+  }
 
   rebindButton(documentRef, `${sectionKey}_show_hidden_button`, () => {
     const next = !getSectionState(sectionKey).showHidden;

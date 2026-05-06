@@ -1,0 +1,5 @@
+# logic-audit
+
+This directory is part of the anatomical framework.
+
+Canonical path: BODY/ORGANS/SKILLS/SAFETY/logic-audit.

@@ -1,0 +1,11 @@
+id: agents_md_spec
+url: "https://kau.sh/blog/agents-md/"
+title: "Keep your AGENTS.md in sync"
+publisher: "Kaushik Gopal"
+authority: "community"
+last_verified: "2026-05-04"
+volatility: "low"
+claims:
+  - "AGENTS.md is a universal instruction surface for multiple tools."
+  - ".agents/ directory contains shared agents, skills, and commands."
+  - "Standardizes tool-agnostic agent configuration."

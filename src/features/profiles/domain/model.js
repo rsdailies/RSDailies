@@ -1,17 +1,80 @@
-import { getCurrentProfile, getProfilePrefix, loadProfiles, saveProfiles, setProfile } from './store.js';
+import { 
+  loadGlobal, 
+  saveGlobal, 
+  setActiveProfile, 
+  getActiveProfile, 
+  getProfilePrefix as getProfilePrefixFromService, 
+  getAllProfilesGlobal, 
+  saveAllProfilesGlobal, 
+  clearProfileStorage,
+  initStorageService,
+  getStorageBackend
+} from '../../../core/storage/storage-service.js';
+import { ACTIVE_PROFILE_KEY } from '../../../core/storage/namespace.js';
 import { CURRENT_EXPORT_SCHEMA_VERSION, CURRENT_STORAGE_SCHEMA_VERSION, migrateStorageShape } from '../../../core/storage/migrations.js';
 
-export function isActiveProfile(name, currentProfile = getCurrentProfile()) {
+/**
+ * Profile Model
+ * 
+ * Authoritative business logic for profiles, state management, 
+ * and export/import token generation.
+ * 
+ * Replaces the legacy profiles/domain/store.js.
+ */
+
+// ============ State Management ============
+
+export function getCurrentProfile() {
+  return getActiveProfile();
+}
+
+export function getProfilePrefix() {
+  return getProfilePrefixFromService();
+}
+
+export function setProfile(name) {
+  const profileName = name || 'default';
+  setActiveProfile(profileName);
+  saveGlobal(ACTIVE_PROFILE_KEY, profileName);
+}
+
+export function initProfileContext() {
+  const storedProfile = loadGlobal(ACTIVE_PROFILE_KEY, 'default');
+  setActiveProfile(storedProfile);
+  initStorageService(storedProfile);
+}
+
+export function loadProfiles() {
+  const profiles = getAllProfilesGlobal();
+  return Array.isArray(profiles) && profiles.length ? profiles : ['default'];
+}
+
+export function saveProfiles(profiles) {
+  saveAllProfilesGlobal(profiles);
+}
+
+export function removeProfileStorage(profileName) {
+  clearProfileStorage(profileName);
+}
+
+// ============ Logic Helpers ============
+
+export function isActiveProfile(name, currentProfile = getActiveProfile()) {
   return name === currentProfile;
 }
 
-export function getProfileLabel(name, currentProfile = getCurrentProfile()) {
+export function getProfileLabel(name, currentProfile = getActiveProfile()) {
   return isActiveProfile(name, currentProfile) ? `${name} (active)` : name;
 }
 
-export function buildExportToken(storage = window.localStorage) {
+// ============ Export/Import ============
+
+export function buildExportToken() {
+  const storage = getStorageBackend();
+  if (!storage) return '';
+  
   migrateStorageShape(storage);
-  const profile = getCurrentProfile();
+  const profile = getActiveProfile();
   const profilePrefix = getProfilePrefix();
 
   const payload = {
@@ -36,7 +99,10 @@ export function buildExportToken(storage = window.localStorage) {
   return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
 }
 
-export function importProfileToken(rawToken, storage = window.localStorage) {
+export function importProfileToken(rawToken) {
+  const storage = getStorageBackend();
+  if (!storage) return null;
+
   const decoded = decodeURIComponent(escape(atob(rawToken)));
   const data = JSON.parse(decoded);
 

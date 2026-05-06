@@ -1,0 +1,4 @@
+# TEMPLATES Index
+
+Canonical path: BODY/SKELETON/TEMPLATES.
+

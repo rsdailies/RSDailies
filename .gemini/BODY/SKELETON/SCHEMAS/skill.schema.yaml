@@ -1,0 +1,24 @@
+# Skill Schema
+# Validates files in BODY/ORGANS/SKILLS/
+
+type: object
+required:
+  - name
+  - description
+  - kind
+properties:
+  name:
+    type: string
+    description: "Slug-style name of the skill."
+  description:
+    type: string
+    description: "Lowercase trigger description for discovery."
+  kind:
+    type: string
+    enum: ["local", "remote", "mcp"]
+  version:
+    type: string
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+  tools:
+    type: array
+    items: { type: string }

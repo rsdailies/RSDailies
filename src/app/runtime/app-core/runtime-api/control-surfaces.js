@@ -1,15 +1,11 @@
 import { setupFeatureControls } from '../setup-controls.js';
 
 export function createRuntimeControls({
-  setupProfileControlBridge,
   setupProfileControlFeature,
-  setupSettingsControlBridge,
   setupSettingsControlFeature,
-  setupViewsControlBridge,
   setupViewsControlFeature,
-  closeFloatingControlsBridge,
   closeFloatingControls,
-  setupGlobalClickCloserBridge,
+  setupGlobalClickCloserHelper,
   setupImportExportFeature,
   buildExportToken,
   importProfileToken,
@@ -21,15 +17,11 @@ export function createRuntimeControls({
   windowRef = window,
 }) {
   const controls = setupFeatureControls({
-    setupProfileControlBridge,
     setupProfileControlFeature,
-    setupSettingsControlBridge,
     setupSettingsControlFeature,
-    setupViewsControlBridge,
     setupViewsControlFeature,
-    closeFloatingControlsBridge,
     closeFloatingControls,
-    setupGlobalClickCloserBridge,
+    setupGlobalClickCloserHelper,
     setupImportExportFeature,
     buildExportToken,
     importProfileToken,
@@ -48,5 +40,6 @@ export function createRuntimeControls({
     setupGlobalClickCloser: () => controls.setupCloser(),
     setupImportExport: () => controls.setupImportExport(),
     setupCustomAdd: () => controls.setupCustomAdd(),
+    setupNavigation: () => controls.setupNavigation(),
   };
 }

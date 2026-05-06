@@ -1,0 +1,4 @@
+# STRUCTURE Index
+
+Canonical path: BODY/SKELETON/STRUCTURE.
+

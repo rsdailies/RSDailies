@@ -1,5 +1,14 @@
 import { getSettings } from '../../../features/settings/domain/state.js';
 import { TIMER_SECTION_KEY } from '../../../features/timers/domain/timers.js';
+import { determineTaskState } from '../../../core/state/task-state-machine.js';
+
+/**
+ * Render App Runner
+ * 
+ * Injects dependencies and business logic into the core render orchestrator.
+ * Standardized on the { load, save } dependency injection pattern and 
+ * delegates state logic to the Task State Machine.
+ */
 
 export function createRenderAppRunner(renderAppCore, deps) {
   const {
@@ -21,24 +30,18 @@ export function createRenderAppRunner(renderAppCore, deps) {
       cleanupReadyCooldowns: deps.cleanupReadyCooldowns,
       hideTooltip: deps.hideTooltip,
       getTaskState: (sectionKey, taskId, task) => {
-        const section = getSectionState(sectionKey);
-        const hiddenRows = section.hiddenRows || {};
-        const completed = section.completed || {};
-        const cooldowns = getCooldowns();
-        const timers = getTimers();
-        const settings = getSettings();
+        const section = getSectionState(sectionKey, { load });
 
-        if (hiddenRows[taskId]) return 'hide';
-        if (task?.cooldownMinutes && cooldowns[taskId]?.readyAt > Date.now()) return 'running';
-        if (sectionKey === TIMER_SECTION_KEY && task?.isTimerParent) {
-          const active = !!timers[task.id];
-          if (!active) return 'idle';
-          return timers[task.id]?.readyAt > Date.now() ? 'running' : 'ready';
-        }
-
-        const isCompleted = !!completed[taskId];
-        if (isCompleted && !settings.showCompletedTasks) return 'hide';
-        return isCompleted ? 'true' : 'false';
+        return determineTaskState(taskId, task, {
+          sectionKey,
+          hiddenRows: section.hiddenRows || {},
+          completed: section.completed || {},
+          cooldowns: getCooldowns(),
+          timers: getTimers(),
+          settings: getSettings({ load }),
+          timerSectionKey: TIMER_SECTION_KEY,
+          now: Date.now()
+        });
       },
       getResolvedSections,
       getTimerHeaderStatus,

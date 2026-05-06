@@ -1,0 +1,10 @@
+id: {{id}}
+url: "{{url}}"
+title: "{{title}}"
+publisher: "{{publisher}}"
+authority: {{authority}}
+last_verified: "{{date}}"
+volatility: {{volatility}}
+claims:
+  - "{{claim1}}"
+  - "{{claim2}}"

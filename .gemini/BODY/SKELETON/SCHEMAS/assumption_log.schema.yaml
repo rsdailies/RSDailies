@@ -1,0 +1,19 @@
+# Schema: Assumption Log
+type: object
+required: [id, assumption, risk_level, validation_method]
+properties:
+  id:
+    type: string
+  assumption:
+    type: string
+    description: "The unverified belief used in reasoning"
+  risk_level:
+    enum: [low, medium, high, critical]
+  status:
+    enum: [unverified, validated, invalidated]
+  validation_method:
+    type: string
+    description: "How to verify this assumption (e.g., search, user query)"
+  related_files:
+    type: array
+    items: { type: string }

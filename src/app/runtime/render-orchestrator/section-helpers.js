@@ -3,8 +3,9 @@ import { SECTION_CONTAINER_IDS, SECTION_TABLE_IDS } from '../../../core/ids/sect
 export function getSectionElements(sectionKey) {
   const container = document.getElementById(SECTION_CONTAINER_IDS[sectionKey]);
   const table = document.getElementById(SECTION_TABLE_IDS[sectionKey]);
+  const thead = table?.querySelector('thead') || null;
   const tbody = table?.querySelector('tbody') || null;
-  return { container, table, tbody };
+  return { container, table, thead, tbody };
 }
 
 export function reorderDashboardSections(sectionKeys) {

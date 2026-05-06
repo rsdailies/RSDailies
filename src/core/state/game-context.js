@@ -1,17 +1,29 @@
-import { loadJson, saveJson } from '../storage/local-store.js';
-import { STORAGE_ROOT } from '../storage/namespace.js';
+import { load, save, removeKey } from '../storage/storage-service.js';
+
+/**
+ * Game Context
+ * 
+ * Manages the selected game state (RS3 vs OSRS).
+ * Persisted per-profile using StorageService.
+ */
 
 export const GAMES = Object.freeze({ RS3: 'rs3', OSRS: 'osrs' });
 
-const GAME_KEY = `${STORAGE_ROOT}:selectedGame`;
-const storedGame = loadJson(GAME_KEY, null);
-let selectedGame = storedGame === GAMES.OSRS || storedGame === GAMES.RS3 ? storedGame : null;
+const GAME_KEY = 'selectedGame';
+let selectedGame = null;
+let isInitialized = false;
 const listeners = new Set();
 
+function ensureInitialized() {
+  if (isInitialized) return;
+  const storedGame = load(GAME_KEY, null);
+  selectedGame = (storedGame === GAMES.OSRS || storedGame === GAMES.RS3) ? storedGame : null;
+  isInitialized = true;
+}
+
 export function getSelectedGame() {
-  if (selectedGame === GAMES.OSRS) return GAMES.OSRS;
-  if (selectedGame === GAMES.RS3) return GAMES.RS3;
-  return null;
+  ensureInitialized();
+  return selectedGame;
 }
 
 export function hasSelectedGame() {
@@ -19,8 +31,14 @@ export function hasSelectedGame() {
 }
 
 export function setSelectedGame(game) {
-  selectedGame = game === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3;
-  saveJson(GAME_KEY, selectedGame);
+  selectedGame = (game === GAMES.OSRS || game === GAMES.RS3) ? game : null;
+  
+  if (selectedGame === null) {
+    removeKey(GAME_KEY);
+  } else {
+    save(GAME_KEY, selectedGame);
+  }
+  
   listeners.forEach((listener) => listener(selectedGame));
   return selectedGame;
 }

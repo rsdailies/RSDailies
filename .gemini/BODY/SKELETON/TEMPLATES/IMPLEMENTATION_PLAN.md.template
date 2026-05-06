@@ -1,0 +1,18 @@
+# Implementation Plan: {{name}}
+
+## 🧠 Impact Assessment
+- **Anatomical Parts**: {{affected_organs}}
+- **Bridges**: {{affected_bridges}}
+
+## 📋 Task List
+- [ ] Task 1: {{task1}}
+- [ ] Task 2: {{task2}}
+
+## 🏗️ Dependency Map
+1. {{step1}} -> {{step2}}
+
+## 🏁 Verification
+- {{test_procedure}}
+
+---
+*Follow the Plan-Mode Protocol. Proceed only after approval.*

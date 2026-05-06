@@ -11,7 +11,7 @@ import { StorageKeyBuilder } from '../../../../../core/storage/keys-builder.js';
 export function bindPinButton(pinBtn, sectionKey, task, { overviewPinId, customStorageId, load, save, renderApp }) {
   if (!pinBtn) return;
   const pinId = buildPinId(sectionKey, task, { overviewPinId, customStorageId });
-  const pins = getOverviewPinsFeature(load);
+  const pins = getOverviewPinsFeature({ load });
   const pinned = !!pins[pinId];
   pinBtn.textContent = pinned ? '\u2605' : '\u2606';
   pinBtn.title = pinned ? 'Unpin from Overview' : 'Pin to Overview';
@@ -19,10 +19,10 @@ export function bindPinButton(pinBtn, sectionKey, task, { overviewPinId, customS
   pinBtn.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const nextPins = { ...getOverviewPinsFeature(load) };
+    const nextPins = { ...getOverviewPinsFeature({ load }) };
     if (nextPins[pinId]) delete nextPins[pinId];
     else nextPins[pinId] = Date.now();
-    saveOverviewPinsFeature(nextPins, save);
+    saveOverviewPinsFeature(nextPins, { save });
     renderApp();
   });
 }
@@ -39,8 +39,8 @@ export function bindHideButton(hideBtn, sectionKey, taskId, task, { isCustom, is
     event.stopPropagation();
     if (isCustom) {
       if (!confirm(`Delete custom task "${task.name}"?`)) return;
-      const next = getCustomTasksFeature(load).filter((t) => t.id !== task.id);
-      saveCustomTasksFeature(next, save);
+      const next = getCustomTasksFeature({ load }).filter((t) => t.id !== task.id);
+      saveCustomTasksFeature(next, { save });
       const completed = load(StorageKeyBuilder.sectionCompletion('custom'), {});
       const hiddenRows = load(StorageKeyBuilder.sectionHiddenRows('custom'), {});
       const removedRows = load(StorageKeyBuilder.sectionRemovedRows('custom'), {});
@@ -50,15 +50,15 @@ export function bindHideButton(hideBtn, sectionKey, taskId, task, { isCustom, is
       save(StorageKeyBuilder.sectionHiddenRows('custom'), hiddenRows);
       save(StorageKeyBuilder.sectionRemovedRows('custom'), removedRows);
       save('notified:custom', notified);
-      const pins = { ...getOverviewPinsFeature(load) };
+      const pins = { ...getOverviewPinsFeature({ load }) };
       delete pins[StorageKeyBuilder.overviewPinStorageId('custom', task.id)];
-      saveOverviewPinsFeature(pins, save);
+      saveOverviewPinsFeature(pins, { save });
     } else {
-      hideTask(sectionKey, taskId);
+      hideTask(sectionKey, taskId, { load, save });
       removeRowViaX(sectionKey, taskId, task, { load, save });
-      const pins = { ...getOverviewPinsFeature(load) };
+      const pins = { ...getOverviewPinsFeature({ load }) };
       delete pins[buildPinId(sectionKey, task, { customStorageId })];
-      saveOverviewPinsFeature(pins, save);
+      saveOverviewPinsFeature(pins, { save });
     }
     renderApp();
   });

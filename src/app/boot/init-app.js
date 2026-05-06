@@ -14,8 +14,8 @@ export function initApp({
   setupGlobalClickCloser,
   setupImportExport,
   setupCustomAdd,
+  setupNavigation,
   startPenguinSync,
-  setupGameShell,
   renderApp,
 }) {
   const run = () => {
@@ -35,7 +35,7 @@ export function initApp({
     setupGlobalClickCloser();
     setupImportExport();
     setupCustomAdd();
-    setupGameShell?.(documentRef);
+    setupNavigation();
 
     renderApp();
     startPenguinSync?.();

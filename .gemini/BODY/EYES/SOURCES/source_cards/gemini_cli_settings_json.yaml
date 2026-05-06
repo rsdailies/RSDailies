@@ -1,0 +1,10 @@
+id: gemini_cli_settings_json
+url: "https://google-gemini.github.io/gemini-cli/settings"
+title: "Settings Configuration"
+publisher: "Google"
+authority: "official"
+last_verified: "2026-05-04"
+volatility: "medium"
+claims:
+  - "settings.json controls approval_mode and context_files."
+  - "MCP servers are defined under the mcpServers key."

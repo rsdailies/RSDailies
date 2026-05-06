@@ -3,6 +3,13 @@ import { StorageKeyBuilder } from '../../../core/storage/keys-builder.js';
 import { getSettings } from '../../settings/domain/state.js';
 import { getTimerMinutes } from './timer-math.js';
 
+/**
+ * Timers Feature Logic
+ * 
+ * Manages farming timers and their associated child task progress.
+ * Uses dependency injection for storage operations.
+ */
+
 export const TIMER_SECTION_KEY = 'timers';
 export const LEGACY_TIMER_SECTION_KEY = 'rs3farming';
 
@@ -18,17 +25,17 @@ export function getTimerChildStorageId(taskId, childId) {
   return StorageKeyBuilder.childTaskStorageId(TIMER_SECTION_KEY, taskId, childId);
 }
 
-export function getTimers(load) {
+export function getTimers({ load }) {
   const value = load(StorageKeyBuilder.timers(), {});
   return value && typeof value === 'object' ? value : {};
 }
 
-export function saveTimers(nextTimers, save) {
+export function saveTimers(nextTimers, { save }) {
   save(StorageKeyBuilder.timers(), nextTimers);
 }
 
-function cloneTimers(load) {
-  return { ...getTimers(load) };
+function cloneTimers({ load }) {
+  return { ...getTimers({ load }) };
 }
 
 function clearChildProgressForTimer(taskId, { load, save }) {
@@ -73,7 +80,7 @@ export function startTimer(task, { load, save, getSettingsValue = getSettings })
   const startedAt = getNow();
   const readyAt = startedAt + (minutes * 60 * 1000);
 
-  const timers = cloneTimers(load);
+  const timers = cloneTimers({ load });
   timers[task.id] = {
     id: task.id,
     name: task.name || '',
@@ -83,19 +90,19 @@ export function startTimer(task, { load, save, getSettingsValue = getSettings })
     growthMinutes: minutes,
   };
 
-  saveTimers(timers, save);
+  saveTimers(timers, { save });
   return true;
 }
 
 export function clearTimer(taskId, { load, save }) {
   if (!taskId) return false;
 
-  const timers = cloneTimers(load);
+  const timers = cloneTimers({ load });
   const hadTimer = !!timers[taskId];
 
   if (hadTimer) {
     delete timers[taskId];
-    saveTimers(timers, save);
+    saveTimers(timers, { save });
   }
 
   const clearedChildren = clearChildProgressForTimer(taskId, { load, save });
@@ -103,7 +110,7 @@ export function clearTimer(taskId, { load, save }) {
 }
 
 export function cleanupReadyTimers({ load, save }) {
-  const timers = cloneTimers(load);
+  const timers = cloneTimers({ load });
   const now = getNow();
   let changed = false;
 
@@ -125,7 +132,7 @@ export function cleanupReadyTimers({ load, save }) {
   });
 
   if (changed) {
-    saveTimers(timers, save);
+    saveTimers(timers, { save });
   }
 
   return changed;
@@ -136,7 +143,7 @@ export function getTimerHeaderStatus(task, { load }) {
     return { state: 'idle', note: task?.note || '' };
   }
 
-  const timers = getTimers(load);
+  const timers = getTimers({ load });
   const entry = timers[task.id];
 
   if (!entry) {

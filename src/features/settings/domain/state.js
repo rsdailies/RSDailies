@@ -1,7 +1,13 @@
 import { settingsDefaults } from '../config/settings-defaults.js';
-import { loadJson, saveJson } from '../../../core/storage/local-store.js';
-import { getProfilePrefix } from '../../profiles/domain/store.js';
+import { load as defaultLoad, save as defaultSave } from '../../../core/storage/storage-service.js';
 import { getSettingsFieldIds } from '../../../ui/components/settings/settings-menu.js';
+
+/**
+ * Settings State
+ * 
+ * Manages user settings persistence and normalization.
+ * Standardized on the { load, save } dependency injection pattern.
+ */
 
 function deriveGrowthOffsetMinutes(herbTicks) {
   return herbTicks === 3 ? 20 : 0;
@@ -40,22 +46,21 @@ export function normalizeSettings(partial = {}) {
   };
 }
 
-export function getSettings(storage = window.localStorage) {
-  const stored = loadJson(
-    `${getProfilePrefix()}settings`,
+export function getSettings({ load = defaultLoad } = {}) {
+  const stored = load(
+    'settings',
     {
       ...settingsDefaults,
       webhookUserId: '',
       webhookMessageTemplate: 'RSDailies: {task} is due.'
-    },
-    storage
+    }
   );
 
   return normalizeSettings(stored);
 }
 
-export function saveSettings(settings, storage = window.localStorage) {
-  saveJson(`${getProfilePrefix()}settings`, normalizeSettings(settings), storage);
+export function saveSettings(settings, { save = defaultSave } = {}) {
+  save('settings', normalizeSettings(settings));
 }
 
 export function applySettingsToDom(documentRef = document, settings = getSettings()) {
