@@ -1,5 +1,5 @@
-import { GAMES, getSelectedGame } from '../../../../core/state/game-context.js';
-import { resolveTrackerSections } from '../../../../core/domain/content/content-loader.js';
+import { GAMES, getSelectedGame } from '../../../../shared/state/game-context.js';
+import { resolveTrackerSections } from '../../../../domain/content/content-loader.js';
 import { createRenderAppRunner } from '../render-deps.js';
 
 /**

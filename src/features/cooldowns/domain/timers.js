@@ -1,6 +1,6 @@
-import { formatDurationMs } from '../../../core/time/formatters.js';
-import { StorageKeyBuilder } from '../../../core/storage/keys-builder.js';
-import { getTrackerSections } from '../../../core/domain/content/content-loader.js';
+import { formatDurationMs } from '../../../shared/lib/time/formatters.js';
+import { StorageKeyBuilder } from '../../../shared/lib/storage/keys-builder.js';
+import { getTrackerSections } from '../../../domain/content/content-loader.js';
 
 /**
  * Cooldowns Feature Logic

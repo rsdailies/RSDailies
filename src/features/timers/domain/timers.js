@@ -1,5 +1,5 @@
-import { formatDurationMs } from '../../../core/time/formatters.js';
-import { StorageKeyBuilder } from '../../../core/storage/keys-builder.js';
+import { formatDurationMs } from '../../../shared/lib/time/formatters.js';
+import { StorageKeyBuilder } from '../../../shared/lib/storage/keys-builder.js';
 import { getSettings } from '../../settings/domain/state.js';
 import { getTimerMinutes } from './timer-math.js';
 

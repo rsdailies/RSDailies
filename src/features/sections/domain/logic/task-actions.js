@@ -1,5 +1,5 @@
 import { getSectionState as getSectionStateFeature, saveSectionValue as saveSectionValueFeature, saveTimers as saveTimersFeature } from '../state.js';
-import { StorageKeyBuilder } from '../../../../core/storage/keys-builder.js';
+import { StorageKeyBuilder } from '../../../../shared/lib/storage/keys-builder.js';
 import { TIMER_SECTION_KEY } from '../../../timers/domain/timers.js';
 
 /**

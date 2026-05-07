@@ -3,7 +3,7 @@ import {
   nextDailyBoundary as nextDailyBoundaryCore,
   nextWeeklyBoundary as nextWeeklyBoundaryCore,
   nextMonthlyBoundary as nextMonthlyBoundaryCore
-} from '../../../core/time/boundaries.js';
+} from '../../../shared/lib/time/boundaries.js';
 
 export function maybeBrowserNotify(title, body) {
   const settings = getSettingsFeature();

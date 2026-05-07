@@ -1,5 +1,5 @@
 import { saveTimers as saveTimersFeature } from '../state.js';
-import { nextDailyBoundary as nextDailyBoundaryCore, nextWeeklyBoundary as nextWeeklyBoundaryCore, nextMonthlyBoundary as nextMonthlyBoundaryCore } from '../../../../core/time/boundaries.js';
+import { nextDailyBoundary as nextDailyBoundaryCore, nextWeeklyBoundary as nextWeeklyBoundaryCore, nextMonthlyBoundary as nextMonthlyBoundaryCore } from '../../../../shared/lib/time/boundaries.js';
 import { maybeBrowserNotify, maybeWebhookNotify } from '../../../notifications/domain/bridge.js';
 import {
   clearCompletionFor,
@@ -9,8 +9,8 @@ import {
   clearCooldownsForTaskIds
 } from './reset-helpers.js';
 import { cleanupTaskNotificationsForReset } from '../../../notifications/domain/bridge.js';
-import { StorageKeyBuilder } from '../../../../core/storage/keys-builder.js';
-import { getTrackerSections } from '../../../../core/domain/content/content-loader.js';
+import { StorageKeyBuilder } from '../../../../shared/lib/storage/keys-builder.js';
+import { getTrackerSections } from '../../../../domain/content/content-loader.js';
 import { TIMER_SECTION_KEY } from '../../../timers/domain/timers.js';
 
 /**

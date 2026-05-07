@@ -1,4 +1,4 @@
-import { load, save } from '../../core/storage/storage-service.js';
+import { load, save } from '../../shared/lib/storage/storage-service.js';
 import { 
   getTrackerPageMode, 
   isTrackerPageMode, 
@@ -6,10 +6,10 @@ import {
   getDefaultTrackerPageMode,
   getTrackerPrimaryNavItems,
   getTrackerViewsPanelGroups
-} from '../../core/domain/content/content-loader.js';
-import { GAMES, getSelectedGame, subscribeToGameChanges } from '../../core/state/game-context.js';
-import { replaceInteractiveElement, setPanelOpenState, positionPanel } from '../../core/dom/controls.js';
-import { bindFloatingPanelTrigger, closeAllFloatingControls } from '../../core/dom/panel-controls.js';
+} from '../../domain/content/content-loader.js';
+import { GAMES, getSelectedGame, subscribeToGameChanges } from '../../shared/state/game-context.js';
+import { replaceInteractiveElement, setPanelOpenState, positionPanel } from '../../shared/ui/controls.js';
+import { bindFloatingPanelTrigger, closeAllFloatingControls } from '../../shared/ui/panel-controls.js';
 
 /**
  * View Controller

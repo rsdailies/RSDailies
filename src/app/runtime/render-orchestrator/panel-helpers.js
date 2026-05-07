@@ -1,4 +1,4 @@
-import { SECTION_TABLE_IDS } from '../../../core/ids/section-ids.js';
+import { SECTION_TABLE_IDS } from '../../../shared/lib/ids/section-ids.js';
 
 export function getGroupCountdown(groupName, { formatDurationMsCore, nextDailyBoundary, nextWeeklyBoundary, nextMonthlyBoundary }) {
   const lower = String(groupName || '').toLowerCase().trim();

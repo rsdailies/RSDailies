@@ -1,6 +1,6 @@
 import { applySettingsToDom, collectSettingsFromDom, getSettings, saveSettings } from './state.js';
-import { replaceInteractiveElement, setPanelOpenState } from '../../../core/dom/controls.js';
-import { bindFloatingPanelTrigger } from '../../../core/dom/panel-controls.js';
+import { replaceInteractiveElement, setPanelOpenState } from '../../../shared/ui/controls.js';
+import { bindFloatingPanelTrigger } from '../../../shared/ui/panel-controls.js';
 
 export function setupSettingsControl({
   renderApp = () => { },

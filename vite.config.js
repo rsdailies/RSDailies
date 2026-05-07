@@ -58,7 +58,7 @@ function penguinProxyPlugin() {
 
 export default defineConfig({
   base: '/RSDailies/',
-  root: 'src/ui/app-shell/html',
+  root: 'src/app/shell/html',
   publicDir: resolve(__dirname, 'assets'),
   plugins: [penguinProxyPlugin()],
   build: {
@@ -66,7 +66,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     rollupOptions: {
-      input: resolve(__dirname, 'src/ui/app-shell/html/index.html')
+      input: resolve(__dirname, 'src/app/shell/html/index.html')
     }
   },
   server: {

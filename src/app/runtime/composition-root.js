@@ -20,7 +20,7 @@ import {
 import { initApp } from '../boot/init-app.js';
 import { startAppLoops } from '../boot/run-loops.js';
 import { createScheduler } from './scheduler.js';
-import { migrateStorageShape } from '../../core/storage/migrations.js';
+import { migrateStorageShape } from '../../shared/lib/storage/migrations.js';
 
 export function createCompositionRoot({ rootElement } = {}) {
   const scheduler = createScheduler();

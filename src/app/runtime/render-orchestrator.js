@@ -2,8 +2,8 @@ import {
   renderOverviewPanel,
   applyPageModeVisibility,
   collectOverviewItems
-} from '../../ui/components/overview/index.js';
-import { createRow } from '../../ui/components/tracker/rows/index.js';
+} from '../../widgets/overview/index.js';
+import { createRow } from '../../widgets/tracker/rows/index.js';
 import {
   clearAllSectionBodies,
   markVisibleSectionEdges,
@@ -16,8 +16,8 @@ import {
 } from './render-orchestrator/panel-helpers.js';
 import { getTrackerPageSectionIds, getTrackerSections } from '../registries/unified-registry.js';
 import { renderTrackerSections } from './render-orchestrator/section-orchestrator.js';
-import { GAMES, getSelectedGame } from '../../core/state/game-context.js';
-import { renderLandingPage } from '../../ui/renderers/landing-renderer.js';
+import { GAMES, getSelectedGame } from '../../shared/state/game-context.js';
+import { renderLandingPage } from '../renderers/landing-renderer.js';
 
 export function renderApp(deps) {
   const {

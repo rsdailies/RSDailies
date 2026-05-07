@@ -1,5 +1,5 @@
-import { SECTION_TABLE_IDS } from '../../../core/ids/section-ids.js';
-import { appendTaskDetails } from '../../../ui/components/tracker/rows/factory/details.js';
+import { SECTION_TABLE_IDS } from '../../../shared/lib/ids/section-ids.js';
+import { appendTaskDetails } from '../../../widgets/tracker/rows/factory/details.js';
 
 export function createUiContext(deps, renderSelf) {
   const {

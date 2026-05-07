@@ -1,6 +1,6 @@
 import { getSettings } from '../../../features/settings/domain/state.js';
 import { TIMER_SECTION_KEY } from '../../../features/timers/domain/timers.js';
-import { determineTaskState } from '../../../core/state/task-state-machine.js';
+import { determineTaskState } from '../../../shared/state/task-state-machine.js';
 
 /**
  * Render App Runner

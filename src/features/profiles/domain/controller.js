@@ -6,9 +6,9 @@ import {
   setProfile,
   removeProfileStorage
 } from './model.js';
-import { renderProfileHeader, renderProfileRows } from '../../../ui/components/profiles/profile-view.js';
-import { replaceInteractiveElement, setPanelOpenState } from '../../../core/dom/controls.js';
-import { bindFloatingPanelTrigger } from '../../../core/dom/panel-controls.js';
+import { renderProfileHeader, renderProfileRows } from '../../../widgets/profiles/profile-view.js';
+import { replaceInteractiveElement, setPanelOpenState } from '../../../shared/ui/controls.js';
+import { bindFloatingPanelTrigger } from '../../../shared/ui/panel-controls.js';
 
 export function updateProfileHeader(profileNameElement = document.getElementById('profile-name')) {
   renderProfileHeader(profileNameElement, getCurrentProfile());

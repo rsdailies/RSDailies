@@ -1,0 +1,123 @@
+.header_like_name {
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+  padding: 0 !important;
+  background: transparent;
+  min-height: 42px !important;
+}
+
+.header_like_name .header_like_text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 42px;
+  padding: 0.38rem 1rem;
+  font-weight: 800;
+  font-size: 1.02rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f2f4f7;
+  text-shadow: 0 0 8px rgba(180, 190, 205, 0.28);
+}
+
+.header_like_color {
+  cursor: default !important;
+  background: inherit !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.header_like_click {
+  cursor: pointer !important;
+}
+
+.header_like_click:hover {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  box-shadow: inset 0 0 0 9999px rgba(255, 255, 255, 0.03) !important;
+}
+
+.header_like_inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 42px;
+  gap: 8px;
+  padding: 0 0.55rem;
+}
+
+.header_like_controls {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  z-index: 5;
+}
+
+.header_like_status {
+  min-width: 74px;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.5rem;
+  color: #e0e3e8;
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.header_restore_wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.header_restore_menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 230px;
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  background: linear-gradient(180deg, #28303a, #222932);
+  border: 1px solid #5f6975;
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  z-index: 450;
+}
+
+.header_restore_select {
+  width: 100%;
+}
+
+.mini-collapse-btn,
+.mini-reset-btn {
+  min-width: 36px;
+  width: 36px;
+  height: 32px;
+  padding: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-reset-btn {
+  font-size: 1.1rem;
+}
+
+.no-caret::after {
+  content: none !important;
+  display: none !important;
+}

@@ -1,5 +1,5 @@
-import { nextDailyBoundary, nextWeeklyBoundary, nextMonthlyBoundary } from '../../../../core/time/boundaries.js';
-import { formatDurationMs } from '../../../../core/time/formatters.js';
+import { nextDailyBoundary, nextWeeklyBoundary, nextMonthlyBoundary } from '../../../../shared/lib/time/boundaries.js';
+import { formatDurationMs } from '../../../../shared/lib/time/formatters.js';
 import { applySettingsToDomBridge, checkAutoResetBridge, updateCountdowns as updateCountdownsBridge } from '../core-actions.js';
 
 export function createRuntimeMaintenance({

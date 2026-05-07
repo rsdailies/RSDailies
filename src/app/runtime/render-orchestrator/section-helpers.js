@@ -1,4 +1,4 @@
-import { SECTION_CONTAINER_IDS, SECTION_TABLE_IDS } from '../../../core/ids/section-ids.js';
+import { SECTION_CONTAINER_IDS, SECTION_TABLE_IDS } from '../../../shared/lib/ids/section-ids.js';
 
 export function getSectionElements(sectionKey) {
   const container = document.getElementById(SECTION_CONTAINER_IDS[sectionKey]);

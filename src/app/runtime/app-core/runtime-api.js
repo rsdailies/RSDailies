@@ -51,10 +51,10 @@ import {
   getOverviewPins, 
   saveSectionValue 
 } from '../../../features/sections/domain/state.js';
-import { bindSectionControls } from '../../../ui/components/tracker/sections/controls/section-controls-bindings.js';
-import { setupImportExport as setupImportExportFeature } from '../../../ui/components/import-export/index.js';
-import { setupCustomAdd as setupCustomAddFeature } from '../../../ui/components/custom-tasks/modal/custom-task-controller.js';
-import { hideTooltip } from '../../../ui/primitives/tooltips/tooltip-engine.js';
+import { bindSectionControls } from '../../../widgets/tracker/sections/controls/section-controls-bindings.js';
+import { setupImportExport as setupImportExportFeature } from '../../../widgets/import-export/index.js';
+import { setupCustomAdd as setupCustomAddFeature } from '../../../widgets/custom-tasks/modal/custom-task-controller.js';
+import { hideTooltip } from '../../../shared/ui/primitives/tooltips/tooltip-engine.js';
 import { 
   load, 
   save, 
@@ -67,14 +67,14 @@ import {
   removeGlobal, 
   getAllProfilesGlobal, 
   saveAllProfilesGlobal 
-} from '../../../core/storage/storage-service.js';
+} from '../../../shared/lib/storage/storage-service.js';
 import { 
   setupGlobalClickCloser as setupGlobalClickCloserHelper, 
   closeAllFloatingControls 
-} from '../../../core/dom/panel-controls.js';
+} from '../../../shared/ui/panel-controls.js';
 import { renderApp as renderAppCore } from '../render-orchestrator.js';
 import { fetchProfits } from './fetch-profits.js';
-import { migrateStorageShape } from '../../../core/storage/migrations.js';
+import { migrateStorageShape } from '../../../shared/lib/storage/migrations.js';
 import { createRuntimeMaintenance } from './runtime-api/maintenance.js';
 import { createRuntimeRenderApp } from './runtime-api/render-app.js';
 import { bindRuntimeSections } from './runtime-api/section-bindings.js';

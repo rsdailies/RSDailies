@@ -3,11 +3,11 @@ import {
   setSectionHiddenState,
   setSectionModeVisibility
 } from './section-helpers.js';
-import { renderSectionPanelHeader as renderSectionHeader } from '../../../ui/components/headers/section-panel-header.js';
+import { renderSectionPanelHeader as renderSectionHeader } from '../../../widgets/headers/section-panel-header.js';
 import { appendCustomEmptyPlaceholder } from './panel-helpers.js';
 import { getTrackerSections } from '../../registries/unified-registry.js';
-import { renderTrackerSection } from '../../../ui/renderers/tracker-section-renderer.js';
-import { StorageKeyBuilder } from '../../../core/storage/keys-builder.js';
+import { renderTrackerSection } from '../../renderers/tracker-section-renderer.js';
+import { StorageKeyBuilder } from '../../../shared/lib/storage/keys-builder.js';
 
 /**
  * Iterates over all tracker sections and renders them based on current state and mode.

@@ -1,5 +1,5 @@
-import { createTaskStateManager } from '../../../core/state/task-state-manager.js';
-import { StorageKeyBuilder } from '../../../core/storage/keys-builder.js';
+import { createTaskStateManager } from '../../../shared/state/task-state-manager.js';
+import { StorageKeyBuilder } from '../../../shared/lib/storage/keys-builder.js';
 
 /**
  * Sections State

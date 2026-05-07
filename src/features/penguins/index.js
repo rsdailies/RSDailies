@@ -1,4 +1,4 @@
-import { nextWeeklyBoundary } from '../../core/time/boundaries.js';
+import { nextWeeklyBoundary } from '../../shared/lib/time/boundaries.js';
 
 const PENGUIN_CACHE_KEY = 'penguinWeeklyData';
 const PENGUIN_META_KEY = 'penguinWeeklyDataMeta';

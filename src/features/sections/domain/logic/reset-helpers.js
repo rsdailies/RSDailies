@@ -1,7 +1,7 @@
 import { cleanupTaskNotificationsForReset } from '../../../notifications/domain/bridge.js';
 import { getCustomTasks as getCustomTasksFeature } from '../state.js';
-import { StorageKeyBuilder } from '../../../../core/storage/keys-builder.js';
-import { getContentSectionTaskIds, getContentSectionTaskIdsByCadence } from '../../../../core/domain/content/content-loader.js';
+import { StorageKeyBuilder } from '../../../../shared/lib/storage/keys-builder.js';
+import { getContentSectionTaskIds, getContentSectionTaskIdsByCadence } from '../../../../domain/content/content-loader.js';
 
 /**
  * Reset Helpers

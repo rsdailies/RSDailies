@@ -4,7 +4,7 @@
  * Orchestrates the binding of UI controls to their respective feature logic.
  */
 
-import { setSelectedGame } from '../../../core/state/game-context.js';
+import { setSelectedGame } from '../../../shared/state/game-context.js';
 
 export function setupFeatureControls({
   setupProfileControlFeature,

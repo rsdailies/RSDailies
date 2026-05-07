@@ -1,4 +1,4 @@
-export * from '../../core/domain/content/content-loader.js';
+export * from '../../domain/content/content-loader.js';
 export * from './shared.js';
 
 /**

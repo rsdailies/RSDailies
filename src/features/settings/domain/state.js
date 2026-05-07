@@ -1,6 +1,6 @@
 import { settingsDefaults } from '../config/settings-defaults.js';
-import { load as defaultLoad, save as defaultSave } from '../../../core/storage/storage-service.js';
-import { getSettingsFieldIds } from '../../../ui/components/settings/settings-menu.js';
+import { load as defaultLoad, save as defaultSave } from '../../../shared/lib/storage/storage-service.js';
+import { getSettingsFieldIds } from '../../../widgets/settings/settings-menu.js';
 
 /**
  * Settings State

@@ -9,9 +9,9 @@ import {
   clearProfileStorage,
   initStorageService,
   getStorageBackend
-} from '../../../core/storage/storage-service.js';
-import { ACTIVE_PROFILE_KEY } from '../../../core/storage/namespace.js';
-import { CURRENT_EXPORT_SCHEMA_VERSION, CURRENT_STORAGE_SCHEMA_VERSION, migrateStorageShape } from '../../../core/storage/migrations.js';
+} from '../../../shared/lib/storage/storage-service.js';
+import { ACTIVE_PROFILE_KEY } from '../../../shared/lib/storage/namespace.js';
+import { CURRENT_EXPORT_SCHEMA_VERSION, CURRENT_STORAGE_SCHEMA_VERSION, migrateStorageShape } from '../../../shared/lib/storage/migrations.js';
 
 /**
  * Profile Model
