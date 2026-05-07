@@ -1,4 +1,4 @@
-import { getAllTimerDefinitions } from '../../src/core/timers/timer-registry.js';
+import { getAllTimerDefinitions } from '../../src/shared/lib/timers/timer-registry.js';
 
 const failures = [];
 const seen = new Set();

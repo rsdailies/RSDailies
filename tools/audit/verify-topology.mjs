@@ -4,100 +4,56 @@ import path from 'node:path';
 const root = process.cwd();
 const failures = [];
 const mustExist = [
-  'src/ui/app-shell/html/index.html',
-  'src/ui/app-shell/runtime/layout-loader.js',
-  'src/ui/app-shell/runtime/render-app-shell.js',
-  'src/ui/app-shell/runtime/section-panel.js',
-  'src/ui/app-shell/styles/index.css',
-  'src/core/dom/panel-controls.js',
-  'src/ui/renderers/tracker-section-renderer.js',
-  'src/ui/components/headers/header.render.js',
-  'src/ui/components/headers/header.frame.js',
-  'src/ui/components/tracker/rows/row.render.js',
-  'src/ui/components/tracker/rows/columns/column.render.js',
-  'src/ui/components/tracker/sections/index.js',
-  'src/ui/components/tracker/sections/controls/section-controls-bindings.js',
-  'src/ui/components/tracker/sections/renderers/common.js',
-  'src/ui/components/tracker/sections/renderers/timers.js',
-  'src/ui/components/tracker/sections/renderers/standard.js',
-  'src/ui/components/tracker/sections/renderers/storage.js',
-  'src/ui/components/tracker/tables/utils/table.utils.js',
-  'src/ui/components/tracker/tables/styles/table.css',
-  'src/ui/components/tracker/farming/styles/farming.css',
-  'src/ui/components/tracker/rows/templates/row-sample.html',
-  'src/ui/components/custom-tasks/modal/custom-task-controller.js',
-  'src/ui/components/import-export/index.js',
-  'src/ui/components/import-export/controller/import-export-controller.js',
-  'src/ui/components/import-export/logic/import-export.logic.js',
-  'src/features/sections/domain/state.js',
-  'src/features/timers/domain/timer-math.js',
-  'src/features/timers/domain/timers.js',
-  'src/features/farming/domain/farming-timer-durations.js',
+  'src/app/shell/html/index.html',
+  'src/app/shell/runtime/layout-loader.js',
+  'src/app/shell/runtime/render-app-shell.js',
+  'src/app/shell/runtime/section-panel.js',
+  'src/app/registries/unified-registry.js',
+  'src/app/runtime/render-orchestrator.js',
+  'src/app/renderers/tracker-section-renderer.js',
+  'src/domain/content/content-loader.js',
+  'src/domain/content/validate-content.js',
+  'src/shared/lib/storage/storage-service.js',
+  'src/shared/lib/storage/keys-builder.js',
+  'src/shared/lib/storage/migrations.js',
+  'src/shared/state/game-context.js',
+  'src/shared/ui/controls.js',
+  'src/shared/ui/panel-controls.js',
+  'src/theme/tokens/tokens.css',
+  'src/theme/base/base.css',
+  'src/widgets/headers/header.render.js',
+  'src/widgets/tracker/rows/row.render.js',
+  'src/widgets/tracker/sections/renderers/section-engine.js',
+  'src/widgets/tracker/rows/templates/row-sample.html',
   'src/app/boot/bootstrap.js'
 ];
 for (const rel of mustExist) {
   if (!fs.existsSync(path.join(root, rel))) failures.push('Missing required file: ' + rel);
 }
 const forbidden = [
-  'src/ui/features/tables/ui/headers',
-  'src/ui/features/tables',
-  'src/ui/features/tables/ui/rows',
-  'src/ui/components/tracker/parent',
-  'src/ui/components/tracker/sub-parent',
-  'src/ui/components/tracker/parents',
-  'src/ui/components/tracker/subparents',
-  'src/app/shell',
-  'src/features/tables/ui',
-  'src/features/tables/styles',
-  'src/features/custom-tasks',
-  'src/ui/features/custom-tasks',
-  'src/features/import-export',
-  'src/ui/features/import-export',
-  'src/features/overview',
-  'src/ui/features/overview',
-  'src/ui/features/sections/ui',
-  'src/ui/features/farming',
-  'src/ui/features/profiles',
-  'src/ui/features/views',
-  'src/ui/features',
+  'src/ui',
+  'src/core',
+  'src/app/shell/styles',
   'src/features/profiles/ui',
   'src/features/settings/ui',
   'src/features/views/ui',
   'src/features/sections/ui',
-  'src/ui/app-shell/runtime/overview-panel.js',
-  'src/features/views/ui',
   'src/app/runtime/legacy',
-  'src/features/profiles/controller.js',
-  'src/features/profiles/model.js',
-  'src/features/profiles/store.js',
-  'src/features/profiles/view.js',
-  'src/features/profiles/index.js',
-  'src/features/sections/state.js',
-  'src/features/sections/logic.js',
-  'src/features/sections/index.js',
-  'src/features/settings/state.js',
-  'src/features/settings/controller.js',
-  'src/features/settings/index.js',
-  'src/features/views/model.js',
-  'src/features/views/controller.js',
-  'src/features/views/view.js',
-  'src/features/views/index.js',
-  'src/features/views/index',
-  'src/app/runtime/legacy-app.js',
-  'src/ui/app-shell/html/dashboard.html',
-  'src/ui/components/custom-tasks/modal/custom-task-modal.js',
-  'src/features/tasks/index.js'
+  'src/ui/components',
+  'src/core/dom',
+  'src/core/utils',
+  'src/core/state'
 ];
 for (const rel of forbidden) {
   if (fs.existsSync(path.join(root, rel))) failures.push('Forbidden removed or misplaced path remains: ' + rel);
 }
 const registryFile = fs.readFileSync(path.join(root, 'src/app/registries/unified-registry.js'), 'utf8');
 if (registryFile.includes("game: 'rs3'")) failures.push('Registry still hardcodes RS3-only resolution: src/app/registries/unified-registry.js');
-const resolveContentFile = fs.readFileSync(path.join(root, 'src/core/domain/content/content-loader.js'), 'utf8');
-if (resolveContentFile.includes("game: 'rs3'")) failures.push('Content resolver still hardcodes RS3-only section resolution: src/core/domain/content/content-loader.js');
+const resolveContentFile = fs.readFileSync(path.join(root, 'src/domain/content/content-loader.js'), 'utf8');
+if (resolveContentFile.includes("game: 'rs3'")) failures.push('Content resolver still hardcodes RS3-only section resolution: src/domain/content/content-loader.js');
 
-const sectionRendererFile = fs.readFileSync(path.join(root, 'src/ui/renderers/tracker-section-renderer.js'), 'utf8');
-if (/switch\s*\(\s*sectionDefinition\.renderVariant\s*\)/.test(sectionRendererFile)) failures.push('Tracker section renderer still uses central switch dispatch: src/ui/renderers/tracker-section-renderer.js');
+const sectionRendererFile = fs.readFileSync(path.join(root, 'src/app/renderers/tracker-section-renderer.js'), 'utf8');
+if (/switch\s*\(\s*sectionDefinition\.renderVariant\s*\)/.test(sectionRendererFile)) failures.push('Tracker section renderer still uses central switch dispatch: src/app/renderers/tracker-section-renderer.js');
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const next = path.join(dir, entry.name);

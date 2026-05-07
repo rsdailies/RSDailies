@@ -1,50 +1,54 @@
-rsdata/
+# RuneScape Dailyscape - Git Ignore
 
-# Dependencies / build output
+# Dependencies
 node_modules/
+
+# Build Output
 dist/
+dist-ssr/
+*.local
+
+# Production build artifacts
+dist/
+dist-ssr/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Testing
 coverage/
 test-results/
 playwright-report/
 .playwright/
-*.log
+tests-results/
 
-# Env files
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.classpath
+.settings/
+
+# Environment
 .env
 .env.local
 .env.*.local
 
-# Editor / OS
-.vscode/
-.idea/
-# Agent State
-/antigravity/
-
-# Logs
-*.log
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-
-# Local-only / planning artifacts
-convo.txt
-friends-project.txt
-Pasted text.txt
-message*.txt
-/src/test/*.log
-/src/test/*.txt
-.agents/
-.gemini/
-test-results/
-
-# Copilot screenshot saving for chat reference
-/assets/screenshots/
-
-# Verification files
-googlec7c393bb3b6c202e.html
-**/googlec7c393bb3b6c202e.html
-
-# Private configs (if you create them locally)
+# Project Specific
+rsdata/
 config.json
 credentials.json
+
+# Local planning / notes
+convo.txt
+*.txt.bak
+/temp/

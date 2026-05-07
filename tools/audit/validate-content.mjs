@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 
 const root = process.cwd();
 const contentRoot = path.join(root, 'src', 'content');
-const validatorUrl = pathToFileURL(path.join(root, 'src', 'core', 'domain', 'content', 'validate-content.js')).href;
+const validatorUrl = pathToFileURL(path.join(root, 'src', 'domain', 'content', 'validate-content.js')).href;
 const { validateContentPageDefinition } = await import(validatorUrl);
 
 function walk(dir, out = []) {
