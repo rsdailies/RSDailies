@@ -7,10 +7,6 @@ node_modules/
 dist/
 dist-ssr/
 *.local
-
-# Production build artifacts
-dist/
-dist-ssr/
 build/
 
 # Logs
@@ -29,26 +25,9 @@ playwright-report/
 .playwright/
 tests-results/
 
-# Editor / IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-.project
-.classpath
-.settings/
-
 # Environment
 .env
-.env.local
-.env.*.local
 
 # Project Specific
-rsdata/
 config.json
 credentials.json
-
-# Local planning / notes
-convo.txt
-*.txt.bak
-/temp/
