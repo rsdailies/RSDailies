@@ -66,30 +66,30 @@ To understand the Dailyscape ecosystem, one must look at the structural hierarch
 ## 🫁 Organ-by-Organ Deep Dive
 
 ### 1. App (`src/app/`)
-The "Brain". It manages the boot sequence (`bootstrap.js`), defines the layout structure, and coordinates the `render-orchestrator.js` which drives the visual state of the application.
+It manages the boot sequence (`bootstrap.js`), defines the layout structure, and coordinates the `render-orchestrator.js` which drives the visual state of the application.
 
 ### 2. Content (`src/content/`)
-The "DNA". Contains zero logic—only pure data. Using factories like `defineTask` and `definePage`, developers author the entire tracker experience here. It is game-agnostic by design.
+Contains zero logic—only pure data. Using factories like `defineTask` and `definePage`, developers author the entire tracker experience here. It is game-agnostic by design.
 
 ### 3. Domain (`src/domain/`)
-The "Translator". It takes raw content and resolves it for the runtime. This includes merging user-created custom tasks, resolving penguin locations, and calculating complex timer offsets.
+It takes raw content and resolves it for the runtime. This includes merging user-created custom tasks, resolving penguin locations, and calculating complex timer offsets.
 
 ### 4. Features (`src/features/`)
-The "Systems". Each feature (like the Reset Orchestrator or the View Controller) owns its specific state and rules. They are decoupled—the Profile feature doesn't know the Settings feature exists.
+Each feature (like the Reset Orchestrator or the View Controller) owns its specific state and rules. They are decoupled—the Profile feature doesn't know the Settings feature exists.
 
 ### 5. Shared (`src/shared/`)
-The "Nervous System". Provides the essential utilities.
+Provides the essential utilities.
 - **Storage Service**: Scoped, versioned access to `localStorage`.
 - **Time Utilities**: Precise UTC reset boundary calculations.
 - **Task State Machine**: Manages the transitions between `true`, `false`, `idle`, and `running`.
 
 ### 6. Theme (`src/theme/`)
-The "Skin". A 100% tokenized design system. 
+A 100% tokenized design system. 
 - **Tokens**: Centralized HSL colors, spacing, and geometry.
 - **Components**: Pure CSS implementations of buttons, cards, and rows.
 
 ### 7. Widgets (`src/widgets/`)
-The "Limbs". Specialized UI components. The **Section Engine** is the most powerful widget—it can render everything from a simple daily list to a complex, multi-stage farming timer cluster based purely on the `renderVariant` provided by the content layer.
+Specialized UI components. The **Section Engine** is the most powerful widget—it can render everything from a simple daily list to a complex, multi-stage farming timer cluster based purely on the `renderVariant` provided by the content layer.
 
 ---
 
@@ -118,10 +118,12 @@ Dailyscape doesn't just clear tasks; it understands **Time**.
 ### Tracker Style/Theme
 ![Tracker Preview](assets/img/tracker.png)
 
-### ⏱️ Precision Farming Timers
+### ⏱️ Precision Timers
+- **Real-time Synchronization**: Timers stay accurate across browser sessions.
+
+### Farming
 The farming system is a high-performance engine.
 - **Speedy Growth Support**: Automatically adjusts math for all growth modifiers.
-- **Real-time Synchronization**: Timers stay accurate across browser sessions.
 - **Location Awareness**: Grouped by patch type (Herbs, Trees, Fruit Trees) for efficient gameplay.
 
 ### 📑 Adaptive Section Engine
