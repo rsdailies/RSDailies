@@ -57,11 +57,9 @@ The **Shared** layer is a foundation for everyone. The **Theme** layer is isolat
 To understand the Dailyscape ecosystem, one must look at the structural hierarchy that governs the 7 organs.
 
 ### The Structural Layers
-![Layers Diagram](assets/img/layers.png)
 *The 7-organ topology ensures that logic, state, and presentation are completely decoupled.*
 
 ### Flow of Authority
-![Topology Diagram](assets/img/topology.png)
 *Data flows from the Content layer through the Domain and Features layers before reaching the UI.*
 
 ---
