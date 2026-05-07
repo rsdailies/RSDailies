@@ -53,7 +53,6 @@ The **Shared** layer is a foundation for everyone. The **Theme** layer is isolat
 ---
 
 ## 🖼️ Visual Architecture
-
 To understand the Dailyscape ecosystem, one must look at the structural hierarchy that governs the 7 organs.
 
 ### The Structural Layers
