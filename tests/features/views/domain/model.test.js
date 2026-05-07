@@ -40,7 +40,7 @@ globalThis.CustomEvent = class CustomEvent {
   }
 };
 
-const { GAMES, setSelectedGame } = await import('../../../../src/core/state/game-context.js');
+const { GAMES, setSelectedGame } = await import('../../../../src/shared/state/game-context.js');
 const { getPageMode, setPageMode, syncStoredViewModeToPageMode } = await import('../../../../src/features/view-controller/ViewController.js');
 
 

@@ -1,6 +1,6 @@
 # Dailyscape Agent Rules
 
-## Table Of Contents
+## Table of Contents
 
 1. [Project Intent](#project-intent)
 2. [Repo-Native SSoT Protocol](#repo-native-ssot-protocol)
@@ -32,7 +32,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 
 | Concept Type | Canonical Owner |
 | :--- | :--- |
-| **Visual Values** | Design Tokens (`src/ui/styles/tokens/tokens.css`) |
+| **Visual Values** | Design Tokens (`src/theme/tokens/tokens.css`) |
 | **DOM Skeletons** | Shared Primitives / HTML Templates |
 | **Feature Behavior** | Feature-domain logic/controllers (`src/features/*`) |
 | **Authored Content** | Content directory (`src/content/*`) |
@@ -46,25 +46,29 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 
 ## Canonical Owners
 
-- App shell HTML entrypoint: `src/ui/app-shell/html/index.html`
-- Global UI tokens: `src/ui/styles/tokens/tokens.css`
-- Global foundations: `src/ui/styles/foundations/base.css`, `src/ui/styles/foundations/states.css`
-- Shell layout chrome: `src/ui/app-shell/styles/layout.css`, `controls.css`, `responsive.css`
-- Shared panel/control helpers: `src/core/dom/controls.js`, `src/core/dom/panel-controls.js`
-- Shared header primitives: `src/ui/components/headers/*`
-- Shared row template flow: `src/ui/components/tracker/rows/*`
-- Tracker table geometry and subgroup visuals: `src/ui/components/tracker/tables/styles/table.css`
+- App shell HTML entrypoint: `src/app/shell/html/index.html`
+- Global UI tokens: `src/theme/tokens/tokens.css`
+- Global foundations: `src/theme/base/base.css`, `src/theme/base/states.css`
+- Shell layout chrome: `src/theme/shell/layout.css`, `src/theme/shell/controls.css`, `src/theme/shell/responsive.css`
+- Shared panel/control helpers: `src/shared/ui/controls.js`, `src/shared/ui/panel-controls.js`
+- Shared header primitives: `src/widgets/headers/*`
+- Shared row template flow: `src/widgets/tracker/rows/*`
+- Tracker table geometry and subgroup visuals: `src/theme/tracker/table.css`
 - Authored game/page/section/task content: `src/content/`
-- Content validation and selection: `src/core/domain/content/*`
+- Content validation and selection: `src/domain/content/*`
 - Game-aware registry resolution: `src/app/registries/unified-registry.js`
 - Runtime orchestration: `src/app/runtime/*`
 - Feature behavior and storage rules: `src/features/*`
+- Top-level page renderers: `src/app/renderers/*`
+- Cross-cutting utilities (storage, time, ids): `src/shared/lib/*`
+- Shared runtime state: `src/shared/state/*`
+- UI primitives (tooltips, DOM helpers): `src/shared/ui/*`
 
 ## Shell And Tracker Boundaries
 
-- `layout.css` owns page/container spacing and outer shell chrome only.
-- `table.css` owns tracker row geometry, subgroup gaps, checkbox border, and terminal-row rounding.
-- `header.styles.css` owns generic header primitives only.
+- `src/theme/shell/layout.css` owns page/container spacing and outer shell chrome only.
+- `src/theme/tracker/table.css` owns tracker row geometry, subgroup gaps, checkbox border, and terminal-row rounding.
+- `src/widgets/headers/` owns generic header primitives only.
 - Tracker-specific subgroup visuals must live with tracker styles, not shell/header primitives.
 - Do not move tracker geometry into shell CSS to solve a local visual problem.
 - Do not add tracker behavior to shell renderers when a tracker renderer or helper can own it directly.
@@ -83,7 +87,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 
 - Use `buildSectionPanelHtml` and `renderSectionPanelHeader` for shell section headers.
 - Use `createTableSectionHeader` for tracker subgroup headers.
-- `src/ui/components/headers/header.frame.js` is the shared header-frame owner for shell and tracker header markup.
+- `src/widgets/headers/header.frame.js` is the shared header-frame owner for shell and tracker header markup.
 - Keep the section engine block contract explicit:
   - row block: `{ id, kind: 'rows', tasks }`
   - subgroup block: `{ id, kind: 'subgroup', title, tasks, headerMode: 'default' | 'attached', rightText?, onResetClick?, restoreOptions?, onRestoreSelect? }`
@@ -92,24 +96,24 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
   - must not create a top gap
   - must preserve the internal gap below the header before child rows
   - must not force curvature onto the row above
-- Tracker render-variant dispatch belongs in `src/ui/renderers/tracker-section-renderer.js` through the renderer map, not a growing switch tree.
+- Tracker render-variant dispatch belongs in `src/app/renderers/tracker-section-renderer.js` through the renderer map, not a growing switch tree.
 
 ## Row Composition Rules
 
 - **Stable Facades**: Keep the audit-facing row facade files (`row.render.js`) stable to protect external consumers.
 - **The Standard Row Flow**:
-    1. **Hydration**: Load the row shell/template from `src/ui/components/tracker/rows/templates/`.
+    1. **Hydration**: Load the row shell/template from `src/widgets/tracker/rows/templates/`.
     2. **Population**: Inject content (name, notes, wiki links) into the DOM.
-    3. **Attachment**: Attach action handlers (checkbox click, timer reset) via `src/ui/components/tracker/rows/row.actions.js`.
+    3. **Attachment**: Attach action handlers (checkbox click, timer reset) via `src/widgets/tracker/rows/factory/base-row.behaviors.js`.
     4. **Status Sync**: Apply visibility and completion states based on `dataset.completed`.
     5. **Augmentation**: Add specialized overlays (timers, custom task controls) without breaking the base template.
     6. **Responsive Adjustments**: Ensure the row adapts to mobile/desktop layouts via CSS tokens.
 - **Minimal Branches**: If row behavior changes, modify the shared row flow before adding a special-case renderer branch.
-- **Thin Surfaces**: Parent/subparent surfaces must stay thin and route through shared subgroup/row behavior. bespoke renderer logic at the row level is forbidden.
+- **Thin Surfaces**: Parent/subparent surfaces must stay thin and route through shared subgroup/row behavior. Bespoke renderer logic at the row level is forbidden.
 
 ## Panel-Control Rules
 
-- Views, Profiles, and Settings must share the same floating-panel toggle lifecycle through `src/core/dom/panel-controls.js`.
+- Views, Profiles, and Settings must share the same floating-panel toggle lifecycle through `src/shared/ui/panel-controls.js`.
 - Button replacement and panel open-state behavior should not be re-implemented per feature.
 - Surface-specific work is allowed for:
   - pre-open hydration
@@ -151,7 +155,7 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 
 - Responsive styles may adjust widths, typography, and shell control layout.
 - Responsive styles must not hardcode alternate tracker geometry that conflicts with tracker tokens.
-- If mobile needs a geometry change, introduce or reuse a token instead of patching row height directly in `responsive.css`.
+- If mobile needs a geometry change, introduce or reuse a token instead of patching row height directly in `src/theme/shell/responsive.css`.
 
 ## Asset And Icon Rules
 
@@ -164,9 +168,10 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 - Analyze the codebase before implementing any Figma-derived change.
 - Reuse existing tracker, header, row, panel, and shell primitives before creating new UI structures.
 - Treat Figma output as design intent, not final code style.
-- Map Figma spacing, rounding, and colors onto the tokens in `src/ui/styles/tokens/tokens.css`.
+- Map Figma spacing, rounding, and colors onto the tokens in `src/theme/tokens/tokens.css`.
 - Do not hardcode new tracker geometry values from a design file.
 - If attached subgroup behavior or tracker section hierarchy appears in a design, implement it through the section engine contract rather than bespoke renderer conditionals.
+- When adding new UI, prefer extending existing widgets in `src/widgets/` over creating parallel structures.
 
 ## Verification Requirements
 
@@ -198,32 +203,74 @@ Every concept must have **one authoritative owner**. Ownership depends on the co
 
 ## Architectural Anatomy
 
-To assist in rapid orientation, the codebase is structured into clear layers:
+The codebase is structured into clear, purpose-driven layers. Each layer has a singular responsibility and strict import direction rules.
+
+### Import Direction
+
+```
+content  ←  domain  ←  features  ←  app
+                    ←  widgets   ←  app
+shared   ←  (everyone except content)
+theme    ←  (HTML only, via <link> tags in index.html)
+```
 
 ### 1. The App Layer (`src/app/`)
 
-- **Registries**: The "brain" of the app. Maps sections, timers, and pages.
-- **Runtime**: Orchestrates the boot process and render loops.
-- **Boot**: The entry point that initializes storage, settings, and renders the shell.
+- **Boot** (`src/app/boot/`): Entry points — `main.js`, `bootstrap.js`, init loops and run loops.
+- **Shell** (`src/app/shell/`): The HTML shell (`index.html`), layout loader, and app-shell runtime that injects HTML partials.
+- **Registries** (`src/app/registries/`): The "brain" of the app. Maps sections, timers, and pages via `unified-registry.js`.
+- **Runtime** (`src/app/runtime/`): Orchestrates the boot process and render loops via `render-orchestrator.js` and `composition-root.js`.
+- **Renderers** (`src/app/renderers/`): Top-level page renderer dispatch — `landing-renderer.js`, `tracker-section-renderer.js`.
 
-### 2. The Core Layer (`src/core/`)
-
-- **Domain**: Game-aware logic for content resolution and task filtering.
-- **DOM**: Low-level UI helpers, panel controls, and tooltip logic.
-- **Storage**: Persistence layer, schema migrations, and key builders.
-
-### 3. The Feature Layer (`src/features/`)
-
-- **Modularized Logic**: Each feature (Tasks, Timers, Sections, Profiles) owns its domain logic.
-- **State Management**: Features maintain their own internal state and normalization rules.
-
-### 4. The UI Layer (`src/ui/`)
-
-- **App Shell**: The persistent chrome (nav, panels, layout).
-- **Components**: Atomic UI units (headers, rows, tables).
-- **Renderers**: Pure functions that transform content into DOM nodes.
-- **Styles**: Token-driven CSS architecture.
-
-### 5. The Content Layer (`src/content/`)
+### 2. The Content Layer (`src/content/`)
 
 - **SSoT for Data**: All game tasks, section definitions, and page layouts live here as authored JS objects.
+- **Factories** (`src/content/factories/`): `define-task.js`, `define-section.js`, `define-page.js`, `define-timer-group.js` — helper factories for authoring.
+- **Games** (`src/content/games/rs3/`, `src/content/games/osrs/`): Game-specific pages, sections, and task files.
+- **Schemas** (`src/content/schemas/`): JSON schemas for content validation (e.g., `cadence.schema.json`).
+
+### 3. The Domain Layer (`src/domain/`)
+
+- **Content Resolution**: Business rules that operate on `src/content/` to produce runtime-ready structures.
+- **Content Loader** (`src/domain/content/content-loader.js`): Loads and validates authored pages.
+- **Resolvers**: Custom task resolver, penguin resolver, timer resolver.
+
+### 4. The Features Layer (`src/features/`)
+
+- **Modularized Logic**: Each feature (Tasks, Timers, Sections, Profiles, Settings, Cooldowns, Notifications) owns its domain logic and state.
+- **State Management**: Features maintain their own internal state and normalization rules.
+- **No cross-feature imports**: Features communicate through the app layer, not directly.
+
+### 5. The Shared Layer (`src/shared/`)
+
+- **`lib/storage/`**: `storage-service.js`, `keys-builder.js`, `migrations.js`, `namespace.js`.
+- **`lib/time/`**: `boundaries.js`, `countdowns.js`, `formatters.js`.
+- **`lib/timers/`**: `timer-registry.js`.
+- **`lib/ids/`**: `section-ids.js`.
+- **`lib/calculators/`**: Efficiency, XP, and gold calculation utilities.
+- **`lib/utils/`**: `arrays.js`, `objects.js`, `strings.js`.
+- **`state/`**: `game-context.js`, `task-state-manager.js`, `task-state-machine.js`.
+- **`ui/`**: `controls.js`, `panel-controls.js`, `primitives/tooltips/tooltip-engine.js`.
+
+### 6. The Theme Layer (`src/theme/`)
+
+- **Token-Driven CSS**: No JS logic. Loaded exclusively via `<link>` tags in `src/app/shell/html/index.html`.
+- **`tokens/`**: `tokens.css` — all design tokens (colors, spacing, rounding, row height, etc.).
+- **`base/`**: `base.css`, `states.css` — global resets and state modifiers.
+- **`components/`**: `button.css`, `modal.css`, `header.css`.
+- **`shell/`**: `layout.css`, `controls.css`, `responsive.css`, `index.css`.
+- **`tracker/`**: `row.css`, `column.css`, `table.css`, `farming.css`.
+- **`pages/`**: `overview.css`.
+
+### 7. The Widgets Layer (`src/widgets/`)
+
+- **Self-Contained UI**: Each widget is a cohesive unit of markup + behavior. Receives dependencies via injection.
+- **`headers/`**: `header.frame.js`, `header.render.js`, `header.logic.js`, section panel header, table section header.
+- **`tracker/rows/`**: Row factory, column types, row behaviors, base-row shell, templates.
+- **`tracker/sections/`**: Section engine, standard renderer, timer group renderer, section control bindings.
+- **`tracker/tables/`**: Table geometry utilities.
+- **`overview/`**: Overview panel DOM and collection logic.
+- **`custom-tasks/`**: Custom task modal controller.
+- **`import-export/`**: Import/export UI and logic.
+- **`profiles/`**: Profile switcher view.
+- **`settings/`**: Settings menu.
