@@ -112,6 +112,10 @@ Dailyscape doesn't just clear tasks; it understands **Time**.
 ---
 
 ## ✨ Feature Ecosystem
+### Game Selection
+![Landing Page](  assets/img/landing.png)
+
+### Tracker Style/Theme
 ![Tracker Preview](assets/img/tracker.png)
 
 ### ⏱️ Precision Farming Timers
