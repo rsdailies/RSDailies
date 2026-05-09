@@ -1,39 +1,37 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import assert from 'node:assert/strict';
 
-const root = process.cwd();
-const contentRoot = path.join(root, 'src', 'content');
-const validatorUrl = pathToFileURL(path.join(root, 'src', 'domain', 'content', 'validate-content.js')).href;
-const { validateContentPageDefinition } = await import(validatorUrl);
+import { TRACKER_PAGES, TRACKER_SECTIONS } from '../../src/lib/domain/static-content.ts';
 
-function walk(dir, out = []) {
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const next = path.join(dir, entry.name);
-    if (entry.isDirectory()) walk(next, out);
-    else out.push(next);
-  }
-  return out;
+function flattenItems(items = []) {
+	return items.flatMap((item) => [
+		item.id,
+		...(Array.isArray(item.children) ? item.children.map((child) => child.id) : []),
+		...(Array.isArray(item.childRows) ? item.childRows.map((child) => child.id) : []),
+	]);
 }
 
-const pageFiles = walk(contentRoot).filter((file) => file.endsWith('.page.js'));
-const failures = [];
+assert.equal(TRACKER_PAGES.length, 6, 'Expected 6 canonical pages.');
+assert.equal(TRACKER_SECTIONS.length, 8, 'Expected 8 canonical sections.');
 
-for (const file of pageFiles) {
-  const moduleUrl = pathToFileURL(file).href;
-  const loaded = await import(moduleUrl);
-  const page = loaded.default || Object.values(loaded).find((value) => value && typeof value === 'object');
-
-  try {
-    validateContentPageDefinition(page);
-  } catch (error) {
-    failures.push(`${path.relative(root, file)}: ${error.message}`);
-  }
+for (const page of TRACKER_PAGES) {
+	assert.ok(page.route.startsWith('/'), `Page ${page.id} must have an absolute route.`);
+	assert.ok(Array.isArray(page.sections), `Page ${page.id} must define sections.`);
+	page.sections.forEach((sectionId) => {
+		assert.ok(TRACKER_SECTIONS.some((section) => section.id === sectionId), `Page ${page.id} references missing section ${sectionId}.`);
+	});
 }
 
-if (failures.length > 0) {
-  console.error(failures.join('\n'));
-  process.exit(1);
+for (const section of TRACKER_SECTIONS) {
+	assert.ok(section.id, 'Section must have an id.');
+	assert.ok(section.label, `Section ${section.id} must have a label.`);
+
+	if (section.renderVariant === 'timer-groups') {
+		assert.ok(Array.isArray(section.groups) && section.groups.length > 0, `Timer section ${section.id} must define groups.`);
+		continue;
+	}
+
+	const taskIds = flattenItems(section.items || []);
+	assert.equal(taskIds.length, new Set(taskIds).size, `Section ${section.id} has duplicate task ids.`);
 }
 
-console.log(`Content audit passed for ${pageFiles.length} page definitions.`);
+console.log(`Content audit passed for ${TRACKER_PAGES.length} pages and ${TRACKER_SECTIONS.length} sections.`);

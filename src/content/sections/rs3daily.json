@@ -1,0 +1,202 @@
+{
+  "id": "rs3daily",
+  "label": "Dailies",
+  "game": "rs3",
+  "displayOrder": 3,
+  "resetFrequency": "daily",
+  "renderVariant": "standard",
+  "shell": {
+    "columns": [
+      "activity_col_name",
+      "activity_col_notes",
+      "activity_col_status"
+    ],
+    "extraTableClasses": [],
+    "showAddButton": false,
+    "showResetButton": true,
+    "showCountdown": true,
+    "countdownId": "countdown-rs3daily"
+  },
+  "items": [
+    {
+      "id": "daily-challenge",
+      "name": "Daily Challenge",
+      "wiki": "https://runescape.wiki/w/Challenge_System",
+      "note": "Get XP and daily progress",
+      "reset": "daily"
+    },
+    {
+      "id": "vis-wax",
+      "name": "Vis Wax",
+      "wiki": "https://runescape.wiki/w/Vis_wax",
+      "note": "Use the rune combination for daily vis wax",
+      "reset": "daily"
+    },
+    {
+      "id": "wicked-hood",
+      "name": "Wicked Hood",
+      "wiki": "https://runescape.wiki/w/Wicked_hood",
+      "note": "Claim daily pure essence / rune utility",
+      "reset": "daily"
+    },
+    {
+      "id": "jack-of-trades",
+      "name": "Jack of Trades",
+      "wiki": "https://runescape.wiki/w/Jack_of_trades_aura/Routines",
+      "note": "Get XP in a range of skills to earn an XP book",
+      "reset": "daily"
+    },
+    {
+      "id": "soul-reaper",
+      "name": "Soul Reaper",
+      "wiki": "https://runescape.wiki/w/Soul_Reaper",
+      "note": "Kill assigned bosses",
+      "reset": "daily"
+    },
+    {
+      "id": "player-owned-port",
+      "name": "Player-owned Ports",
+      "wiki": "https://runescape.wiki/w/Player-owned_port",
+      "note": "Manage your port. Buy resources from the Black Marketeer.",
+      "reset": "daily"
+    },
+    {
+      "id": "player-owned-farm",
+      "name": "Player-owned Farm",
+      "wiki": "https://runescape.wiki/w/Player-owned_farm",
+      "note": "Manage your farm",
+      "reset": "daily"
+    },
+    {
+      "id": "crystal-tree-blossom",
+      "name": "Crystal Tree Blossom",
+      "wiki": "https://runescape.wiki/w/Crystal_tree_blossom",
+      "note": "Collect blossom for perfect plus potions",
+      "reset": "daily"
+    },
+    {
+      "id": "invention-machines",
+      "name": "Invention Machines",
+      "wiki": "https://runescape.wiki/w/Machines",
+      "note": "Fill and collect from machines",
+      "reset": "daily"
+    },
+    {
+      "id": "divine-locations",
+      "name": "Divine Locations",
+      "wiki": "https://runescape.wiki/w/Divine_location",
+      "note": "Gather resources from divine locations",
+      "reset": "daily"
+    },
+    {
+      "id": "archaeology-research",
+      "name": "Archaeology Research",
+      "wiki": "https://runescape.wiki/w/Research",
+      "note": "Send out research teams for XP and resources",
+      "reset": "daily"
+    },
+    {
+      "id": "nemi-forest",
+      "name": "Nemi Forest",
+      "wiki": "https://runescape.wiki/w/Nemi_Forest",
+      "note": "Daily map route and rewards",
+      "reset": "daily"
+    },
+    {
+      "id": "sinkholes",
+      "name": "Sinkholes",
+      "wiki": "https://runescape.wiki/w/Sinkholes",
+      "note": "Dungeoneering XP lamps and tokens (2x/day)",
+      "reset": "daily"
+    },
+    {
+      "id": "goebie-bands",
+      "name": "Goebie Supply Run",
+      "wiki": "https://runescape.wiki/w/Supply_run",
+      "note": "Daily goebie run",
+      "reset": "daily"
+    },
+    {
+      "id": "menaphos-obelisk",
+      "name": "Menaphos Obelisk / Scarabs",
+      "wiki": "https://runescape.wiki/w/Soul_obelisk_(Menaphos)",
+      "note": "Soul obelisk and Menaphos reputation",
+      "reset": "daily"
+    },
+    {
+      "id": "big-chinchompa",
+      "name": "Big Chinchompa",
+      "wiki": "https://runescape.wiki/w/Big_Chinchompa",
+      "note": "Hunter D&D rewards",
+      "reset": "daily"
+    },
+    {
+      "id": "fixate",
+      "name": "Fixate Charges",
+      "wiki": "https://runescape.wiki/w/Fixate",
+      "note": "Use fixate charges for guaranteed artefacts",
+      "reset": "daily"
+    },
+    {
+      "id": "arc-contracts",
+      "name": "Arc Contracts",
+      "wiki": "https://runescape.wiki/w/Contract",
+      "note": "Complete up to 7 Arc contracts",
+      "reset": "daily"
+    },
+    {
+      "id": "rapid-growth",
+      "name": "Rapid Growth",
+      "wiki": "https://runescape.wiki/w/Rapid_Growth",
+      "note": "Use daily growth charges",
+      "reset": "daily"
+    },
+    {
+      "id": "runesphere",
+      "name": "Runesphere",
+      "wiki": "https://runescape.wiki/w/Runesphere",
+      "note": "Hand in rune dust for XP",
+      "reset": "daily"
+    },
+    {
+      "id": "book-of-char",
+      "name": "Book of Char",
+      "wiki": "https://runescape.wiki/w/The_Book_of_Char",
+      "note": "Fast Firemaking XP",
+      "reset": "daily"
+    },
+    {
+      "id": "travelling-merchant",
+      "name": "Travelling Merchant",
+      "wiki": "https://runescape.wiki/w/Travelling_Merchant%27s_Shop",
+      "note": "Check stock if it matters to your route",
+      "reset": "daily"
+    },
+    {
+      "id": "motherlode-maw",
+      "name": "Motherlode Maw",
+      "wiki": "https://runescape.wiki/w/Motherlode_Maw",
+      "note": "Claim maw reward if available",
+      "reset": "daily"
+    },
+    {
+      "id": "wildy-flash-events",
+      "name": "Wilderness Flash Events",
+      "wiki": "https://runescape.wiki/w/Wilderness_Flash_Events",
+      "note": "Check event timing / utility",
+      "reset": "daily"
+    },
+    {
+      "id": "sandstone-red-sandstone",
+      "name": "Sandstone / Red Sandstone",
+      "wiki": "https://runescape.wiki/w/Red_sandstone",
+      "note": "Daily sandstone collection",
+      "reset": "daily"
+    }
+  ],
+  "legacySectionId": "rs3daily",
+  "containerId": "rs3daily-container",
+  "tableId": "rs3daily-table",
+  "includedInAllMode": true,
+  "supportsTaskNotifications": true
+}

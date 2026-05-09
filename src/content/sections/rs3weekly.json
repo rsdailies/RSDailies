@@ -1,0 +1,264 @@
+{
+  "id": "rs3weekly",
+  "label": "Weeklies",
+  "game": "rs3",
+  "displayOrder": 4,
+  "resetFrequency": "weekly",
+  "renderVariant": "parent-children",
+  "shell": {
+    "columns": [
+      "activity_col_name",
+      "activity_col_notes",
+      "activity_col_status"
+    ],
+    "extraTableClasses": [],
+    "showAddButton": false,
+    "showResetButton": true,
+    "showCountdown": true,
+    "countdownId": "countdown-rs3weekly"
+  },
+  "items": [
+    {
+      "id": "thalmunds-wares",
+      "name": "Thalmund's Wares",
+      "wiki": "https://runescape.wiki/w/Thalmund%27s_Wares",
+      "note": "Merchant in the City of Um",
+      "reset": "weekly"
+    },
+    {
+      "id": "clan-citadel-cap",
+      "name": "Clan Citadel Cap",
+      "wiki": "https://runescape.wiki/w/Clan_Citadel",
+      "note": "Get skill XP and bonuses",
+      "reset": "weekly"
+    },
+    {
+      "id": "anachronia-totems",
+      "name": "Charge Anachronia Totems",
+      "wiki": "https://runescape.wiki/w/Totem",
+      "note": "Recharge weekly",
+      "reset": "weekly"
+    },
+    {
+      "id": "meg",
+      "name": "Meg",
+      "wiki": "https://runescape.wiki/w/Meg#Meg%27s_questions",
+      "note": "XP lamp and coins",
+      "reset": "weekly"
+    },
+    {
+      "id": "tears-of-guthix",
+      "name": "Tears of Guthix",
+      "wiki": "https://runescape.wiki/w/Tears_of_Guthix",
+      "note": "XP for your lowest skill",
+      "reset": "weekly"
+    },
+    {
+      "id": "herby-werby",
+      "name": "Herby Werby",
+      "wiki": "https://runescape.wiki/w/Herby_Werby",
+      "note": "Herb bag and totem pieces. Commonly worth doing late for higher-level XP scaling.",
+      "reset": "weekly",
+      "alertDaysBeforeReset": 1
+    },
+    {
+      "id": "big-top-bonanza",
+      "name": "Big Top Bonanza",
+      "wiki": "https://runescape.wiki/w/Balthazar_Beauregard%27s_Big_Top_Bonanza",
+      "note": "Circus tricks for XP",
+      "reset": "weekly"
+    },
+    {
+      "id": "penguins",
+      "name": "Penguins",
+      "wiki": "https://jq.world60pengs.com",
+      "note": "Weekly penguin route with compact child checklist rows. Child notes should display inline in the next JS pass.",
+      "reset": "weekly",
+      "alertDaysBeforeReset": 0,
+      "childRows": [
+        {
+          "id": "penguin-1",
+          "name": "Penguin 1",
+          "note": "1-point or 2-point location row. Replace label/location weekly if you want manual upkeep."
+        },
+        {
+          "id": "penguin-2",
+          "name": "Penguin 2",
+          "note": "Use note text for area, disguise, hint, or route guidance."
+        },
+        {
+          "id": "penguin-3",
+          "name": "Penguin 3",
+          "note": "Compact child row intended for mark-off and inline guidance."
+        },
+        {
+          "id": "penguin-4",
+          "name": "Penguin 4",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-5",
+          "name": "Penguin 5",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-6",
+          "name": "Penguin 6",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-7",
+          "name": "Penguin 7",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-8",
+          "name": "Penguin 8",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-9",
+          "name": "Penguin 9",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-10",
+          "name": "Penguin 10",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-11",
+          "name": "Penguin 11",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-12",
+          "name": "Ghost Penguin",
+          "note": "Shadow Realm / ghost penguin can be tracked here if you want all 12 in one parent block."
+        },
+        {
+          "id": "penguin-polar-bear",
+          "name": "Polar Bear",
+          "note": "Weekly well location helper row."
+        }
+      ]
+    },
+    {
+      "id": "wisps-of-the-grove",
+      "name": "Wisps of the Grove",
+      "wiki": "https://runescape.wiki/w/Wisps_of_the_Grove",
+      "note": "Farming and Hunter XP",
+      "reset": "weekly"
+    },
+    {
+      "id": "shattered-worlds",
+      "name": "Shattered Worlds",
+      "wiki": "https://runescape.wiki/w/Shattered_Worlds",
+      "note": "Weekly anima and challenge progress",
+      "reset": "weekly"
+    },
+    {
+      "id": "familiarisation",
+      "name": "Familiarisation",
+      "wiki": "https://runescape.wiki/w/Familiarisation",
+      "note": "Summoning outfit progress",
+      "reset": "weekly"
+    },
+    {
+      "id": "skeletal-horror",
+      "name": "Skeletal Horror",
+      "wiki": "https://runescape.wiki/w/Skeletal_horror",
+      "note": "Elite or master clue chance",
+      "reset": "weekly"
+    },
+    {
+      "id": "aquarium-treasure-chest",
+      "name": "Aquarium Treasure Chest",
+      "wiki": "https://runescape.wiki/w/Treasure_chest_decoration",
+      "note": "Weekly clue or utility chest",
+      "reset": "weekly"
+    },
+    {
+      "id": "agoroth",
+      "name": "Agoroth",
+      "wiki": "https://runescape.wiki/w/Agoroth",
+      "note": "2x/week black pearl reward",
+      "reset": "weekly"
+    },
+    {
+      "id": "broken-home",
+      "name": "Replay Broken Home",
+      "wiki": "https://runescape.wiki/w/Broken_Home/Quick_guide",
+      "note": "No-death speedrun for XP lamp",
+      "reset": "weekly"
+    },
+    {
+      "id": "rush-of-blood",
+      "name": "Rush of Blood",
+      "wiki": "https://runescape.wiki/w/Rush_of_Blood",
+      "note": "Slayer XP and titles",
+      "reset": "weekly"
+    },
+    {
+      "id": "water-filtration",
+      "name": "Water Filtration",
+      "wiki": "https://runescape.wiki/w/Water_filtration_system",
+      "note": "Het's Oasis rewards",
+      "reset": "weekly"
+    },
+    {
+      "id": "miscellania-weekly",
+      "name": "Miscellania Weekly Check",
+      "wiki": "https://runescape.wiki/w/Calculator:Other/Miscellania",
+      "note": "Longer interval coffer check",
+      "reset": "weekly"
+    },
+    {
+      "id": "invention-machine-weekly",
+      "name": "Invention Machines Weekly Check",
+      "wiki": "https://runescape.wiki/w/Machines",
+      "note": "Weekly machine refill sweep",
+      "reset": "weekly"
+    },
+    {
+      "id": "arc-supplies",
+      "name": "Arc Supplies Crate",
+      "wiki": "https://runescape.wiki/w/Rosie_(supplies)",
+      "note": "Free supplies from Rosie",
+      "reset": "weekly"
+    },
+    {
+      "id": "dream-of-iaia-resource",
+      "name": "Dream of Iaia (Resources)",
+      "wiki": "https://runescape.wiki/w/Dream_of_Iaia",
+      "note": "Convert stored resources",
+      "reset": "weekly"
+    },
+    {
+      "id": "gwd2-bounties",
+      "name": "GWD2 Bounties",
+      "wiki": "https://runescape.wiki/w/Feng,_the_Bounty_Master",
+      "note": "Up to 5 stored bounties",
+      "reset": "weekly"
+    },
+    {
+      "id": "fort-forinthry-bonus-xp",
+      "name": "Fort Forinthry Bonus XP",
+      "wiki": "https://runescape.wiki/w/Town_Hall_(Fort_Forinthry)",
+      "note": "Claim weekly bonus XP",
+      "reset": "weekly"
+    },
+    {
+      "id": "advance-time",
+      "name": "Advance Time",
+      "wiki": "https://runescape.wiki/w/Advance_Time",
+      "note": "Cast the spell 3 times",
+      "reset": "weekly"
+    }
+  ],
+  "legacySectionId": "rs3weekly",
+  "containerId": "rs3weekly-container",
+  "tableId": "rs3weekly-table",
+  "includedInAllMode": true,
+  "supportsTaskNotifications": true
+}

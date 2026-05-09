@@ -1,0 +1,33 @@
+{
+  "id": "rs3-tasks",
+  "title": "Tasks",
+  "navLabel": "Tasks",
+  "game": "rs3",
+  "route": "/rs3/tasks",
+  "layout": "tracker",
+  "displayOrder": 2,
+  "primaryNav": true,
+  "availableViews": [
+    {
+      "id": "all",
+      "label": "All"
+    },
+    {
+      "id": "daily",
+      "label": "Daily"
+    },
+    {
+      "id": "weekly",
+      "label": "Weekly"
+    },
+    {
+      "id": "monthly",
+      "label": "Monthly"
+    }
+  ],
+  "sections": [
+    "rs3daily",
+    "rs3weekly",
+    "rs3monthly"
+  ]
+}

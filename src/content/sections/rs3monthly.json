@@ -1,0 +1,77 @@
+{
+  "id": "rs3monthly",
+  "label": "Monthlies",
+  "game": "rs3",
+  "displayOrder": 5,
+  "resetFrequency": "monthly",
+  "renderVariant": "standard",
+  "shell": {
+    "columns": [
+      "activity_col_name",
+      "activity_col_notes",
+      "activity_col_status"
+    ],
+    "extraTableClasses": [],
+    "showAddButton": false,
+    "showResetButton": true,
+    "showCountdown": true,
+    "countdownId": "countdown-rs3monthly"
+  },
+  "items": [
+    {
+      "id": "solomons-store",
+      "name": "Solomon's Store",
+      "wiki": "https://secure.runescape.com/m=mtxn_rs_shop/index?jptg=ia&jptv=sgs_page#category/FreeItem",
+      "note": "Free cosmetics and loyalty checks",
+      "reset": "monthly"
+    },
+    {
+      "id": "giant-oyster",
+      "name": "Giant Oyster",
+      "wiki": "https://runescape.wiki/w/Giant_Oyster",
+      "note": "Fishing and Farming XP, clue chest",
+      "reset": "monthly"
+    },
+    {
+      "id": "god-statues",
+      "name": "God Statues",
+      "wiki": "https://runescape.wiki/w/God_Statues",
+      "note": "Construction and Prayer / Slayer XP. Often worth doing near the end of the month.",
+      "reset": "monthly",
+      "alertDaysBeforeReset": 1
+    },
+    {
+      "id": "effigy-incubator",
+      "name": "Effigy Incubator",
+      "wiki": "https://runescape.wiki/w/Effigy_Incubator",
+      "note": "Monthly effigy run",
+      "reset": "monthly"
+    },
+    {
+      "id": "troll-invasion",
+      "name": "Troll Invasion",
+      "wiki": "https://runescape.wiki/w/Troll_Invasion",
+      "note": "XP book and reward",
+      "reset": "monthly"
+    },
+    {
+      "id": "dream-of-iaia-xp",
+      "name": "Dream of Iaia (XP)",
+      "wiki": "https://runescape.wiki/w/Dream_of_Iaia",
+      "note": "Use stored XP in stations",
+      "reset": "monthly"
+    },
+    {
+      "id": "monthly-dnd-check",
+      "name": "Monthly D&D Sweep",
+      "wiki": "https://runescape.wiki/w/Distractions_and_Diversions",
+      "note": "Check monthly-limited activities",
+      "reset": "monthly"
+    }
+  ],
+  "legacySectionId": "rs3monthly",
+  "containerId": "rs3monthly-container",
+  "tableId": "rs3monthly-table",
+  "includedInAllMode": true,
+  "supportsTaskNotifications": true
+}

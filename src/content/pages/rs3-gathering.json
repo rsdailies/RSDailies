@@ -1,0 +1,23 @@
+{
+  "id": "rs3-gathering",
+  "title": "Gathering",
+  "navLabel": "Gathering",
+  "game": "rs3",
+  "route": "/rs3/gathering",
+  "layout": "tracker",
+  "displayOrder": 3,
+  "primaryNav": true,
+  "availableViews": [
+    {
+      "id": "daily",
+      "label": "Daily"
+    },
+    {
+      "id": "weekly",
+      "label": "Weekly"
+    }
+  ],
+  "sections": [
+    "gathering"
+  ]
+}

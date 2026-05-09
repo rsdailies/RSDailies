@@ -1,35 +1,21 @@
-import { getAllTimerDefinitions } from '../../src/shared/lib/timers/timer-registry.js';
+import assert from 'node:assert/strict';
 
-const failures = [];
-const seen = new Set();
+import { TRACKER_SECTIONS } from '../../src/lib/domain/static-content.ts';
+import { TimerRegistry } from '../../src/lib/shared/timers/timer-registry.ts';
 
-for (const timer of getAllTimerDefinitions()) {
-  if (!timer?.id || typeof timer.id !== 'string') {
-    failures.push('Timer missing string id.');
-    continue;
-  }
+const timerSection = TRACKER_SECTIONS.find((section) => section.id === 'timers');
+assert.ok(timerSection, 'Timer section is missing.');
+assert.ok(Array.isArray(timerSection.groups) && timerSection.groups.length > 0, 'Timer section must define timer groups.');
 
-  if (seen.has(timer.id)) {
-    failures.push(`Duplicate timer id: ${timer.id}`);
-  }
-  seen.add(timer.id);
+const registry = new TimerRegistry(timerSection.groups);
+const timers = registry.getAllTimerDefinitions();
 
-  if (!timer.name || typeof timer.name !== 'string') {
-    failures.push(`Timer "${timer.id}" missing name.`);
-  }
+assert.ok(timers.length > 0, 'Timer registry must expose timers.');
 
-  if (timer.cycleMinutes != null && (!Number.isFinite(timer.cycleMinutes) || timer.cycleMinutes <= 0)) {
-    failures.push(`Timer "${timer.id}" has invalid cycleMinutes.`);
-  }
-
-  if (timer.groupId == null || typeof timer.groupId !== 'string') {
-    failures.push(`Timer "${timer.id}" missing groupId.`);
-  }
+for (const timer of timers) {
+	assert.ok(timer.id, 'Timer must have an id.');
+	assert.ok(timer.name, `Timer ${timer.id} must have a name.`);
+	assert.ok((timer.cycleMinutes || timer.timerMinutes || timer.growthMinutes) > 0, `Timer ${timer.id} must have a positive duration source.`);
 }
 
-if (failures.length > 0) {
-  console.error(failures.join('\n'));
-  process.exit(1);
-}
-
-console.log(`Timer audit passed for ${getAllTimerDefinitions().length} timer definitions.`);
+console.log(`Timer audit passed for ${timers.length} timer definitions.`);

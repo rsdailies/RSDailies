@@ -1,0 +1,583 @@
+{
+  "id": "timers",
+  "label": "Timers",
+  "game": "rs3",
+  "displayOrder": 1,
+  "resetFrequency": "rolling",
+  "renderVariant": "timer-groups",
+  "shell": {
+    "columns": [
+      "activity_col_name",
+      "activity_col_notes",
+      "activity_col_status"
+    ],
+    "extraTableClasses": [],
+    "showAddButton": false,
+    "showResetButton": true,
+    "showCountdown": false
+  },
+  "items": [],
+  "legacySectionId": "rs3farming",
+  "containerId": "timers-container",
+  "tableId": "timers-table",
+  "includedInAllMode": false,
+  "supportsTaskNotifications": false,
+  "groups": [
+    {
+      "id": "herbs",
+      "label": "Herbs",
+      "name": "Herbs",
+      "note": "Main herb run timer with individual patch checklist rows.",
+      "timers": [
+        {
+          "id": "farm-herbs",
+          "name": "Herb Run",
+          "wiki": "https://runescape.wiki/w/Herb_patch",
+          "note": "Primary herb timer. Uses your Speedy Growth upgrade setting automatically.",
+          "cycleMinutes": 20,
+          "stages": 4,
+          "durationNote": "Growth: 80 min base / 60 min with Speedy Growth",
+          "useHerbSetting": true,
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "run",
+          "timerCategory": "farming"
+        }
+      ],
+      "plots": [
+        {
+          "id": "herb-falador",
+          "name": "Falador",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        },
+        {
+          "id": "herb-catherby",
+          "name": "Catherby",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        },
+        {
+          "id": "herb-ardougne",
+          "name": "Ardougne",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        },
+        {
+          "id": "herb-port-phasmatys",
+          "name": "Port Phasmatys",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        },
+        {
+          "id": "herb-troll-stronghold",
+          "name": "Troll Stronghold",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        },
+        {
+          "id": "herb-prifddinas",
+          "name": "Prifddinas",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        },
+        {
+          "id": "herb-wilderness",
+          "name": "Wilderness",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        },
+        {
+          "id": "herb-garden-of-kharid",
+          "name": "Garden of Kharid",
+          "wiki": "https://runescape.wiki/w/Herb_patch"
+        }
+      ]
+    },
+    {
+      "id": "allotments",
+      "label": "Allotments",
+      "name": "Allotments",
+      "note": "Allotment run timer with patch checklist rows.",
+      "timers": [
+        {
+          "id": "farm-allotments",
+          "name": "Allotment Run",
+          "wiki": "https://runescape.wiki/w/Allotment_patch",
+          "note": "Typical allotment growth timer.",
+          "cycleMinutes": 10,
+          "stages": 4,
+          "durationNote": "Growth: 40 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "run",
+          "timerCategory": "farming"
+        }
+      ],
+      "plots": [
+        {
+          "id": "allotment-falador",
+          "name": "Falador",
+          "wiki": "https://runescape.wiki/w/Allotment_patch"
+        },
+        {
+          "id": "allotment-catherby",
+          "name": "Catherby",
+          "wiki": "https://runescape.wiki/w/Allotment_patch"
+        },
+        {
+          "id": "allotment-ardougne",
+          "name": "Ardougne",
+          "wiki": "https://runescape.wiki/w/Allotment_patch"
+        },
+        {
+          "id": "allotment-port-phasmatys",
+          "name": "Port Phasmatys",
+          "wiki": "https://runescape.wiki/w/Allotment_patch"
+        },
+        {
+          "id": "allotment-havenhythe",
+          "name": "Havenhythe",
+          "wiki": "https://runescape.wiki/w/Allotment_patch",
+          "locationNote": "Havenhythe allotment patch."
+        }
+      ]
+    },
+    {
+      "id": "hops",
+      "label": "Hops",
+      "name": "Hops",
+      "note": "Hop run timer with patch checklist rows.",
+      "timers": [
+        {
+          "id": "farm-hops",
+          "name": "Hop Run",
+          "wiki": "https://runescape.wiki/w/Hops_patch",
+          "note": "Typical hops growth timer.",
+          "cycleMinutes": 10,
+          "stages": 4,
+          "durationNote": "Growth: 40 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "run",
+          "timerCategory": "farming"
+        }
+      ],
+      "plots": [
+        {
+          "id": "hops-yanille",
+          "name": "Yanille",
+          "wiki": "https://runescape.wiki/w/Hops_patch"
+        },
+        {
+          "id": "hops-lumbridge",
+          "name": "Lumbridge",
+          "wiki": "https://runescape.wiki/w/Hops_patch"
+        },
+        {
+          "id": "hops-seers",
+          "name": "Seers' Village",
+          "wiki": "https://runescape.wiki/w/Hops_patch"
+        },
+        {
+          "id": "hops-entrana",
+          "name": "Entrana",
+          "wiki": "https://runescape.wiki/w/Hops_patch"
+        }
+      ]
+    },
+    {
+      "id": "trees",
+      "label": "Trees",
+      "name": "Trees",
+      "note": "Tree timers broken into compact child groups.",
+      "timers": [
+        {
+          "id": "farm-regular-trees",
+          "name": "Regular Trees",
+          "wiki": "https://runescape.wiki/w/Tree_patch",
+          "note": "Regular tree growth timer.",
+          "cycleMinutes": 40,
+          "stages": 8,
+          "durationNote": "Growth: 320 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "tree-lumbridge",
+              "name": "Lumbridge",
+              "wiki": "https://runescape.wiki/w/Tree_patch"
+            },
+            {
+              "id": "tree-falador",
+              "name": "Falador",
+              "wiki": "https://runescape.wiki/w/Tree_patch"
+            },
+            {
+              "id": "tree-taverley",
+              "name": "Taverley",
+              "wiki": "https://runescape.wiki/w/Tree_patch"
+            },
+            {
+              "id": "tree-varrock",
+              "name": "Varrock",
+              "wiki": "https://runescape.wiki/w/Tree_patch"
+            },
+            {
+              "id": "tree-gnome-stronghold",
+              "name": "Gnome Stronghold",
+              "wiki": "https://runescape.wiki/w/Tree_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-fruit-trees",
+          "name": "Fruit Trees",
+          "wiki": "https://runescape.wiki/w/Fruit_Tree_Patch",
+          "note": "Fruit tree growth timer.",
+          "cycleMinutes": 160,
+          "stages": 6,
+          "durationNote": "Growth: 960 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "fruit-gnome-stronghold",
+              "name": "Gnome Stronghold",
+              "wiki": "https://runescape.wiki/w/Fruit_Tree_Patch"
+            },
+            {
+              "id": "fruit-gnome-village",
+              "name": "Tree Gnome Village",
+              "wiki": "https://runescape.wiki/w/Fruit_Tree_Patch"
+            },
+            {
+              "id": "fruit-catherby",
+              "name": "Catherby",
+              "wiki": "https://runescape.wiki/w/Fruit_Tree_Patch"
+            },
+            {
+              "id": "fruit-herblore-habitat",
+              "name": "Herblore Habitat",
+              "wiki": "https://runescape.wiki/w/Fruit_Tree_Patch"
+            },
+            {
+              "id": "fruit-lletya",
+              "name": "Lletya",
+              "wiki": "https://runescape.wiki/w/Fruit_Tree_Patch"
+            },
+            {
+              "id": "fruit-meilyr",
+              "name": "Meilyr",
+              "wiki": "https://runescape.wiki/w/Fruit_Tree_Patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-spirit-tree",
+          "name": "Spirit Tree",
+          "wiki": "https://runescape.wiki/w/Spirit_tree_patch",
+          "note": "Spirit tree growth timer.",
+          "cycleMinutes": 40,
+          "stages": 8,
+          "durationNote": "Growth: 320 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "spirit-port-sarim",
+              "name": "Port Sarim",
+              "wiki": "https://runescape.wiki/w/Spirit_tree_patch"
+            },
+            {
+              "id": "spirit-etceteria",
+              "name": "Etceteria",
+              "wiki": "https://runescape.wiki/w/Spirit_tree_patch"
+            },
+            {
+              "id": "spirit-brimhaven",
+              "name": "Brimhaven",
+              "wiki": "https://runescape.wiki/w/Spirit_tree_patch"
+            },
+            {
+              "id": "spirit-miscellania",
+              "name": "Miscellania",
+              "wiki": "https://runescape.wiki/w/Spirit_tree_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-calquat",
+          "name": "Calquat",
+          "wiki": "https://runescape.wiki/w/Calquat_patch",
+          "note": "Calquat growth reminder.",
+          "cycleMinutes": 160,
+          "stages": 6,
+          "durationNote": "Growth: 960 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "calquat-brimhaven",
+              "name": "Brimhaven",
+              "wiki": "https://runescape.wiki/w/Calquat_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-elder-tree",
+          "name": "Elder Tree",
+          "wiki": "https://runescape.wiki/w/Elder_tree_patch",
+          "note": "Long elder tree growth reminder.",
+          "cycleMinutes": 320,
+          "stages": 7,
+          "durationNote": "Growth: 2240 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "elder-gnome-stronghold",
+              "name": "Gnome Stronghold",
+              "wiki": "https://runescape.wiki/w/Elder_tree_patch"
+            },
+            {
+              "id": "elder-falador",
+              "name": "Falador",
+              "wiki": "https://runescape.wiki/w/Elder_tree_patch"
+            }
+          ]
+        }
+      ],
+      "plots": []
+    },
+    {
+      "id": "specialty",
+      "label": "Specialty",
+      "name": "Specialty",
+      "note": "Specialty farming timers with compact location checklists.",
+      "timers": [
+        {
+          "id": "farm-bushes",
+          "name": "Bushes",
+          "wiki": "https://runescape.wiki/w/Bush_patch",
+          "note": "Bush patch timer.",
+          "cycleMinutes": 20,
+          "stages": 4,
+          "durationNote": "Growth: 80 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "bush-rimmington",
+              "name": "Rimmington",
+              "wiki": "https://runescape.wiki/w/Bush_patch"
+            },
+            {
+              "id": "bush-ardougne",
+              "name": "Ardougne",
+              "wiki": "https://runescape.wiki/w/Bush_patch"
+            },
+            {
+              "id": "bush-etceteria",
+              "name": "Etceteria",
+              "wiki": "https://runescape.wiki/w/Bush_patch"
+            },
+            {
+              "id": "bush-farming-guild",
+              "name": "Farming Guild / Manor Farm area",
+              "wiki": "https://runescape.wiki/w/Bush_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-cactus",
+          "name": "Cactus",
+          "wiki": "https://runescape.wiki/w/Cactus_patch",
+          "note": "Cactus patch reminder timer.",
+          "cycleMinutes": 80,
+          "stages": 1,
+          "durationNote": "Growth: 80 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "harvest",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "cactus-al-kharid",
+              "name": "Al Kharid",
+              "wiki": "https://runescape.wiki/w/Cactus_patch"
+            },
+            {
+              "id": "cactus-menaphos",
+              "name": "Menaphos",
+              "wiki": "https://runescape.wiki/w/Cactus_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-mushrooms",
+          "name": "Mushrooms",
+          "wiki": "https://runescape.wiki/w/Mushroom_patch",
+          "note": "Mushroom patch timer.",
+          "cycleMinutes": 40,
+          "stages": 6,
+          "durationNote": "Growth: 240 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "mushroom-canifis",
+              "name": "Canifis",
+              "wiki": "https://runescape.wiki/w/Mushroom_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-belladonna",
+          "name": "Belladonna",
+          "wiki": "https://runescape.wiki/w/Belladonna_patch",
+          "note": "Belladonna patch timer.",
+          "cycleMinutes": 20,
+          "stages": 4,
+          "durationNote": "Growth: 80 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "belladonna-draynor",
+              "name": "Draynor Manor",
+              "wiki": "https://runescape.wiki/w/Belladonna_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-celastrus",
+          "name": "Celastrus",
+          "wiki": "https://runescape.wiki/w/Celastrus_patch",
+          "note": "Celastrus patch growth reminder.",
+          "cycleMinutes": 80,
+          "stages": 6,
+          "durationNote": "Growth: 480 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "celastrus-anachronia",
+              "name": "Anachronia",
+              "wiki": "https://runescape.wiki/w/Celastrus_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-redwood",
+          "name": "Redwood",
+          "wiki": "https://runescape.wiki/w/Redwood_tree_patch",
+          "note": "Redwood growth reminder.",
+          "cycleMinutes": 320,
+          "stages": 7,
+          "durationNote": "Growth: 2240 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "redwood-farming-guild",
+              "name": "Farming Guild / Manor Farm area",
+              "wiki": "https://runescape.wiki/w/Redwood_tree_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-crystal-tree",
+          "name": "Crystal Tree",
+          "wiki": "https://runescape.wiki/w/Crystal_tree",
+          "note": "Crystal tree re-check reminder.",
+          "cycleMinutes": 240,
+          "stages": 1,
+          "durationNote": "Growth: 240 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "harvest",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "crystal-prifddinas",
+              "name": "Prifddinas",
+              "wiki": "https://runescape.wiki/w/Crystal_tree"
+            }
+          ]
+        },
+        {
+          "id": "farm-anima-patch",
+          "name": "Anima Patch",
+          "wiki": "https://runescape.wiki/w/Anima_patch",
+          "note": "Anima patch timer.",
+          "cycleMinutes": 20,
+          "stages": 4,
+          "durationNote": "Growth: 80 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "anima-anachronia",
+              "name": "Anachronia",
+              "wiki": "https://runescape.wiki/w/Anima_patch"
+            }
+          ]
+        },
+        {
+          "id": "farm-bloodweed",
+          "name": "Bloodweed",
+          "wiki": "https://runescape.wiki/w/Bloodweed_patch",
+          "note": "Bloodweed patch timer.",
+          "cycleMinutes": 20,
+          "stages": 4,
+          "durationNote": "Growth: 80 minutes",
+          "alertOnReady": true,
+          "autoClearOnReady": false,
+          "vanishOnStart": true,
+          "timerKind": "growth",
+          "timerCategory": "farming",
+          "plots": [
+            {
+              "id": "bloodweed-wilderness",
+              "name": "Wilderness",
+              "wiki": "https://runescape.wiki/w/Bloodweed_patch"
+            }
+          ]
+        }
+      ],
+      "plots": []
+    }
+  ]
+}

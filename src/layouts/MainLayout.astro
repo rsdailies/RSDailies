@@ -1,0 +1,65 @@
+---
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/tokens/tokens.css';
+import '../styles/base/base.css';
+import '../styles/base/states.css';
+import '../styles/components/modal.css';
+import '../styles/components/button.css';
+import '../styles/components/header.css';
+import '../styles/shell/index.css';
+import '../styles/shell/layout.css';
+import '../styles/shell/controls.css';
+import '../styles/tracker/row.css';
+import '../styles/tracker/column.css';
+import '../styles/tracker/table.css';
+import '../styles/tracker/farming.css';
+import '../styles/pages/overview.css';
+import '../styles/shell/responsive.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		<link rel="icon" type="image/png" href="/RSDailies/img/dailyscape.png" />
+
+		<meta
+			name="description"
+			content="Self-hosted RS3 task tracker. Custom tasks, farming, dailies, gathering, weeklies, and monthlies with profiles and reset timers."
+		/>
+	</head>
+
+	<body id="app">
+		<nav id="main-nav" class="navbar nav-pills fixed-top navbar-expand-lg navbar-dark bg-dark"></nav>
+
+		<div id="landing-mount"></div>
+		<div class="container-xl" id="overview-mount"></div>
+
+		<div class="container-xl activity_tables" id="dashboard-container">
+			<div class="row" id="dashboard-mount"></div>
+		</div>
+
+		<footer id="main-footer"></footer>
+
+		<div id="modals-mount">
+			<div id="token-modal" class="modal fade" tabindex="-1"></div>
+			<div id="custom-task-modal" class="modal fade" tabindex="-1"></div>
+		</div>
+
+		<template id="sample_row"></template>
+
+		<div id="tooltip" style="display:none; visibility:hidden;"></div>
+
+		<script>
+			import '../bootstrap/bootstrap-app.ts';
+		</script>
+	</body>
+</html>

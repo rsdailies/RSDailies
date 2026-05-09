@@ -1,0 +1,33 @@
+{
+  "id": "osrs-tasks",
+  "title": "Tasks",
+  "navLabel": "Tasks",
+  "game": "osrs",
+  "route": "/osrs/tasks",
+  "layout": "tracker",
+  "displayOrder": 2,
+  "primaryNav": true,
+  "availableViews": [
+    {
+      "id": "all",
+      "label": "All"
+    },
+    {
+      "id": "daily",
+      "label": "Daily"
+    },
+    {
+      "id": "weekly",
+      "label": "Weekly"
+    },
+    {
+      "id": "monthly",
+      "label": "Monthly"
+    }
+  ],
+  "sections": [
+    "osrsdaily",
+    "osrsweekly",
+    "osrsmonthly"
+  ]
+}

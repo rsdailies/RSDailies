@@ -1,0 +1,195 @@
+{
+  "id": "gathering",
+  "label": "Gathering",
+  "game": "rs3",
+  "displayOrder": 2,
+  "resetFrequency": "mixed",
+  "renderVariant": "grouped-sections",
+  "shell": {
+    "columns": [
+      "activity_col_name",
+      "activity_col_notes",
+      "activity_col_status"
+    ],
+    "extraTableClasses": [],
+    "showAddButton": false,
+    "showResetButton": true,
+    "showCountdown": false
+  },
+  "items": [
+    {
+      "id": "bloodwood-tree",
+      "name": "Bakriminel Bolts (Bloodwood Tree)",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Fletching_bakriminel_bolts",
+      "note": "Fletch bakriminel bolts roughly every 6 hours.",
+      "reset": "daily",
+      "cooldownMinutes": 360
+    },
+    {
+      "id": "miscellania",
+      "name": "Miscellania",
+      "wiki": "https://runescape.wiki/w/Calculator:Other/Miscellania",
+      "note": "Check approval rating and funds in coffer",
+      "reset": "daily"
+    },
+    {
+      "id": "zaff-battlestaves",
+      "name": "Zaff Battlestaves",
+      "wiki": "https://runescape.wiki/w/Zaff",
+      "note": "Collect daily battlestaves if unlocked",
+      "reset": "daily"
+    },
+    {
+      "id": "bert-sand-daily",
+      "name": "Bert Sand",
+      "wiki": "https://runescape.wiki/w/Bert",
+      "note": "Collect daily sand if part of your route",
+      "reset": "daily"
+    },
+    {
+      "id": "meat-shop-check",
+      "name": "Meat / Utility Shop Check",
+      "wiki": "https://runescape.wiki/w/Shop",
+      "note": "Optional gathering-related shop pass",
+      "reset": "daily"
+    },
+    {
+      "id": "rune-shop-touchpoint",
+      "name": "Rune / Essence Shop Touchpoint",
+      "wiki": "https://runescape.wiki/w/Runes",
+      "note": "Optional rune or essence stock pass",
+      "reset": "daily"
+    },
+    {
+      "id": "herb-run-reminder",
+      "name": "Herb Run",
+      "wiki": "https://runescape.wiki/w/Farming",
+      "note": "Use the Farming section for the actual timer tracking",
+      "reset": "daily"
+    },
+    {
+      "id": "feather-shop-run",
+      "name": "Feather Shop Run",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_feathers",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "meat-packs",
+      "name": "Meat Packs",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_Meat_from_Oo%27glog",
+      "note": "Only buy packs",
+      "reset": "weekly"
+    },
+    {
+      "id": "vial-of-water-packs",
+      "name": "Vial of Water Packs",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_vials_of_water",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "yak-hide",
+      "name": "Yak Hide",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_yak-hide",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "bandit-duty-free",
+      "name": "Bandit Duty Free",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_construction_materials_from_Bandit_Duty_Free",
+      "note": "Wilderness shop",
+      "reset": "weekly"
+    },
+    {
+      "id": "seaweed-and-pineapples",
+      "name": "Seaweed and Pineapples",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_seaweed_and_pineapples_from_Arhein",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "bert-sand",
+      "name": "Sand from Bert",
+      "wiki": "https://runescape.wiki/w/Bert",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "dellmonti-pineapples",
+      "name": "Dell Monti Fruit",
+      "wiki": "https://runescape.wiki/w/Dell_Monti",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "coeden-logs",
+      "name": "Logs from Coeden",
+      "wiki": "https://runescape.wiki/w/Coeden",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "lupe",
+      "name": "Soul Supplies",
+      "wiki": "https://runescape.wiki/w/Lupe#Underworld_achievement_rewards",
+      "note": "Lupe weekly supplies",
+      "reset": "weekly"
+    },
+    {
+      "id": "feathers-of-maat",
+      "name": "Feathers of Ma'at",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_feathers_of_Ma%27at",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "broad-arrowheads",
+      "name": "Broad Arrowheads",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_broad_arrowheads",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "potato-cactus",
+      "name": "Potato Cactus",
+      "wiki": "https://runescape.wiki/w/Weird_Old_Man",
+      "note": "Weird Old Man stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "razmire-planks",
+      "name": "Planks (Razmire)",
+      "wiki": "https://runescape.wiki/w/Razmire_Keelgan",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "geoffrey-flax",
+      "name": "Flax (Geoffrey)",
+      "wiki": "https://runescape.wiki/w/Geoffrey",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "cromperty-pure-essence",
+      "name": "Pure Essence (Wizard Cromperty)",
+      "wiki": "https://runescape.wiki/w/Wizard_Cromperty",
+      "note": "Weekly stock",
+      "reset": "weekly"
+    },
+    {
+      "id": "rune-shop-run",
+      "name": "Rune Shop Run",
+      "wiki": "https://runescape.wiki/w/Money_making_guide/Buying_runes",
+      "note": "Weekly shop sweep",
+      "reset": "weekly"
+    }
+  ],
+  "legacySectionId": "gathering",
+  "containerId": "gathering-container",
+  "tableId": "gathering-table",
+  "includedInAllMode": false,
+  "supportsTaskNotifications": true
+}

@@ -1,0 +1,20 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+export function getStaticPaths() {
+	return [
+		{ params: { game: 'rs3', page: 'overview' } },
+		{ params: { game: 'rs3', page: 'tasks' } },
+		{ params: { game: 'rs3', page: 'gathering' } },
+		{ params: { game: 'rs3', page: 'timers' } },
+		{ params: { game: 'osrs', page: 'overview' } },
+		{ params: { game: 'osrs', page: 'tasks' } },
+	];
+}
+
+const { game, page } = Astro.params;
+const gameLabel = game === 'osrs' ? 'OSRS' : 'RS3';
+const pageLabel = page ? page.charAt(0).toUpperCase() + page.slice(1) : 'Tracker';
+---
+
+<MainLayout title={`RSDailies - ${gameLabel} ${pageLabel}`} />
