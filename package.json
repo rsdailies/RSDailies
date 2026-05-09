@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": "^22.12.0"
   },
   "scripts": {
     "dev": "astro dev",
@@ -15,7 +15,8 @@
     "audit:routes": "node tools/audit/verify-routes.mjs",
     "audit:timers": "node tools/audit/validate-timers.mjs",
     "test:e2e": "npm run build && node tools/e2e/run-playwright.mjs",
-    "verify:full": "powershell -ExecutionPolicy Bypass -File tools/verify/full-clean.ps1"
+    "verify:full": "node tools/verify/run-full.mjs",
+    "verify:full:windows": "powershell -ExecutionPolicy Bypass -File tools/verify/full-clean.ps1"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",

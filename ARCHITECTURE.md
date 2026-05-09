@@ -40,7 +40,7 @@ The root verification path is:
 5. `npm run build`
 6. `npm run test:e2e`
 
-`npm run verify:full` runs those checks through `tools/verify/run-full.mjs` in isolated steps.
+`npm run verify:full` runs those checks through `tools/verify/run-full.mjs` in isolated steps and is suitable for CI on non-Windows runners.
 
 ## Cleanup Boundary
 
