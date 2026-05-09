@@ -9,7 +9,7 @@ export function renderLandingPage(deps: any) {
 		mount.innerHTML = `
       <div class="game-selection-page">
         <div class="game-selection-card">
-          <img src="/RSDailies/img/dailyscape.png" alt="RSDailies" class="game-selection-logo">
+          <img src="/img/dailyscape.png" alt="RSDailies" class="game-selection-logo">
           <h1>Select Your Game</h1>
           <p>Choose which version of RuneScape you'd like to track today.</p>
           <div class="game-selection-actions">

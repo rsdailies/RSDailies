@@ -28,6 +28,7 @@ The shipped app is an Astro static build with a hosted client runtime.
 - `src/app/shell/html/` contains the mounted shell fragments injected into the page.
 - `src/lib/widgets/` and `src/lib/renderers/` contain the active row, section, header, overview, and landing renderers.
 - `src/styles/` contains the active local stylesheet entrypoints used by the shell.
+- `public/img/` is the single canonical static asset root used by the runtime shell and landing page.
 
 ## Verification
 
@@ -44,4 +45,4 @@ The root verification path is:
 
 ## Cleanup Boundary
 
-Archived material such as `_vanilla_legacy`, `src/legacy-port`, and audit artifacts should remain out of the active runtime. If any future migration utility needs old reference data, it should be recreated from committed history rather than wired back into `src`.
+Archived material, compatibility asset copies, duplicate style trees, and unused component/store paths should remain out of the active runtime. If any future migration utility needs old reference data, it should be recreated from committed history rather than wired back into `src`.

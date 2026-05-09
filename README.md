@@ -38,14 +38,12 @@ npm run verify:full
 ## Deployment
 
 - Recommended host: `Vercel`
-- Also supported: `Cloudflare Pages`, `Netlify`
 - Build command: `npm run build`
 - Output directory: `dist`
 - Node version is pinned in `.nvmrc`, `.node-version`, and `package.json`
 - Vercel config is committed in `vercel.json`
-- Netlify config is committed in `netlify.toml`
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for the full deployment artifacts, host comparison, and exact setup steps.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the Vercel deployment setup and verification details.
 
 ## Verification
 
@@ -62,5 +60,6 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full deployment artifacts, host compa
 
 - Astro JSON content under `src/content` is the authored source of truth.
 - The current app does not require `_vanilla_legacy` or `src/legacy-port` at runtime.
+- Public assets are served from the canonical `/img` path.
 - Penguin sync is opt-in only through `PUBLIC_PENGUIN_API_URL`.
 - `verify:full` is cross-platform and suitable for CI; the host build command should stay `npm run build`.
