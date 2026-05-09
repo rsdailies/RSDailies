@@ -1,4 +1,4 @@
-import { getTrackerSections } from '../../domain/legacy-mode-content.ts';
+import { getTrackerSections } from '../../features/sections/section-registry.ts';
 import { StorageKeyBuilder } from '../../shared/storage/keys-builder.ts';
 import { getSectionElements, setSectionHiddenState, setSectionModeVisibility } from './section-helpers.ts';
 import { appendCustomEmptyPlaceholder } from './panel-helpers.ts';

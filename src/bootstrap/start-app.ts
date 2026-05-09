@@ -18,7 +18,7 @@ import {
 	startPenguinSync,
 	syncStoredViewModeToPageMode,
 	updateCountdowns,
-} from '../lib/runtime/hosted-app-runtime.ts';
+} from '../lib/runtime/app-runtime.ts';
 
 declare global {
 	interface Window {

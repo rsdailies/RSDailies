@@ -1,6 +1,5 @@
-import { getTrackerSectionIds } from '../domain/legacy-mode-content.ts';
-
 export function bindRuntimeSections({
+	getTrackerSectionIds,
 	bindSectionControls,
 	renderApp,
 	getSectionState,

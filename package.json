@@ -15,8 +15,7 @@
     "audit:routes": "node tools/audit/verify-routes.mjs",
     "audit:timers": "node tools/audit/validate-timers.mjs",
     "test:e2e": "npm run build && node tools/e2e/run-playwright.mjs",
-    "verify:full": "node tools/verify/run-full.mjs",
-    "verify:full:windows": "powershell -ExecutionPolicy Bypass -File tools/verify/full-clean.ps1"
+    "verify:full": "node tools/verify/run-full.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",

@@ -7,7 +7,7 @@ import {
 	buildTimerLocationTask,
 } from '../widgets/tracker-sections.ts';
 import { createHeaderRow } from '../widgets/header-index.ts';
-import { createRow, createRightSideChildRow } from '../widgets/tracker-rows.ts';
+import { createRow, createRightSideChildRow } from '../features/rows/index.ts';
 import { applyOrderingAndSort } from '../shared/table-utils.ts';
 import { formatDurationMs as formatDurationMsCore } from '../shared/time/formatters.ts';
 import { nextDailyBoundary, nextWeeklyBoundary, nextMonthlyBoundary } from '../shared/time/boundaries.ts';

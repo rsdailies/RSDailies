@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 
 import { StorageKeyBuilder } from '../../../src/lib/shared/storage/keys-builder.ts';
 import * as StorageService from '../../../src/lib/shared/storage/storage-service.ts';
-import { checkAutoReset, resetSectionView } from '../../../src/lib/features/sections/reset-service.ts';
-import { upsertCustomTask } from '../../../src/lib/features/custom-tasks/custom-task-service.ts';
+import { checkAutoReset } from '../../../src/lib/features/sections/auto-reset.ts';
+import { resetSectionView } from '../../../src/lib/features/sections/reset-view.ts';
+import { upsertCustomTask } from '../../../src/lib/features/custom-tasks/custom-task-state.ts';
 import { createMemoryStorage } from '../../helpers/memory-storage.js';
 
 function initMemoryProfile() {

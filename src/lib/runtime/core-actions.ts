@@ -1,4 +1,4 @@
-import { getTrackerSections } from '../domain/legacy-mode-content.ts';
+import { getTrackerSections } from '../features/sections/section-registry.ts';
 
 export function formatBoundaryCountdown(targetMs: number, formatDurationMs: (diff: number) => string) {
 	const diff = targetMs - Date.now();

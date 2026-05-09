@@ -1,4 +1,4 @@
-import { getTrackerSections } from '../domain/legacy-mode-content.ts';
+import { getTrackerSections } from '../features/sections/section-registry.ts';
 import { buildSectionPanelHtml } from './section-panel.ts';
 
 export function renderAppView(documentRef = document) {

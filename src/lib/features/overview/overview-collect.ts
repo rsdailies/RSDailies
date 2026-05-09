@@ -1,4 +1,4 @@
-import { getTrackerSections, getTrackerSection } from '../domain/legacy-mode-content.ts';
+import { getTrackerSection, getTrackerSections } from '../sections/section-registry.ts';
 
 function getPinTimestamp(pins: Record<string, any>, pinId: string) {
 	const value = pins?.[pinId];

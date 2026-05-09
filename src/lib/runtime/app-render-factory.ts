@@ -1,5 +1,5 @@
 import { GAMES, getSelectedGame } from './game-context.ts';
-import { resolveTrackerSections } from '../domain/legacy-mode-content.ts';
+import { resolveTrackerSections } from '../features/sections/section-resolution.ts';
 import { createRenderAppRunner } from './render-app-runner.ts';
 
 export function createRuntimeRenderApp({

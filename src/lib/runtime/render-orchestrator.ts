@@ -1,8 +1,9 @@
-import { renderOverviewPanel, applyPageModeVisibility, collectOverviewItems } from '../widgets/overview.ts';
-import { createRow } from '../widgets/tracker-rows.ts';
+import { renderOverviewPanel, applyPageModeVisibility, collectOverviewItems } from '../features/overview/index.ts';
+import { createRow } from '../features/rows/index.ts';
 import { renderLandingPage } from '../renderers/landing-renderer.ts';
 import { GAMES, getSelectedGame } from './game-context.ts';
-import { getTrackerPageSectionIds, getTrackerSections } from '../domain/legacy-mode-content.ts';
+import { getTrackerPageSectionIds } from '../features/navigation/page-registry.ts';
+import { getTrackerSections } from '../features/sections/section-registry.ts';
 import { clearAllSectionBodies, markVisibleSectionEdges, reorderDashboardSections } from './render-orchestrator/section-helpers.ts';
 import { createUiContext } from './render-orchestrator/overview-ui-context.ts';
 import { hideAllSortButtons, movePenguinsBlockToBottom } from './render-orchestrator/panel-helpers.ts';

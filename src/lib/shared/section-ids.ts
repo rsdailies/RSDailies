@@ -1,4 +1,4 @@
-import { getTrackerSectionIdMaps } from '../domain/legacy-mode-content.ts';
+import { getTrackerSectionIdMaps } from '../features/sections/section-registry.ts';
 
 export const SECTION_CONTAINER_IDS = new Proxy<Record<string, string>>(
 	{},

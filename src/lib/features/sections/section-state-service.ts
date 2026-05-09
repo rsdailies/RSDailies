@@ -3,7 +3,7 @@ import {
 	getCustomTasks as getStoredCustomTasks,
 	saveCustomTasks as saveStoredCustomTasks,
 	type CustomTask,
-} from '../custom-tasks/custom-task-service.ts';
+} from '../custom-tasks/custom-task-state.ts';
 import {
 	getTimers as getStoredTimers,
 	saveTimers as saveStoredTimers,
