@@ -187,8 +187,8 @@
       "reset": "weekly"
     }
   ],
-  "containerId": "gathering_container",
-  "tableId": "gathering_table",
+  "containerId": "gathering-container",
+  "tableId": "gathering-table",
   "includedInAllMode": false,
   "supportsTaskNotifications": true
 }
