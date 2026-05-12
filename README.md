@@ -1,219 +1,538 @@
-# RSDailies / Dailyscape
+# Dailyscape
 
-RSDailies is a static **Astro + Svelte** RuneScape daily tracker. Astro owns page routing, layout composition, and validated JSON content loading. Svelte owns the interactive tracker UI: navbar state, overview pins, task rows, collapsible sections, reset controls, and farming/timer rows.
+<p align="center">
+  <img src="public/img/dailyscapebig.png" alt="Dailyscape logo" width="180" />
+</p>
 
-This checkpoint is the cleaned migration baseline after removing the old active imperative renderer. There is no legacy table renderer, no injected shell HTML runtime, and no widget-renderer tree competing with Svelte.
+<p align="center">
+  <strong>A lightweight RuneScape routine tracker for dailies, weeklies, monthlies, gathering activities, farming patches, and timed tasks.</strong>
+</p>
 
-## Current app contract
+<p align="center">
+  Dailyscape helps you keep recurring RuneScape activities organized with a clean dark tracker UI, local progress saving, pinned priorities, profiles, import/export tools, and dedicated RS3 and OSRS tracker entry points.
+</p>
 
-| Route | Status | Purpose |
-|---|---|---|
-| `/` | Active | Game-selection landing page for RS3 or OSRS. |
-| `/rs3/tasks` | Active | RS3 daily, weekly, and monthly task tracker. |
-| `/rs3/gathering` | Active | RS3 gathering tracker. |
-| `/rs3/timers` | Active | RS3 farming/timer tracker with nested timer/plot rows. |
-| `/osrs/tasks` | Active shell | Empty OSRS Daily, Weekly, and Monthly sections by design. |
+<p align="center">
+  <a href="https://rsdailies.github.io/RSDailies/">Live Site</a>
+  ·
+  <a href="#features">Features</a>
+  ·
+  <a href="#trackers">Trackers</a>
+  ·
+  <a href="#local-development">Local Development</a>
+  ·
+  <a href="#documentation">Documentation</a>
+</p>
 
-## What changed in this checkpoint
+---
 
-- Removed the old runtime renderer from the active project.
-- Removed old injected shell HTML fragments.
-- Removed old widget/render helper files.
-- Consolidated content under `src/content/games/`.
-- Normalized page ids to dashed canonical ids.
-- Fixed the RS3 timers/farming page so timer parents and plot/location rows render correctly.
-- Preserved OSRS as a visible empty shell, per project decision.
-- Added project documentation under `/docs/` for future AI/human maintenance.
-- Added an npm `overrides` rule for `yaml` so `npm audit` reports zero known vulnerabilities with the current lockfile.
+## Table of Contents
 
-## Install and run
+- [About](#about)
+- [Features](#features)
+- [Trackers](#trackers)
+- [Pages](#pages)
+- [Overview and Pinning](#overview-and-pinning)
+- [Profiles](#profiles)
+- [Import and Export](#import-and-export)
+- [Farming and Timers](#farming-and-timers)
+- [Local Data and Privacy](#local-data-and-privacy)
+- [Technology](#technology)
+- [Project Structure](#project-structure)
+- [Local Development](#local-development)
+- [Available Scripts](#available-scripts)
+- [Documentation](#documentation)
+- [Roadmap Ideas](#roadmap-ideas)
+- [Disclaimer](#disclaimer)
+- [License](#license)
 
-```bash
-npm install
-npm run dev
-```
+---
 
-The dev server serves the Astro app locally. Open the URL printed by Astro, then check:
+## About
 
-```text
-/rs3/tasks
-/rs3/gathering
-/rs3/timers
-/osrs/tasks
-```
+**Dailyscape** is a web app for tracking recurring RuneScape activities.
 
-## Verification commands
+It is designed for players who want a simple way to manage daily, weekly, monthly, gathering, and farming routines without keeping a separate spreadsheet, checklist, or note file open.
 
-```bash
-npm run check
-npm test
-npm run audit:content
-npm run audit:routes
-npm run audit:timers
-npm audit
-npm run build
-npm run verify:full
-```
+The app keeps the original DailyScape-inspired table layout while using a modern Astro and Svelte project foundation behind the scenes.
 
-`npm run verify:full` runs the non-browser gate: Astro check, unit tests, content audit, route audit, timer audit, npm audit, and production build.
+Dailyscape is built around a few simple goals:
 
-Browser smoke tests are separate because Playwright browsers are large machine-level assets:
+- Open the tracker quickly.
+- See the activities that matter.
+- Check off completed tasks.
+- Pin important tasks into an Overview section.
+- Hide tasks that do not apply to your account.
+- Track reset timers.
+- Keep separate profile states.
+- Export your data when you want a backup.
 
-```bash
-npx playwright install
-npm run test:e2e
-```
+---
 
-## Project tree
+## Features
 
-```text
-src/
-├─ bootstrap/              Browser bootstrap. Bootstrap JS only; no renderer startup.
-├─ components/
-│  ├─ layout/              Navbar and footer.
-│  ├─ modals/              Import/export and custom task modal shell.
-│  └─ tracker/             Dashboard, overview, sections, rows, and timers.
-├─ content.config.ts       Astro content collection schemas.
-├─ content/games/          JSON source of truth for pages and sections.
-├─ layouts/                Astro document shell and global CSS imports.
-├─ lib/                    Pure domain/services/storage/timer helpers.
-├─ pages/                  Astro routes.
-├─ stores/                 Svelte browser state.
-└─ styles/                 Global visual system and tracker CSS.
-```
+### Task Tracking
 
-## Ownership rules
+Dailyscape includes recurring tracker sections for routine activities.
 
-### Astro owns
+Supported tracker patterns include:
 
-- `src/pages/**`
-- `src/layouts/**`
-- `src/content.config.ts`
-- static route generation
-- content collection loading
+- Daily tasks
+- Weekly tasks
+- Monthly tasks
+- Gathering tasks
+- Farming timers
+- Patch/location rows
+- Completion checkboxes
+- Reset controls
+- Collapsible sections
 
-### Svelte owns
+### Overview Panel
 
-- tracker dashboard rendering
-- task row rendering
-- farming/timer hierarchy rendering
-- row completion/hidden/pin state
-- section/group collapse and reset controls
-- navbar/modal UI rendering
+The Overview panel is a top-level priority area.
 
-### Services own
+Use it to surface important tasks from the full tracker without needing to scroll through every section.
 
-- local storage namespacing
-- reset-boundary math
-- timer math
-- settings normalization
-- content and route audits
+The Overview section is useful for:
 
-## Forbidden architecture
+- High-priority dailies
+- Commonly forgotten tasks
+- Farming tasks you are watching
+- Short-session goals
+- Activities you want visible every time you open the app
 
-Do not reintroduce:
+### Pinning
 
-- a global `renderApp()` table renderer
-- imperative dashboard row injection
-- old shell HTML fragments as active UI
-- a second tracker renderer beside Svelte
-- duplicate content folders outside `src/content/games/`
-- hidden legacy bridge logic controlling page rendering
+Any supported task can be pinned into the Overview panel.
 
-## Content model
+Pinned tasks let you build a small personal checklist from the larger tracker.
 
-All page and section content lives under:
+### Hide and Restore
 
-```text
-src/content/games/
-├─ rs3/
-│  ├─ pages/
-│  └─ sections/
-└─ osrs/
-   ├─ pages/
-   └─ sections/
-```
+Tasks and sections can be hidden when they do not apply to your account, goals, or current routine.
 
-Canonical page ids:
+This keeps the tracker clean while preserving the underlying activity data.
 
-```text
-rs3-tasks
-rs3-gathering
-rs3-timers
-osrs-tasks
-```
+### Profiles
 
-OSRS intentionally has empty `items` arrays until real OSRS task data is authored.
+Profiles allow separate saved tracker states.
 
-## Timers/farming model
+This is useful for:
 
-The RS3 timers page supports:
+- Main accounts
+- Ironman accounts
+- Alternate accounts
+- Different playstyles
+- Shared computers
+- Testing different tracker setups
 
-```text
-Timer section
-└─ group: Herbs / Trees / Specialty
-   ├─ timer parent: Regular Trees / Fruit Trees / Crystal Tree
-   └─ plot/location rows: Falador / Catherby / etc.
-```
+### Import and Export
 
-Timer locations are real task rows, not fake subgroup headers. This is important for preserving old visual structure while keeping Svelte as the only renderer.
+Dailyscape includes import/export tools for local tracker state.
 
-## Security/dependency policy
+Use this to:
 
-- Keep `package-lock.json` committed.
-- Run `npm audit` before final review.
-- The project currently uses an npm `overrides` rule to force a patched `yaml` version for transitive tooling dependencies.
-- Avoid `npm audit fix --force` unless you have reviewed the breaking dependency downgrade/upgrade it proposes.
+- Back up your tracker
+- Move progress between browsers
+- Restore a previous setup
+- Save profile data before clearing browser storage
+- Transfer data between devices
 
-## Documentation map
+### Dark Tracker UI
 
-Start with:
+The app uses a dark table-based interface designed for quick scanning.
 
-- `docs/PROJECT_OVERVIEW.md`
-- `docs/architecture/OWNERSHIP.md`
-- `docs/architecture/FILE_TREE.md`
-- `docs/architecture/NO_LEGACY_POLICY.md`
-- `docs/features/CONTENT.md`
-- `docs/features/TIMERS.md`
-- `docs/features/OSRS.md`
-- `docs/framework/ASTRO.md`
-- `docs/framework/SVELTE.md`
-- `docs/testing/VERIFICATION.md`
-- `docs/maintenance/DEPENDENCIES_SECURITY.md`
-- `docs/agents/REQUEST_SCOPING.md`
-- `docs/sources/SOURCES.md`
+The layout emphasizes:
 
-## Visual checkpoint
+- Compact rows
+- Clear section headers
+- Strong activity/status separation
+- Readable notes
+- Fast visual completion checks
+- A familiar DailyScape-inspired tracker style
 
-The public legacy site remains the visual checkpoint:
+---
 
-```text
-https://rsdailies.github.io/RSDailies/
-```
+## Trackers
 
-Use it for visual comparison only. Do not restore its old runtime architecture.
+Dailyscape currently supports two game tracker entry points.
 
-## Windows npm install troubleshooting
+### RS3 Tracker
 
-This project intentionally ships without `node_modules`. Install dependencies with:
+The RS3 tracker is the primary complete tracker.
 
-```bash
-npm install
-```
+It includes:
 
-The project includes `.npmrc` to force the public npm registry:
+- Tasks
+- Gathering
+- Timers
+- Daily activities
+- Weekly activities
+- Monthly activities
+- Farming patch groups
+- Overview pinning
+- Profiles
+- Import/export support
 
-```text
-registry=https://registry.npmjs.org/
-engine-strict=false
-```
+### OSRS Tracker
 
-If an install is interrupted on Windows and you see `EPERM` cleanup warnings, close running editors/terminals that may be locking files, delete `node_modules`, and run `npm install` again. If npm reports a stale or private registry URL, run:
+The OSRS tracker is currently a preserved tracker shell.
 
-```bash
-npm config get registry
-npm config set registry https://registry.npmjs.org/
-```
+It includes:
 
-Node `22.12.0` or newer is supported. Node `24.x` is accepted by the `engines` range.
+- Tasks page
+- Overview panel
+- Daily section shell
+- Weekly section shell
+- Monthly section shell
 
+The OSRS tracker is intentionally present so the app can support OSRS data expansion over time.
+
+---
+
+## Pages
+
+### Landing Page
+
+The landing page lets you choose which tracker to open.
+
+Available tracker buttons:
+
+- Open RS3 Tracker
+- Open OSRS Tracker
+
+### RS3 Tasks
+
+The RS3 Tasks page contains the main recurring activity checklist.
+
+Typical sections include:
+
+- Overview
+- Dailies
+- Weeklies
+- Monthlies
+
+### RS3 Gathering
+
+The Gathering page separates gathering-related activities from the main routine checklist.
+
+This keeps the main tracker cleaner while still preserving gathering-specific workflows.
+
+### RS3 Timers
+
+The Timers page focuses on time-based and farming-related tasks.
+
+It supports grouped categories, parent timer rows, and patch/location rows.
+
+### OSRS Tasks
+
+The OSRS Tasks page provides the OSRS tracker shell.
+
+It is ready for future OSRS task data while keeping the current app navigation stable.
+
+---
+
+## Overview and Pinning
+
+The Overview section is designed as a personal priority panel.
+
+Instead of showing every task, it shows the tasks you choose to pin.
+
+This lets you create a focused mini-tracker at the top of the page.
+
+Common uses:
+
+- Pin only tasks you do every day.
+- Pin farming tasks that matter to your account.
+- Pin high-value weeklies or monthlies.
+- Pin activities you want to remember before logging out.
+- Keep a lightweight session checklist.
+
+Pinned tasks are still connected to their tracker state, so completing a pinned task should remain consistent with the full tracker behavior.
+
+---
+
+## Profiles
+
+Dailyscape supports profile-style local state.
+
+Profiles help keep different tracker setups separated.
+
+Example profile uses:
+
+- Main
+- Ironman
+- Skiller
+- Alt account
+- Test profile
+- Seasonal routine
+
+Profiles are stored locally in the browser.
+
+---
+
+## Import and Export
+
+Import/export support gives you control over your saved tracker data.
+
+This is important because Dailyscape does not require a remote login or account system.
+
+Recommended uses:
+
+- Export before clearing browser data.
+- Export before changing devices.
+- Export before major app updates.
+- Keep occasional backup copies.
+- Import a previous setup when needed.
+
+---
+
+## Farming and Timers
+
+The RS3 Timers page supports farming and timer-style activity groups.
+
+Timer categories may include:
+
+- Herbs
+- Allotments
+- Hops
+- Trees
+- Fruit trees
+- Specialty patches
+- Farming locations
+- Parent activity rows
+- Patch/location child rows
+
+The timer page is designed to keep the farming hierarchy readable while preserving the same tracker-table style used across the rest of the app.
+
+---
+
+## Local Data and Privacy
+
+Dailyscape stores tracker state locally in your browser.
+
+This means:
+
+- There is no required login.
+- Your tracker state stays on your device.
+- Clearing browser data can remove saved progress.
+- Import/export should be used for backups.
+- Different browsers or devices may have separate tracker states unless you transfer data manually.
+
+---
+
+## Technology
+
+Dailyscape is built with:
+
+- Astro
+- Svelte
+- TypeScript
+- Bootstrap
+- CSS
+- Static JSON content collections
+
+Astro handles:
+
+- Pages
+- Layouts
+- Routing
+- Static build output
+- Content loading
+
+Svelte handles:
+
+- Interactive tracker components
+- Buttons
+- Completion state
+- Pinning
+- Collapsing
+- Client-side tracker behavior
+
+---
+
+## Project Structure
+
+Main project folders:
+
+- `public/` — static images and public assets
+- `src/pages/` — Astro routes
+- `src/layouts/` — shared page layouts
+- `src/components/` — Svelte and Astro UI components
+- `src/content/` — tracker page and section data
+- `src/stores/` — client-side state
+- `src/styles/` — visual styling
+- `src/bootstrap/` — browser startup entry files
+- `docs/` — deeper project documentation
+- `tests/` — project tests
+- `tools/` — validation and audit scripts
+
+Tracker content lives under:
+
+- `src/content/games/rs3/pages/`
+- `src/content/games/rs3/sections/`
+- `src/content/games/osrs/pages/`
+- `src/content/games/osrs/sections/`
+
+---
+
+## Local Development
+
+### Requirements
+
+- Node.js 22.12.0 or newer
+- npm
+- A modern browser
+
+### Install dependencies
+
+Run:
+
+    npm install
+
+### Start the development server
+
+Run:
+
+    npm run dev
+
+Then open the local URL shown in your terminal.
+
+During normal editing, you do not need to rebuild after every file change. Keep the dev server running, save your file, and refresh the browser if needed.
+
+### Build for production
+
+Run:
+
+    npm run build
+
+### Preview the production build
+
+Run:
+
+    npm run preview
+
+### Run the full verification suite
+
+Run:
+
+    npm run verify:full
+
+---
+
+## Available Scripts
+
+### `npm run dev`
+
+Starts the Astro development server.
+
+Use this while actively editing the app.
+
+### `npm run build`
+
+Builds the production version of the site.
+
+Use this before deployment.
+
+### `npm run preview`
+
+Serves the production build locally.
+
+Use this to check the built output.
+
+### `npm test`
+
+Runs the project test suite.
+
+### `npm run check`
+
+Runs Astro and Svelte project checks.
+
+### `npm run audit:content`
+
+Validates tracker content structure.
+
+### `npm run audit:routes`
+
+Validates route coverage.
+
+### `npm run audit:timers`
+
+Validates timer content.
+
+### `npm run test:e2e`
+
+Runs browser smoke tests.
+
+If this fails because browser binaries are missing, install Playwright browsers first.
+
+### `npm run verify:full`
+
+Runs the main verification sequence.
+
+This is the best command to run before committing or deploying.
+
+---
+
+## Documentation
+
+More detailed documentation lives in the `docs/` folder.
+
+Recommended docs areas:
+
+- `docs/architecture/`
+- `docs/features/`
+- `docs/framework/`
+- `docs/verification/`
+- `docs/deployment/`
+- `docs/agents/`
+- `docs/sources/`
+
+The root README is intended to be the GitHub front page for the project.
+
+The `docs/` folder is intended for deeper technical notes and maintenance details.
+
+---
+
+## Roadmap Ideas
+
+Possible future improvements:
+
+- Expanded OSRS task content
+- Additional farming timer categories
+- More profile controls
+- More import/export options
+- Mobile layout refinements
+- Accessibility improvements
+- More detailed content editing documentation
+- More deployment guides
+- Optional theme refinements
+- More automation around content validation
+
+---
+
+## Contributing
+
+Suggestions, fixes, and improvements are welcome.
+
+When changing the project, try to keep work scoped:
+
+- Content changes should stay in content files.
+- Visual changes should stay in style and component files.
+- Tracker behavior changes should stay in Svelte components and stores.
+- Documentation changes should stay in README or `docs/`.
+- Verification changes should stay in tests or tools.
+
+This makes the project easier to review, maintain, and safely improve.
+
+---
+
+## Disclaimer
+
+Dailyscape is an unofficial fan-made tracker project.
+
+It is not affiliated with, endorsed by, sponsored by, or approved by Jagex.
+
+RuneScape, Old School RuneScape, and related names belong to their respective owners.
+
+---
