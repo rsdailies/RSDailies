@@ -1,6 +1,4 @@
-import { GAMES, getSelectedGame } from './game-context.ts';
 import { getTrackerSectionIds } from '../features/sections/section-registry.ts';
-import { resolveTrackerSections } from '../features/sections/section-resolution.ts';
 import { createRuntimeRenderApp } from './app-render-factory.ts';
 import { bindRuntimeSections } from './app-section-bindings.ts';
 import { renderApp as renderAppCore } from './render-orchestrator.ts';

@@ -6,9 +6,9 @@ import { getSectionState, saveSectionValue } from '../sections/section-state-ser
 type LoadFn = <T = any>(key: string, fallback?: T) => T;
 type SaveFn = (key: string, value: any) => void;
 
-function getCooldownsMap({ load }: { load?: LoadFn } = {}) {
+function getCooldownsMap({ load }: { load?: LoadFn } = {}): Record<string, { readyAt: number; minutes: number }> {
 	const reader = load || ((_: string, fallback: any) => fallback);
-	const value = reader<Record<string, { readyAt: number; minutes: number }>>(StorageKeyBuilder.cooldowns(), {});
+	const value = reader(StorageKeyBuilder.cooldowns(), {});
 	return value && typeof value === 'object' ? value : {};
 }
 
@@ -44,7 +44,7 @@ export function startCooldown(taskId: string, minutes: number, { load, save }: {
 	if (!taskId) return false;
 
 	const durationMinutes = Math.max(1, Math.floor(Number(minutes) || 0));
-	const cooldowns = { ...getCooldownsMap({ load }) };
+	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
 	cooldowns[taskId] = {
 		readyAt: Date.now() + durationMinutes * 60000,
 		minutes: durationMinutes,
@@ -57,7 +57,7 @@ export function startCooldown(taskId: string, minutes: number, { load, save }: {
 export function clearCooldown(taskId: string, { load, save }: { load?: LoadFn; save?: SaveFn }) {
 	if (!taskId) return false;
 
-	const cooldowns = { ...getCooldownsMap({ load }) };
+	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
 	if (!cooldowns[taskId]) return false;
 
 	delete cooldowns[taskId];
@@ -82,7 +82,7 @@ export function getCooldownStatus(taskId: string, { load }: { load?: LoadFn } = 
 }
 
 export function cleanupReadyCooldowns({ load, save }: { load?: LoadFn; save?: SaveFn }) {
-	const cooldowns = { ...getCooldownsMap({ load }) };
+	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
 	const sections = TRACKER_SECTIONS.filter((section) => section.renderVariant !== 'timer-groups').map((section) => section.id);
 	let changed = false;
 

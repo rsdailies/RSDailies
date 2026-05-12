@@ -9,7 +9,7 @@ import { bindFloatingPanelTrigger } from '../ui/panel-controls.ts';
 import { getSettingsFieldIds } from '../ui/settings-fields.ts';
 
 export function applySettingsToDom(documentRef = document, settings: Settings = getHostedSettings()) {
-	const fieldIds = getSettingsFieldIds();
+	const fieldIds = getSettingsFieldIds() as any;
 	const splitDaily = documentRef.getElementById(fieldIds.splitDailyTables) as HTMLInputElement | null;
 	const splitWeekly = documentRef.getElementById(fieldIds.splitWeeklyTables) as HTMLInputElement | null;
 	const showCompleted = documentRef.getElementById(fieldIds.showCompletedTasks) as HTMLInputElement | null;
@@ -22,7 +22,7 @@ export function applySettingsToDom(documentRef = document, settings: Settings = 
 
 	if (splitDaily) splitDaily.checked = settings.splitDailyTables !== false;
 	if (splitWeekly) splitWeekly.checked = settings.splitWeeklyTables !== false;
-	if (showCompleted) showCompleted.checked = settings.showCompletedTasks === true || settings.showCompletedTasks === 'true';
+	if (showCompleted) showCompleted.checked = settings.showCompletedTasks === true;
 	if (herbs3) herbs3.checked = settings.herbTicks === 3;
 	if (browserNotif) browserNotif.checked = !!settings.browserNotif;
 	if (webhook) webhook.value = settings.webhookUrl || '';
@@ -40,7 +40,7 @@ export function applySettingsToDom(documentRef = document, settings: Settings = 
 }
 
 export function collectSettingsFromDom(documentRef = document) {
-	const fieldIds = getSettingsFieldIds();
+	const fieldIds = getSettingsFieldIds() as any;
 	const herbTicks = (documentRef.getElementById(fieldIds.herbTicks) as HTMLInputElement | null)?.checked ? 3 : 4;
 
 	return normalizeSettings({
@@ -86,7 +86,7 @@ export function setupSettingsControl({
 		},
 	});
 
-	saveBtn.addEventListener('click', async (event) => {
+	saveBtn.addEventListener('click', async (event: Event) => {
 		event.preventDefault();
 		event.stopPropagation();
 

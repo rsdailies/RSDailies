@@ -1,4 +1,4 @@
-import { SECTION_CONTAINER_IDS, SECTION_TABLE_IDS } from '../../shared/section-ids.ts';
+import { SECTION_CONTAINER_IDS } from '../../shared/section-ids.ts';
 
 export function getSectionElements(sectionKey: string) {
 	const container =

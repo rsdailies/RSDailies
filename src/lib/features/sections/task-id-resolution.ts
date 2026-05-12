@@ -23,7 +23,7 @@ export function getContentSectionTaskIds(sectionId: string, options: { customTas
 		return (options.customTasks || []).map((task: any) => task.id).filter(Boolean);
 	}
 
-	const section = getTrackerSection(sectionId);
+	const section = getTrackerSection(sectionId) as any;
 	if (!section) return [];
 
 	if (Array.isArray(section.items) && section.items.length > 0) {
@@ -38,7 +38,7 @@ export function getContentSectionTaskIds(sectionId: string, options: { customTas
 }
 
 export function getContentSectionTaskIdsByCadence(sectionId: string, cadence: string) {
-	const section = getTrackerSection(sectionId);
+	const section = getTrackerSection(sectionId) as any;
 	if (!section || !Array.isArray(section.items)) {
 		return [];
 	}

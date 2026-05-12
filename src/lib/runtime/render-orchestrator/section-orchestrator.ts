@@ -32,8 +32,7 @@ export function renderTrackerSections(sections: Record<string, any>, visibleSect
 		
 		const hidden = !!load(StorageKeyBuilder.sectionHidden(key), false);
 		const showHidden = !!load(StorageKeyBuilder.sectionShowHidden(key), false) || 
-		                   globalSettings.showCompletedTasks === true || 
-		                   globalSettings.showCompletedTasks === 'true';
+		                   globalSettings.showCompletedTasks === true;
 		const visibleByMode = setSectionModeVisibility(key, visibleSectionIds);
 
 		if (!visibleByMode) return;

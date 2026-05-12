@@ -5,7 +5,7 @@ export function persistOrderFromTable(sectionKey: string, { getTableId, save }: 
 	const table = document.getElementById(tableId);
 	if (!table) return;
 
-	const rows = Array.from(table.querySelectorAll('tbody tr[data-id]'));
+	const rows = Array.from(table.querySelectorAll<HTMLElement>('tbody tr[data-id]'));
 	const order = rows.map((row) => row.dataset.id).filter(Boolean);
 	save(`order:${sectionKey}`, order);
 }

@@ -38,7 +38,7 @@ export function setupFeatureControls({
 	const setupNavigation = () => {
 		const logo = documentRef.getElementById('navbar-logo');
 		if (logo) {
-			logo.addEventListener('click', (event) => {
+			logo.addEventListener('click', (event: Event) => {
 				event.preventDefault();
 				setSelectedGame(null);
 				renderApp();

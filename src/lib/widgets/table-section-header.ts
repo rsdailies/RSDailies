@@ -42,7 +42,7 @@ export function createTableSectionHeader(label: string, blockId: string, options
 
 	if (onRightClick) {
 		controlsHost.classList.add(HEADER_CLASSES.clickable);
-		controlsHost.addEventListener('click', (event) => {
+		controlsHost.addEventListener('click', (event: Event) => {
 			if ((event.target as Element | null)?.closest('.mini-collapse-btn')) return;
 			if ((event.target as Element | null)?.closest('.mini-reset-btn, select')) return;
 			onRightClick();

@@ -5,13 +5,13 @@ import { ROW_CLASS_NAMES } from './constants.ts';
 function disableLink(link: HTMLAnchorElement | null) {
 	if (!link) return;
 	link.href = '#';
-	link.addEventListener('click', (event) => event.preventDefault());
+	link.addEventListener('click', (event: Event) => event.preventDefault());
 }
 
 export function createBaseRowShell(sectionKey: string, taskId: string, taskState: unknown, options: any = {}) {
 	const { cloneRowTemplate, isCustom = false, extraClass = '', isOverviewPanel = false } = options;
 
-	const row = cloneRowTemplate?.();
+	const row = cloneRowTemplate?.() as HTMLElement | null;
 	if (!row) return null;
 
 	row.dataset.id = taskId;

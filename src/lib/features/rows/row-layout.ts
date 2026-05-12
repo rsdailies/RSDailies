@@ -14,7 +14,7 @@ export function appendWeeklyCollapseButton(nameCell: Element | null, task: any, 
 	btn.textContent = collapsed ? '\u25B6' : '\u25BC';
 	btn.title = collapsed ? 'Expand child rows' : 'Collapse child rows';
 	btn.setAttribute('aria-label', btn.title);
-	btn.addEventListener('click', (event) => {
+	btn.addEventListener('click', (event: Event) => {
 		event.preventDefault();
 		event.stopPropagation();
 		setCollapsedBlock(blockId, !isCollapsedBlock(blockId));
@@ -29,7 +29,8 @@ export function appendSectionBadge(nameCell: Element | null, sectionKey: string)
 	if (!nameCell) return;
 	const badge = document.createElement('span');
 	badge.className = 'overview-section-badge';
-	badge.textContent = getTrackerSection(sectionKey)?.shortLabel || getTrackerSection(sectionKey)?.label || sectionKey;
+	const sec = getTrackerSection(sectionKey) as any;
+	badge.textContent = sec?.shortLabel || sec?.label || sectionKey;
 	
 	const link = nameCell.querySelector('a');
 	if (link) {

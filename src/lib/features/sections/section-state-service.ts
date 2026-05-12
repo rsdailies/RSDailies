@@ -17,3 +17,9 @@ export function getSectionState(sectionKey: string, { load }: { load?: LoadFn } 
 export function saveSectionValue(sectionKey: string, key: string, value: any, { save }: { save?: SaveFn } = {}) { writer(save)(StorageKeyBuilder.sectionValue(sectionKey, key), value); }
 export function saveTimers(timers: Record<string, any>, { save }: { save?: SaveFn } = {}) { writer(save)(StorageKeyBuilder.timers(), timers || {}); }
 export function resetSectionState(sectionKey: string, { save }: { save?: SaveFn } = {}) { const write = writer(save); write(StorageKeyBuilder.sectionCompletion(sectionKey), {}); write(StorageKeyBuilder.sectionHiddenRows(sectionKey), {}); write(StorageKeyBuilder.sectionRemovedRows(sectionKey), {}); write(StorageKeyBuilder.sectionOrder(sectionKey), []); write(StorageKeyBuilder.sectionSort(sectionKey), 'default'); write(StorageKeyBuilder.sectionShowHidden(sectionKey), false); write(StorageKeyBuilder.sectionHidden(sectionKey), false); }
+export function getCustomTasks({ load }: { load?: LoadFn } = {}) { return safeArray(reader(load)(StorageKeyBuilder.customTasks(), []), []); }
+export function saveCustomTasks(tasks: any[], { save }: { save?: SaveFn } = {}) { writer(save)(StorageKeyBuilder.customTasks(), safeArray(tasks, [])); return tasks; }
+export function getOverviewPins({ load }: { load?: LoadFn } = {}) { return safeObject<Record<string, any>>(reader(load)(StorageKeyBuilder.overviewPins(), {}), {}); }
+export function saveOverviewPins(pins: Record<string, any>, { save }: { save?: SaveFn } = {}) { writer(save)(StorageKeyBuilder.overviewPins(), safeObject(pins, {})); return pins; }
+export function getTimers({ load }: { load?: LoadFn } = {}) { return safeObject<Record<string, any>>(reader(load)(StorageKeyBuilder.timers(), {}), {}); }
+export function getCooldowns({ load }: { load?: LoadFn } = {}) { return safeObject<Record<string, any>>(reader(load)(StorageKeyBuilder.cooldowns(), {}), {}); }

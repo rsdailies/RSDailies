@@ -33,7 +33,7 @@ export async function copyTextToClipboard(
 	} catch {
 		fallbackTarget.focus();
 		fallbackTarget.select();
-		documentRef.execCommand('copy');
+		(documentRef as any).execCommand('copy');
 	}
 }
 

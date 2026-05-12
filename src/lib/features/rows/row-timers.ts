@@ -9,9 +9,9 @@ function normalizeMinutes(value: unknown) {
 
 export function getCustomTimerText(taskId: string, task: any, load?: <T = any>(key: string, fallback?: T) => T) {
 	const cooldownMinutes = normalizeMinutes(task?.cooldownMinutes);
-	if (!Number.isFinite(cooldownMinutes) || cooldownMinutes < 1) return '';
+	if (cooldownMinutes === null || cooldownMinutes < 1) return '';
 
-	const cooldowns = load?.(StorageKeyBuilder.cooldowns(), {}) || {};
+	const cooldowns: Record<string, { readyAt?: number }> = load?.(StorageKeyBuilder.cooldowns(), {}) || {};
 	const active = cooldowns?.[taskId];
 	if (active?.readyAt && active.readyAt > Date.now()) {
 		return formatDurationMs(active.readyAt - Date.now());

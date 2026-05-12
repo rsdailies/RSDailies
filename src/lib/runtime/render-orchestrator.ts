@@ -1,13 +1,12 @@
 import { renderOverviewPanel, applyPageModeVisibility, collectOverviewItems } from '../features/overview/index.ts';
 import { createRow } from '../features/rows/index.ts';
 import { renderLandingPage } from '../renderers/landing-renderer.ts';
-import { GAMES, getSelectedGame } from './game-context.ts';
-import { getTrackerPageSectionIds } from '../features/navigation/page-registry.ts';
+import { getSelectedGame } from './game-context.ts';
+
 import { getTrackerSections } from '../features/sections/section-registry.ts';
-import { clearAllSectionBodies, markVisibleSectionEdges, reorderDashboardSections } from './render-orchestrator/section-helpers.ts';
+import { markVisibleSectionEdges, reorderDashboardSections } from './render-orchestrator/section-helpers.ts';
 import { createUiContext } from './render-orchestrator/overview-ui-context.ts';
 import { hideAllSortButtons, movePenguinsBlockToBottom } from './render-orchestrator/panel-helpers.ts';
-import { renderTrackerSections } from './render-orchestrator/section-orchestrator.ts';
 
 export function renderApp(deps: any) {
 	const {
@@ -52,7 +51,7 @@ export function renderApp(deps: any) {
 	const allSectionDefinitions = getTrackerSections();
 	const sectionKeys = allSectionDefinitions.map((section) => section.id);
 	const mode = getPageMode(game);
-	const visibleSectionIds = new Set(getTrackerPageSectionIds(mode, game));
+
 
 	reorderDashboardSections(sectionKeys);
 	applyPageModeVisibility(mode);

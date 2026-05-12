@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const pagesCollection = defineCollection({
@@ -25,6 +26,7 @@ const sectionsCollection = defineCollection({
 	schema: z.object({
 		id: z.string(),
 		label: z.string(),
+		shortLabel: z.string().optional(),
 		game: z.enum(['rs3', 'osrs']),
 		displayOrder: z.number(),
 		resetFrequency: z.enum(['daily', 'weekly', 'monthly', 'timer', 'mixed', 'rolling']),
@@ -87,7 +89,7 @@ const sectionsCollection = defineCollection({
 	}),
 });
 
-// export const collections = {
-// 	'pages': pagesCollection,
-// 	'sections': sectionsCollection,
-// };
+export const collections = {
+	'pages': pagesCollection,
+	'sections': sectionsCollection,
+};

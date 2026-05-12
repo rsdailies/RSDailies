@@ -1,13 +1,7 @@
 import { getTrackerPage } from '../navigation/page-registry.ts';
 import { resolveWeeklyPenguinTask } from '../penguins/penguin-task-resolution.ts';
 import { resolveTimerGroups } from '../timers/timer-group-resolution.ts';
-import { getTrackerSections } from './section-registry.ts';
-
-function filterTasksByView(items: any[], view: string): any[] {
-	if (!view || view === 'all') return items;
-	const normalizedView = view.toLowerCase();
-	return items.filter((item) => String(item.reset || '').toLowerCase() === normalizedView);
-}
+import { getTrackerSection, getTrackerSections } from './section-registry.ts';
 
 function resolveSectionItems(
 	section: any,
@@ -65,9 +59,13 @@ export function resolveTrackerPage(
 
 	return {
 		...page,
-		sections: (page.sections || []).map((section) => ({
-			...section,
-			resolvedItems: resolveSectionItems(section, options),
-		})),
+		sections: (page.sections || []).map((sectionId) => {
+			const section = getTrackerSection(sectionId);
+			if (!section) return null;
+			return {
+				...section,
+				resolvedItems: resolveSectionItems(section, options),
+			};
+		}).filter(Boolean),
 	};
 }

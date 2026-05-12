@@ -1,4 +1,3 @@
-import { getSectionLabel } from './overview-collect.ts';
 
 export function sortTopFive(items: any[]) {
 	return [...items].sort((a, b) => {

@@ -21,7 +21,7 @@ export const updateCountdowns = maintenance.updateCountdowns;
 export { cleanupReadyTimersHosted, cleanupReadyCooldownsHosted };
 export const cleanupReadyTimers = cleanupReadyTimersHosted;
 export const cleanupReadyCooldowns = cleanupReadyCooldownsHosted;
-export const clearSectionCompletionsOnlyHosted = (key: string, deps?: { save?: typeof save }) =>
-	clearSectionCompletionsOnlyFeature(key, deps);
+export const clearSectionCompletionsOnlyHosted = (key: string, deps: { save?: typeof save } = {}) =>
+	clearSectionCompletionsOnlyFeature(key, deps as any);
 export const clearSectionCompletionsOnly = clearSectionCompletionsOnlyHosted;
 export const clearSectionCompletionsOnlyRuntime = clearSectionCompletionsOnlyHosted;

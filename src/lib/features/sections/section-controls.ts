@@ -6,8 +6,9 @@ function rebindButton(documentRef: Document, id: string, onClick: (event: Event)
 	if (!existing) return null;
 
 	const replacement = replaceInteractiveElement(existing);
+	if (!replacement) return null;
 
-	replacement.addEventListener('click', (event) => {
+	replacement.addEventListener('click', (event: Event) => {
 		event.preventDefault();
 		event.stopPropagation();
 		onClick(event);
@@ -31,13 +32,14 @@ export function bindSectionControls(sectionKey: string, opts: { sortable?: boole
 
 	removeSectionRestoreControls(sectionKey, { documentRef });
 
-	const container =
+	const container = (
 		documentRef.getElementById(`${sectionKey}-container`) ||
 		documentRef.getElementById(sectionKey)?.closest('.table_container') ||
-		documentRef;
+		documentRef
+	) as Element;
 
-	container.querySelectorAll('.section-restore-all-btn').forEach((btn) => {
-		btn.addEventListener('click', (event) => {
+	container.querySelectorAll<HTMLElement>('.section-restore-all-btn').forEach((btn: HTMLElement) => {
+		btn.addEventListener('click', (event: Event) => {
 			event.preventDefault();
 			event.stopPropagation();
 			restoreAllTasks(sectionKey, { save: deps.save });
@@ -45,11 +47,11 @@ export function bindSectionControls(sectionKey: string, opts: { sortable?: boole
 		});
 	});
 
-	container.querySelectorAll('.section-restore-task-btn').forEach((btn) => {
-		btn.addEventListener('click', (event) => {
+	container.querySelectorAll<HTMLElement>('.section-restore-task-btn').forEach((btn: HTMLElement) => {
+		btn.addEventListener('click', (event: Event) => {
 			event.preventDefault();
 			event.stopPropagation();
-			const taskId = (btn as HTMLElement).dataset.taskId;
+			const taskId = btn.dataset.taskId;
 			if (taskId) {
 				restoreTask(sectionKey, taskId, { load: deps.load, save: deps.save });
 				renderApp();
@@ -57,8 +59,8 @@ export function bindSectionControls(sectionKey: string, opts: { sortable?: boole
 		});
 	});
 
-	container.querySelectorAll('.section-clear-completion-btn').forEach((btn) => {
-		btn.addEventListener('click', (event) => {
+	container.querySelectorAll<HTMLElement>('.section-clear-completion-btn').forEach((btn: HTMLElement) => {
+		btn.addEventListener('click', (event: Event) => {
 			event.preventDefault();
 			event.stopPropagation();
 			deps.clearSectionCompletionsOnly(sectionKey);

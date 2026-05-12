@@ -10,36 +10,40 @@ export function setupImportExport({
 	documentRef = document,
 	navigatorRef = navigator,
 	buildExportToken = () => '',
-	importProfileToken = () => {},
-	onImport = () => window.location.reload(),
+	importProfileToken = (_val: string) => {},
+	onImport = (_val: string) => window.location.reload(),
 } = {}) {
 	const elements = getImportExportElements(documentRef);
 	if (!hasImportExportElements(elements)) return;
 
-	const buttonReplacement = replaceInteractiveElement(elements.tokenButton);
-	const copyReplacement = replaceInteractiveElement(elements.tokenCopy);
-	const importReplacement = replaceInteractiveElement(elements.tokenImport);
+	const { tokenButton, tokenCopy, tokenImport, tokenInput, tokenOutput } = elements;
+	if (!tokenButton || !tokenCopy || !tokenImport || !tokenInput || !tokenOutput) return;
+
+	const buttonReplacement = replaceInteractiveElement(tokenButton);
+	const copyReplacement = replaceInteractiveElement(tokenCopy);
+	const importReplacement = replaceInteractiveElement(tokenImport);
+	if (!buttonReplacement || !copyReplacement || !importReplacement) return;
 
 	buttonReplacement.addEventListener('click', () => {
-		elements.tokenOutput.value = buildExportToken();
-		elements.tokenInput.classList.remove('is-invalid');
+		tokenOutput.value = buildExportToken();
+		tokenInput.classList.remove('is-invalid');
 	});
 
-	copyReplacement.addEventListener('click', async (event) => {
+	copyReplacement.addEventListener('click', async (event: Event) => {
 		event.preventDefault();
 		event.stopPropagation();
-		await copyTextToClipboard(elements.tokenOutput.value || '', elements.tokenOutput, documentRef, navigatorRef);
+		await copyTextToClipboard(tokenOutput.value || '', tokenOutput, documentRef, navigatorRef);
 	});
 
-	importReplacement.addEventListener('click', (event) => {
+	importReplacement.addEventListener('click', (event: Event) => {
 		event.preventDefault();
 		event.stopPropagation();
 
-		elements.tokenInput.classList.remove('is-invalid');
-		const value = readImportToken(elements.tokenInput);
+		tokenInput.classList.remove('is-invalid');
+		const value = readImportToken(tokenInput);
 
 		if (!value) {
-			elements.tokenInput.classList.add('is-invalid');
+			tokenInput.classList.add('is-invalid');
 			return;
 		}
 

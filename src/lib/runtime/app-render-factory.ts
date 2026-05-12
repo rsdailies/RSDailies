@@ -51,7 +51,7 @@ export function createRuntimeRenderApp({
 				game: game || (getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3),
 				getCustomTasks: () => getCustomTasks({ load }),
 				getPenguinWeeklyData: () => load('penguinWeeklyData', {}),
-				gatheringView: getGatheringView(game || (getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3)),
+				gatheringView: getGatheringView((game || (getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3)) as 'rs3' | 'osrs'),
 			}),
 		getTimerHeaderStatus: (task: any) => getTimerHeaderStatus(task, { load }),
 		hideTask: (sectionKey: string, taskId: string) => hideTask(sectionKey, taskId, { load, save }),

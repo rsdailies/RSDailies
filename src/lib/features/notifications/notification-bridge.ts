@@ -42,15 +42,16 @@ export function maybeNotifyTaskAlert(
 	const target = getTaskAlertTarget(task);
 	if (Date.now() < target.getTime()) return;
 
-	const notified = load(`notified:${sectionKey}`, {});
+	const notified: Record<string, string> = load(`notified:${sectionKey}`, {});
 	const stamp = target.toISOString();
+	const taskIdKey = String(task.id);
 
-	if (notified[task.id] === stamp) return;
+	if (notified[taskIdKey] === stamp) return;
 
 	maybeBrowserNotify('RSDailies', `${task.name} is due.`);
 	maybeWebhookNotify(task.name);
 
-	notified[task.id] = stamp;
+	notified[taskIdKey] = stamp;
 	save(`notified:${sectionKey}`, notified);
 }
 

@@ -7,7 +7,7 @@ import {
 import { StorageKeyBuilder } from '../../shared/storage/keys-builder.ts';
 import { buildPinId } from './row-ids.ts';
 
-function getHiddenRows(sectionKey: string, load: <T = any>(key: string, fallback?: T) => T) {
+function getHiddenRows(sectionKey: string, load: <T = any>(key: string, fallback?: T) => T): Record<string, string> {
 	return { ...(load(StorageKeyBuilder.sectionHiddenRows(sectionKey), {}) || {}) };
 }
 
@@ -15,7 +15,7 @@ function saveHiddenRows(sectionKey: string, value: any, save: (key: string, valu
 	save(StorageKeyBuilder.sectionHiddenRows(sectionKey), value);
 }
 
-function getRemovedRows(sectionKey: string, load: <T = any>(key: string, fallback?: T) => T) {
+function getRemovedRows(sectionKey: string, load: <T = any>(key: string, fallback?: T) => T): Record<string, string> {
 	return { ...(load(StorageKeyBuilder.sectionRemovedRows(sectionKey), {}) || {}) };
 }
 
@@ -45,12 +45,12 @@ export function bindHideButton(
 		return;
 	}
 
-	hideBtn.addEventListener('click', (event) => {
+	hideBtn.addEventListener('click', (event: Event) => {
 		event.preventDefault();
 		event.stopPropagation();
 		if (isCustom) {
 			if (!confirm(`Delete custom task "${task.name}"?`)) return;
-			const next = getCustomTasks({ load }).filter((customTask) => customTask.id !== task.id);
+			const next = getCustomTasks({ load }).filter((customTask: any) => customTask.id !== task.id);
 			saveCustomTasks(next, { save });
 
 			const completed = load(StorageKeyBuilder.sectionCompletion('custom'), {});

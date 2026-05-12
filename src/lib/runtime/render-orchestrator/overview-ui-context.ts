@@ -20,7 +20,7 @@ export function createUiContext(deps: any, renderSelf: () => void) {
 		load,
 		save,
 		getTaskState,
-		cloneRowTemplate: () => document.getElementById('sample_row')?.content?.firstElementChild?.cloneNode(true) || null,
+		cloneRowTemplate: () => (document.getElementById('sample_row') as HTMLTemplateElement | null)?.content?.firstElementChild?.cloneNode(true) || null,
 		createInlineActions: (_task: any, isCustom: boolean) => {
 			if (isCustom) return null;
 

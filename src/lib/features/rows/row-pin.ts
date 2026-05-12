@@ -14,7 +14,7 @@ export function bindPinButton(
 	pinBtn.textContent = pinned ? '\u2605' : '\u2606';
 	pinBtn.title = pinned ? 'Unpin from Overview' : 'Pin to Overview';
 	pinBtn.setAttribute('aria-label', pinBtn.title);
-	pinBtn.addEventListener('click', (event) => {
+	pinBtn.addEventListener('click', (event: Event) => {
 		event.preventDefault();
 		event.stopPropagation();
 		const nextPins = { ...getOverviewPins({ load }) };

@@ -39,7 +39,7 @@ export function updateCountdowns(
 	};
 
 	getTrackerSections().forEach((section) => {
-		const countdownId = section.shell?.countdownId;
+		const countdownId = (section.shell as any)?.countdownId;
 		const boundaryResolver = boundaryResolvers[section.resetFrequency as keyof typeof boundaryResolvers];
 
 		if (!countdownId || !boundaryResolver) {

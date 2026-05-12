@@ -86,5 +86,6 @@ export function collectOverviewItems(sections: Record<string, any>, { getOvervie
 }
 
 export function getSectionLabel(sectionKey: string) {
-	return getTrackerSection(sectionKey)?.shortLabel || getTrackerSection(sectionKey)?.label || sectionKey;
+	const sec = getTrackerSection(sectionKey) as any;
+	return sec?.shortLabel || sec?.label || sectionKey;
 }

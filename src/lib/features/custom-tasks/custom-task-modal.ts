@@ -4,7 +4,7 @@ import { promptAddCustomTask } from './prompt.ts';
 import { replaceInteractiveElement } from '../../ui/dom-controls.ts';
 
 export function setupCustomAdd(deps: any) {
-	const { getCustomTasks, saveCustomTasks, renderApp, bootstrapRef = window.bootstrap, documentRef = document } = deps;
+	const { getCustomTasks, saveCustomTasks, renderApp, bootstrapRef = (window as any).bootstrap, documentRef = document } = deps;
 	const existingAddBtn = documentRef.getElementById('custom_add_button');
 	if (!existingAddBtn) return;
 
@@ -34,18 +34,18 @@ export function setupCustomAdd(deps: any) {
 	);
 	const bootstrapModal = hasModal && bootstrapRef?.Modal ? bootstrapRef.Modal.getOrCreateInstance(modalEl) : null;
 
-	if (!bootstrapModal) {
-		addBtn.addEventListener('click', (event) => {
+	if (!bootstrapModal || !saveBtn || !nameInput || !noteInput || !wikiInput || !resetSelect || !alertInput || !timerBlock || !timerMinsInput || !form) {
+		addBtn.addEventListener('click', (event: Event) => {
 			event.preventDefault();
 			promptAddCustomTask(deps);
 		});
 		return;
 	}
 
-	saveBtn = replaceInteractiveElement(saveBtn);
+	const activeSaveBtn = replaceInteractiveElement(saveBtn);
 	resetSelect.addEventListener('change', () => syncTimerVisibility(resetSelect, timerBlock, alertInput));
 
-	addBtn.addEventListener('click', (event) => {
+	addBtn.addEventListener('click', (event: Event) => {
 		event.preventDefault();
 		resetCustomTaskForm({ nameInput, noteInput, wikiInput, resetSelect, alertInput, timerMinsInput, timerBlock });
 		syncTimerVisibility(resetSelect, timerBlock, alertInput);
@@ -53,12 +53,12 @@ export function setupCustomAdd(deps: any) {
 		window.setTimeout(() => nameInput.focus(), 50);
 	});
 
-	form.addEventListener('submit', (event) => {
+	form.addEventListener('submit', (event: Event) => {
 		event.preventDefault();
-		saveBtn.click();
+		activeSaveBtn.click();
 	});
 
-	saveBtn.addEventListener('click', (event) => {
+	activeSaveBtn.addEventListener('click', (event: Event) => {
 		event.preventDefault();
 		nameInput.classList.remove('is-invalid');
 		wikiInput.classList.remove('is-invalid');
