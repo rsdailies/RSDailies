@@ -6,7 +6,6 @@ import { setupImportExport as setupImportExportFeature } from '../features/impor
 import { setupCustomAdd as setupCustomAddFeature } from '../features/custom-tasks/custom-task-modal.ts';
 import { createRuntimeControls } from './app-control-surfaces.ts';
 import { buildExportToken, importProfileToken } from './app-runtime-base.ts';
-import { renderApp } from './app-runtime-render.ts';
 import { getHostedCustomTasks, saveHostedCustomTasks } from './app-runtime-state.ts';
 
 const runtimeControls = createRuntimeControls({
@@ -19,7 +18,6 @@ const runtimeControls = createRuntimeControls({
 	buildExportToken,
 	importProfileToken,
 	setupCustomAddFeature,
-	renderApp,
 	getCustomTasks: getHostedCustomTasks,
 	saveCustomTasks: saveHostedCustomTasks,
 	documentRef: document,

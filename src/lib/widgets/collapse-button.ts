@@ -1,8 +1,9 @@
 import { HEADER_CONTROL_LABELS, HEADER_CONTROL_TEXT } from './header-constants.ts';
 import { getCollapseState, resolveHeaderContext } from './header-logic.ts';
+import { tracker } from '../../stores/tracker.svelte';
 
 export function createCollapseButton(blockId: string, context: any = {}) {
-	const { isCollapsedBlock, setCollapsedBlock, renderApp } = resolveHeaderContext(context);
+	const { isCollapsedBlock, setCollapsedBlock } = resolveHeaderContext(context);
 	const button = document.createElement('button');
 	button.type = 'button';
 	button.className = 'btn btn-secondary btn-sm mini-collapse-btn primitive-btn';
@@ -15,7 +16,7 @@ export function createCollapseButton(blockId: string, context: any = {}) {
 		event.preventDefault();
 		event.stopPropagation();
 		setCollapsedBlock(blockId, !isCollapsedBlock(blockId));
-		renderApp();
+		tracker.reloadAll();
 	});
 
 	return button;

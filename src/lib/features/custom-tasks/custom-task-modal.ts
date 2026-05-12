@@ -2,9 +2,10 @@ import { buildCustomTask, isValidOptionalUrl } from './builders.ts';
 import { readTaskForm, resetCustomTaskForm, syncTimerVisibility } from './form.ts';
 import { promptAddCustomTask } from './prompt.ts';
 import { replaceInteractiveElement } from '../../ui/dom-controls.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 export function setupCustomAdd(deps: any) {
-	const { getCustomTasks, saveCustomTasks, renderApp, bootstrapRef = (window as any).bootstrap, documentRef = document } = deps;
+	const { getCustomTasks, saveCustomTasks, bootstrapRef = (window as any).bootstrap, documentRef = document } = deps;
 	const existingAddBtn = documentRef.getElementById('custom_add_button');
 	if (!existingAddBtn) return;
 
@@ -79,6 +80,6 @@ export function setupCustomAdd(deps: any) {
 		const existing = Array.isArray(getCustomTasks()) ? getCustomTasks() : [];
 		saveCustomTasks([...existing, task]);
 		bootstrapModal.hide();
-		renderApp();
+		tracker.reloadAll();
 	});
 }

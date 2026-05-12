@@ -22,7 +22,6 @@ export function attachBaseRowBehaviors(rowParts: any, task: any, options: any = 
 		save,
 		getTaskState,
 		createInlineActions,
-		renderApp,
 		hideTask,
 		setTaskCompleted,
 		clearTimer,
@@ -35,14 +34,14 @@ export function attachBaseRowBehaviors(rowParts: any, task: any, options: any = 
 	} = context;
 	const { row, nameCell, pinBtn, hideBtn, notesCell, statusCell, desc, checkOff, checkOn } = rowParts;
 
-	appendWeeklyCollapseButton(nameCell, task, { isCollapsedBlock, setCollapsedBlock, renderApp, isOverviewPanel });
+	appendWeeklyCollapseButton(nameCell, task, { isCollapsedBlock, setCollapsedBlock, isOverviewPanel });
 	if (isOverviewPanel) appendSectionBadge(nameCell, sectionKey);
 
 	const actions = createInlineActions?.(task, isCustom);
 	if (actions && !isOverviewPanel && desc) desc.appendChild(actions);
 
-	bindPinButton(pinBtn, sectionKey, task, { overviewPinId, customStorageId, load, save, renderApp });
-	bindHideButton(hideBtn, sectionKey, taskId, task, { isCustom, isOverviewPanel, customStorageId, load, save, hideTask, renderApp });
+	bindPinButton(pinBtn, sectionKey, task, { overviewPinId, customStorageId, load, save });
+	bindHideButton(hideBtn, sectionKey, taskId, task, { isCustom, isOverviewPanel, customStorageId, load, save, hideTask });
 
 	const toggleTask = createToggleTaskHandler(sectionKey, taskId, task, {
 		load,
@@ -52,7 +51,6 @@ export function attachBaseRowBehaviors(rowParts: any, task: any, options: any = 
 		clearTimer,
 		startTimer,
 		startCooldown,
-		renderApp,
 	});
 
 	if (isCustom && !renderNameOnRight && notesCell && statusCell) {

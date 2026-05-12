@@ -1,11 +1,12 @@
 import { TIMER_SECTION_KEY } from '../timers/timer-runtime.ts';
 import { shouldIgnoreToggleClick } from './row-layout.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 export function createToggleTaskHandler(
 	sectionKey: string,
 	taskId: string,
 	task: any,
-	{ load, save, getTaskState, setTaskCompleted, clearTimer, startTimer, startCooldown, renderApp }: any
+	{ load, save, getTaskState, setTaskCompleted, clearTimer, startTimer, startCooldown }: any
 ) {
 	return function toggleTask(event?: any) {
 		if (event && shouldIgnoreToggleClick(event)) return;
@@ -33,6 +34,6 @@ export function createToggleTaskHandler(
 			}
 		}
 
-		renderApp();
+		tracker.reloadAll();
 	};
 }

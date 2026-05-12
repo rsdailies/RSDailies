@@ -7,6 +7,7 @@ import {
 import { replaceInteractiveElement, setPanelOpenState } from '../ui/dom-controls.ts';
 import { bindFloatingPanelTrigger } from '../ui/panel-controls.ts';
 import { getSettingsFieldIds } from '../ui/settings-fields.ts';
+import { tracker } from '../../stores/tracker.svelte';
 
 export function applySettingsToDom(documentRef = document, settings: Settings = getHostedSettings()) {
 	const fieldIds = getSettingsFieldIds() as any;
@@ -65,7 +66,6 @@ export function saveSettings(settings: Partial<Settings>) {
 }
 
 export function setupSettingsControl({
-	renderApp = () => {},
 	closeFloatingControls = () => {},
 	documentRef = document,
 } = {}) {
@@ -102,6 +102,6 @@ export function setupSettingsControl({
 		}
 
 		setPanelOpenState(panel, false);
-		renderApp();
+		tracker.reloadAll();
 	});
 }

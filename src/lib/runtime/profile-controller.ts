@@ -9,13 +9,13 @@ import {
 import { renderProfileHeader, renderProfileRows } from '../ui/profile-view.ts';
 import { replaceInteractiveElement, setPanelOpenState } from '../ui/dom-controls.ts';
 import { bindFloatingPanelTrigger } from '../ui/panel-controls.ts';
+import { tracker } from '../../stores/tracker.svelte';
 
 export function updateProfileHeader(profileNameElement = document.getElementById('profile-name')) {
 	renderProfileHeader(profileNameElement, getCurrentProfile());
 }
 
 export function setupProfileControl({
-	renderApp = () => {},
 	closeFloatingControls = () => {},
 	documentRef = document,
 	windowRef = window,
@@ -36,7 +36,7 @@ export function setupProfileControl({
 				setProfile(name);
 				updateProfileHeader();
 				renderProfiles();
-				renderApp();
+				tracker.reloadAll();
 			},
 			onDeleteProfile: (name: string) => {
 				if (name === 'default') return;
@@ -53,7 +53,7 @@ export function setupProfileControl({
 
 				updateProfileHeader();
 				renderProfiles();
-				renderApp();
+				tracker.reloadAll();
 			},
 		});
 	}
@@ -85,7 +85,7 @@ export function setupProfileControl({
 
 		updateProfileHeader();
 		renderProfiles();
-		renderApp();
+		tracker.reloadAll();
 
 		setPanelOpenState(panel, false);
 	});

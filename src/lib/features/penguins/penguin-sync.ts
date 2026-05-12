@@ -1,4 +1,5 @@
 import { nextWeeklyBoundary } from '../../shared/time/boundaries.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 const PENGUIN_CACHE_KEY = 'penguinWeeklyData';
 const PENGUIN_META_KEY = 'penguinWeeklyDataMeta';
@@ -91,12 +92,10 @@ function shouldSyncPenguins(load?: <T = any>(key: string, fallback?: T) => T) {
 export async function syncPenguinWeeklyData({
 	load,
 	save,
-	renderApp,
 	fetchImpl = window.fetch.bind(window),
 }: {
 	load?: <T = any>(key: string, fallback?: T) => T;
 	save?: (key: string, value: any) => void;
-	renderApp?: () => void;
 	fetchImpl?: typeof fetch;
 }) {
 	if (activePenguinSync) return activePenguinSync;
@@ -136,7 +135,7 @@ export async function syncPenguinWeeklyData({
 				lastAttemptAt: Date.now(),
 				lastError: '',
 			});
-			renderApp?.();
+			tracker.reloadAll();
 			return true;
 		} catch (error) {
 			save?.(PENGUIN_META_KEY, {

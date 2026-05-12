@@ -1,4 +1,5 @@
 import { setSelectedGame } from './game-context.ts';
+import { tracker } from '../../stores/tracker.svelte';
 
 export function setupFeatureControls({
 	setupProfileControlFeature,
@@ -10,16 +11,15 @@ export function setupFeatureControls({
 	buildExportToken,
 	importProfileToken,
 	setupCustomAddFeature,
-	renderApp,
 	getCustomTasks,
 	saveCustomTasks,
 	documentRef = document,
 	windowRef = window,
 }: any) {
-	const setupProfile = () => setupProfileControlFeature({ renderApp, closeFloatingControls, documentRef, windowRef });
-	const setupSettings = () => setupSettingsControlFeature({ renderApp, closeFloatingControls, documentRef });
+	const setupProfile = () => setupProfileControlFeature({ closeFloatingControls, documentRef, windowRef });
+	const setupSettings = () => setupSettingsControlFeature({ closeFloatingControls, documentRef });
 	const setupViews = () =>
-		setupViewsControlFeature({ renderApp, closeAllFloatingControls: closeFloatingControls, documentRef, windowRef });
+		setupViewsControlFeature({ closeAllFloatingControls: closeFloatingControls, documentRef, windowRef });
 	const setupCloser = () => setupGlobalClickCloserHelper(documentRef);
 
 	const setupImportExport = () => {
@@ -33,7 +33,7 @@ export function setupFeatureControls({
 	};
 
 	const setupCustomAdd = () =>
-		setupCustomAddFeature({ getCustomTasks, saveCustomTasks, renderApp, bootstrapRef: windowRef.bootstrap, documentRef });
+		setupCustomAddFeature({ getCustomTasks, saveCustomTasks, bootstrapRef: windowRef.bootstrap, documentRef });
 
 	const setupNavigation = () => {
 		const logo = documentRef.getElementById('navbar-logo');
@@ -41,7 +41,7 @@ export function setupFeatureControls({
 			logo.addEventListener('click', (event: Event) => {
 				event.preventDefault();
 				setSelectedGame(null);
-				renderApp();
+				tracker.reloadAll();
 			});
 		}
 	};

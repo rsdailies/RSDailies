@@ -1,7 +1,8 @@
 import { buildCustomTask, isValidOptionalUrl } from './builders.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 export function promptAddCustomTask(deps: any) {
-	const { getCustomTasks, saveCustomTasks, renderApp } = deps;
+	const { getCustomTasks, saveCustomTasks } = deps;
 	const name = prompt('Task name:');
 	if (!name || !name.trim()) return;
 
@@ -27,5 +28,5 @@ export function promptAddCustomTask(deps: any) {
 
 	const existing = Array.isArray(getCustomTasks()) ? getCustomTasks() : [];
 	saveCustomTasks([...existing, task]);
-	renderApp();
+	tracker.reloadAll();
 }

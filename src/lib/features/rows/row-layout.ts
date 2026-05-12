@@ -1,10 +1,11 @@
 import { getTrackerSection } from '../sections/section-registry.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 export function appendWeeklyCollapseButton(nameCell: Element | null, task: any, context: any = {}) {
-	const { isCollapsedBlock, setCollapsedBlock, renderApp, isOverviewPanel = false } = context;
+	const { isCollapsedBlock, setCollapsedBlock, isOverviewPanel = false } = context;
 	if (isOverviewPanel) return;
 	if (!Array.isArray(task?.children) || task.children.length === 0) return;
-	if (!nameCell || !isCollapsedBlock || !setCollapsedBlock || !renderApp) return;
+	if (!nameCell || !isCollapsedBlock || !setCollapsedBlock) return;
 
 	const blockId = `row-collapse-${task.id}`;
 	const collapsed = isCollapsedBlock(blockId);
@@ -18,7 +19,7 @@ export function appendWeeklyCollapseButton(nameCell: Element | null, task: any, 
 		event.preventDefault();
 		event.stopPropagation();
 		setCollapsedBlock(blockId, !isCollapsedBlock(blockId));
-		renderApp();
+		tracker.reloadAll();
 	});
 
 	const actionHost = nameCell.querySelector('.row-actions') || nameCell;

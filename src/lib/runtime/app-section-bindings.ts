@@ -1,7 +1,6 @@
 export function bindRuntimeSections({
 	getTrackerSectionIds,
 	bindSectionControls,
-	renderApp,
 	getSectionState,
 	saveSectionValue,
 	resetSectionView,
@@ -12,7 +11,6 @@ export function bindRuntimeSections({
 }: any) {
 	getTrackerSectionIds().forEach((sectionKey: string) =>
 		bindSectionControls(sectionKey, { sortable: true }, {
-			renderApp,
 			getSectionState: (key: string) => getSectionState(key, { load }),
 			saveSectionValue: (key: string, name: string, value: any) => saveSectionValue(key, name, value, { save }),
 			resetSectionView: (key: string) => resetSectionView(key, { load, save, removeKey }),

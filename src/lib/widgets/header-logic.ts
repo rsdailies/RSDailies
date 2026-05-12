@@ -2,7 +2,6 @@ export function resolveHeaderContext(context: any = {}) {
 	return {
 		isCollapsedBlock: context.isCollapsedBlock || (() => false),
 		setCollapsedBlock: context.setCollapsedBlock || (() => {}),
-		renderApp: context.renderApp || (() => {}),
 	};
 }
 

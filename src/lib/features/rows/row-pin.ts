@@ -1,11 +1,12 @@
 import { getOverviewPins, saveOverviewPins } from '../sections/section-state-service.ts';
 import { buildPinId } from './row-ids.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 export function bindPinButton(
 	pinBtn: HTMLElement | null,
 	sectionKey: string,
 	task: any,
-	{ overviewPinId, customStorageId, load, save, renderApp }: any
+	{ overviewPinId, customStorageId, load, save }: any
 ) {
 	if (!pinBtn) return;
 	const pinId = buildPinId(sectionKey, task, { overviewPinId, customStorageId });
@@ -21,6 +22,6 @@ export function bindPinButton(
 		if (nextPins[pinId]) delete nextPins[pinId];
 		else nextPins[pinId] = Date.now();
 		saveOverviewPins(nextPins, { save });
-		renderApp();
+		tracker.reloadAll();
 	});
 }

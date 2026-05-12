@@ -1,4 +1,5 @@
 import { StorageKeyBuilder } from '../shared/storage/keys-builder.ts';
+import { tracker } from '../../stores/tracker.svelte';
 
 export function getHiddenRowsForSection(sectionKey: string, context: any) {
 	return { ...((context.load?.(StorageKeyBuilder.sectionHiddenRows(sectionKey), {})) || {}) };
@@ -58,7 +59,7 @@ export function resetTaskList(sectionKey: string, tasks: any[], context: any) {
 	if (changedHidden) setHiddenRowsForSection(sectionKey, hiddenRows, context);
 	if (changedRemoved) setRemovedRowsForSection(sectionKey, removedRows, context);
 
-	context.renderApp?.();
+	tracker.reloadAll();
 }
 
 export function buildRestoreEntries(sectionKey: string, taskIds: string[], context: any) {
@@ -93,5 +94,5 @@ export function restoreHiddenRow(sectionKey: string, taskId: string, context: an
 
 	setHiddenRowsForSection(sectionKey, nextHiddenRows, context);
 	setRemovedRowsForSection(sectionKey, nextRemovedRows, context);
-	context.renderApp?.();
+	tracker.reloadAll();
 }

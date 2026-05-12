@@ -6,6 +6,7 @@ import {
 } from '../sections/section-state-service.ts';
 import { StorageKeyBuilder } from '../../shared/storage/keys-builder.ts';
 import { buildPinId } from './row-ids.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 function getHiddenRows(sectionKey: string, load: <T = any>(key: string, fallback?: T) => T): Record<string, string> {
 	return { ...(load(StorageKeyBuilder.sectionHiddenRows(sectionKey), {}) || {}) };
@@ -37,7 +38,7 @@ export function bindHideButton(
 	sectionKey: string,
 	taskId: string,
 	task: any,
-	{ isCustom, isOverviewPanel, customStorageId, load, save, hideTask, renderApp }: any
+	{ isCustom, isOverviewPanel, customStorageId, load, save, hideTask }: any
 ) {
 	if (!hideBtn) return;
 	if (isOverviewPanel) {
@@ -79,6 +80,6 @@ export function bindHideButton(
 			saveOverviewPins(pins, { save });
 		}
 
-		renderApp();
+		tracker.reloadAll();
 	});
 }

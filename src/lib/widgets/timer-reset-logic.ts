@@ -5,6 +5,7 @@ import {
 	setHiddenRowsForSection,
 	setRemovedRowsForSection,
 } from './section-storage.ts';
+import { tracker } from '../../stores/tracker.svelte';
 
 const TIMER_SECTION_KEY = 'timers';
 
@@ -23,5 +24,5 @@ export function resetTimerRows(taskIds: string[], context: any, timerIds: string
 
 	setHiddenRowsForSection(TIMER_SECTION_KEY, hiddenRows, context);
 	setRemovedRowsForSection(TIMER_SECTION_KEY, removedRows, context);
-	context.renderApp?.();
+	tracker.reloadAll();
 }

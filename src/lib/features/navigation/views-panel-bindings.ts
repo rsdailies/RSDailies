@@ -1,14 +1,10 @@
 import { getSelectedGame, subscribeToGameChanges } from '../../runtime/game-context.ts';
 import { closeAllFloatingControls } from '../../ui/panel-controls.ts';
+import { tracker } from '../../../stores/tracker.svelte';
 
 export const closeFloatingControls = closeAllFloatingControls;
 
-export function setupViewsControl({
-	renderApp,
-}: {
-	documentRef: Document;
-	renderApp: () => void;
-}) {
+export function setupViewsControl({}: { documentRef?: Document } = {}) {
 	const syncNavbar = (_game: string | null) => {
 		// Navbar integration via components
 	};
@@ -17,6 +13,6 @@ export function setupViewsControl({
 
 	subscribeToGameChanges((game) => {
 		syncNavbar(game);
-		renderApp();
+		tracker.reloadAll();
 	});
 }
