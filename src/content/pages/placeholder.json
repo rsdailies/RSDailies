@@ -1,0 +1,11 @@
+{
+  "id": "placeholder",
+  "title": "Placeholder",
+  "navLabel": "Placeholder",
+  "game": "rs3",
+  "route": "/placeholder",
+  "layout": "tracker",
+  "displayOrder": 999,
+  "primaryNav": false,
+  "sections": []
+}

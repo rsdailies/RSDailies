@@ -1,5 +1,6 @@
 import { GAMES, getSelectedGame } from './game-context.ts';
 import { resolveTrackerSections } from '../features/sections/section-resolution.ts';
+import { getGatheringView } from '../features/navigation/index.ts';
 import { createRenderAppRunner } from './render-app-runner.ts';
 
 export function createRuntimeRenderApp({
@@ -50,6 +51,7 @@ export function createRuntimeRenderApp({
 				game: game || (getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3),
 				getCustomTasks: () => getCustomTasks({ load }),
 				getPenguinWeeklyData: () => load('penguinWeeklyData', {}),
+				gatheringView: getGatheringView(game || (getSelectedGame() === GAMES.OSRS ? GAMES.OSRS : GAMES.RS3)),
 			}),
 		getTimerHeaderStatus: (task: any) => getTimerHeaderStatus(task, { load }),
 		hideTask: (sectionKey: string, taskId: string) => hideTask(sectionKey, taskId, { load, save }),

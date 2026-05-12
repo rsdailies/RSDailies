@@ -30,7 +30,13 @@ export function appendSectionBadge(nameCell: Element | null, sectionKey: string)
 	const badge = document.createElement('span');
 	badge.className = 'overview-section-badge';
 	badge.textContent = getTrackerSection(sectionKey)?.shortLabel || getTrackerSection(sectionKey)?.label || sectionKey;
-	nameCell.appendChild(badge);
+	
+	const link = nameCell.querySelector('a');
+	if (link) {
+		link.after(badge);
+	} else {
+		nameCell.appendChild(badge);
+	}
 }
 
 export function hideRowActionsForOverview(row: Element | null) {

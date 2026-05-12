@@ -69,7 +69,6 @@
       "reset": "monthly"
     }
   ],
-  "legacySectionId": "rs3monthly",
   "containerId": "rs3monthly-container",
   "tableId": "rs3monthly-table",
   "includedInAllMode": true,

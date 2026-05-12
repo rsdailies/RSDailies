@@ -1,44 +1,117 @@
-.overview-shell {
-  background: rgba(47, 53, 61, 1);
-  border: 1px solid rgba(80, 89, 99, 1);
-  border-top: 0;
-  padding: 0.7rem 0.9rem 0.9rem;
-  border-radius: 0 0 6px 6px;
+/* Overview panel
+   Preserve the new Svelte overview logic while returning the visual geometry
+   to the same tracker-section contract used by Dailies / Weeklies / Monthlies.
+
+   Important rules:
+   - Do not override the parent section header sizing, font, alignment, or controls.
+   - Let the shared table/header CSS create the normal header and body gap.
+   - Only neutralize the normal red/green task-state columns inside Overview.
+*/
+
+/* Keep Overview in the same grid rhythm as the other tracker sections. */
+#overview-root {
+  margin: 0;
 }
 
-.overview-note {
-  text-align: right;
-  font-size: 0.8rem;
-  color: rgba(188, 196, 206, 1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* Do not card-wrap or offset the Overview section.
+   The Section.svelte output is already the same col-12 table_container used by
+   every normal tracker section. */
+#overview-root #overview-container.table_container {
+  margin-top: 0;
+  padding-top: 0;
 }
 
-.overview-divider {
-  margin: 0.5rem 0 0.7rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+/* Keep native shared section/table geometry.
+   The global tracker/table styles provide:
+   - full-width parent header
+   - centered uppercase title
+   - right-side controls
+   - the intentional gap beneath the header
+   - row clipping and bottom rounding */
+#overview-root #overview-table.activity_table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 0;
 }
 
-.overview-empty-message {
+/* Overview body should look like the old dark overview box, but without
+   breaking table width or section header alignment. Do not set tbody display. */
+#overview-root #overview-table tbody.activity_body td,
+#overview-root #overview-table tbody.activity_body td.activity_name,
+#overview-root #overview-table tbody.activity_body td.activity_notes,
+#overview-root #overview-table tbody.activity_body td.activity_status {
+  background: #2f353d !important;
+  background-color: #2f353d !important;
+  color: #ffffff;
+  box-shadow: none !important;
+  vertical-align: middle;
+}
+
+/* Preserve the header gap created by the shared row rule while adding a subtle
+   body frame once the row background starts. */
+#overview-root #overview-table tbody.activity_body tr:first-child td {
+  border-top-color: transparent !important;
+  background-clip: padding-box !important;
+}
+
+#overview-root #overview-table tbody.activity_body tr td:first-child {
+  border-left: 1px solid rgba(80, 89, 99, 1) !important;
+}
+
+#overview-root #overview-table tbody.activity_body tr td:last-child {
+  border-right: 1px solid rgba(80, 89, 99, 1) !important;
+}
+
+#overview-root #overview-table tbody.activity_body tr:last-child td {
+  border-bottom: 1px solid rgba(80, 89, 99, 1) !important;
+}
+
+/* Blend columns together so pinned/empty overview rows do not look like normal
+   red/green completion rows. */
+#overview-root #overview-table tbody.activity_body tr:hover td,
+#overview-root #overview-table tbody.activity_body tr:focus-within td {
+  background: #363d46 !important;
+  background-color: #363d46 !important;
+}
+
+#overview-root #overview-table td.activity_name,
+#overview-root #overview-table td.activity_name a,
+#overview-root #overview-table td.activity_name a:active,
+#overview-root #overview-table td.activity_name a:link,
+#overview-root #overview-table td.activity_name a:visited {
+  color: #ffffff;
+}
+
+#overview-root #overview-table td.activity_notes {
   text-align: center;
-  color: rgba(216, 221, 227, 1);
-  padding: 1rem 0 0.4rem;
-  font-size: 0.98rem;
 }
 
-.overview-split-divider {
-  margin: 0.85rem 0 0.55rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  position: relative;
+#overview-root #overview-table .activity_desc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--ds-row-height);
+  color: #ffffff;
 }
 
-.overview-split-divider-label {
-  position: relative;
-  top: -0.72rem;
-  background: rgba(47, 53, 61, 1);
-  padding: 0 0.5rem;
-  color: rgba(216, 221, 227, 1);
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
+#overview-root #overview-table td.activity_status {
+  width: var(--ds-checkbox-width);
+  text-align: center;
+}
+
+/* Remove inherited name/status accent overlays inside Overview only. */
+#overview-root #overview-table td.activity_name::before,
+#overview-root #overview-table td.activity_notes::before,
+#overview-root #overview-table td.activity_status::before {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* Keep any old overview helper classes harmless if referenced later. */
+.overview-shell,
+.overview-panel {
+  background: #2f353d;
 }

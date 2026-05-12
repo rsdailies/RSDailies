@@ -17,7 +17,6 @@
     "showCountdown": false
   },
   "items": [],
-  "legacySectionId": "rs3farming",
   "containerId": "timers-container",
   "tableId": "timers-table",
   "includedInAllMode": false,
@@ -133,8 +132,7 @@
         {
           "id": "allotment-havenhythe",
           "name": "Havenhythe",
-          "wiki": "https://runescape.wiki/w/Allotment_patch",
-          "locationNote": "Havenhythe allotment patch."
+          "wiki": "https://runescape.wiki/w/Allotment_patch"
         }
       ]
     },

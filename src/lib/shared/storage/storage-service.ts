@@ -43,8 +43,11 @@ function loadJsonInternal(key: string, fallback: any, storage: StoragePayload) {
 
 function saveJsonInternal(key: string, value: any, storage: StoragePayload) {
 	if (!storage) return;
-
-	storage.setItem(key, JSON.stringify(value));
+	try {
+		storage.setItem(key, JSON.stringify(value));
+	} catch (e) {
+		console.warn(`[StorageService] Failed to save key "${key}". Storage might be full.`, e);
+	}
 }
 
 function removeKeyInternal(key: string, storage: StoragePayload) {
@@ -195,6 +198,19 @@ export function listCurrentProfileEntries() {
 	return payload;
 }
 
+function encodeBase64Unicode(value: string) {
+	const bytes = new TextEncoder().encode(value);
+	let binary = '';
+	bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+	return btoa(binary);
+}
+
+function decodeBase64Unicode(value: string) {
+	const binary = atob(value);
+	const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+	return new TextDecoder().decode(bytes);
+}
+
 export function buildExportToken() {
 	if (!storageBackend) return '';
 
@@ -219,14 +235,14 @@ export function buildExportToken() {
 		}
 	}
 
-	return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+	return encodeBase64Unicode(JSON.stringify(payload));
 }
 
 export function importProfileToken(rawToken: string) {
 	if (!storageBackend) return null;
 
 	try {
-		const decoded = decodeURIComponent(escape(atob(String(rawToken || '').trim())));
+		const decoded = decodeBase64Unicode(String(rawToken || '').trim());
 		const data = JSON.parse(decoded);
 
 		if (!data?.profileData || typeof data.profileData !== 'object') {

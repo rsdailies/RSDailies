@@ -1,11 +1,22 @@
 import { SECTION_CONTAINER_IDS, SECTION_TABLE_IDS } from '../../shared/section-ids.ts';
 
 export function getSectionElements(sectionKey: string) {
-	const container = document.getElementById(SECTION_CONTAINER_IDS[sectionKey]);
-	const table = document.getElementById(SECTION_TABLE_IDS[sectionKey]);
-	const thead = table?.querySelector('thead') || null;
-	const tbody = table?.querySelector('tbody') || null;
-	return { container, table, thead, tbody };
+	const container =
+		document.getElementById(`${sectionKey}_container`) ||
+		document.getElementById(`${sectionKey}-container`) ||
+		document.getElementById(sectionKey);
+
+	const table =
+		container?.querySelector('table') ||
+		document.getElementById(`${sectionKey}_table`) ||
+		document.getElementById(`${sectionKey}-table`);
+
+	return {
+		container: container as HTMLElement,
+		table: table as HTMLTableElement,
+		thead: table?.querySelector('thead') as HTMLElement,
+		tbody: table?.querySelector('tbody') as HTMLElement,
+	};
 }
 
 export function reorderDashboardSections(sectionKeys: string[]) {

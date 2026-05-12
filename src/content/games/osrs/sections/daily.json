@@ -18,7 +18,6 @@
     "countdownId": "countdown-osrsdaily"
   },
   "items": [],
-  "legacySectionId": "osrsdaily",
   "containerId": "osrsdaily-container",
   "tableId": "osrsdaily-table",
   "includedInAllMode": true,

@@ -27,17 +27,6 @@ export function buildOverviewCard(items: any[], { createRow, context, compact = 
 
 		if (compact) {
 			row.classList.add('overview-row-compact');
-			const notesCell = row.querySelector('.activity_notes');
-			const desc = row.querySelector('.activity_desc') as HTMLElement | null;
-			const nameCell = row.querySelector('.activity_name');
-			if (nameCell) {
-				const badge = document.createElement('span');
-				badge.className = 'overview-section-badge';
-				badge.textContent = getSectionLabel(sectionKey);
-				nameCell.appendChild(badge);
-			}
-			if (notesCell) notesCell.classList.add('overview-notes-compact');
-			if (desc) desc.textContent = desc.textContent?.trim() || '';
 		}
 		tbody.appendChild(row);
 	});

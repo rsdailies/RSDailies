@@ -1,9 +1,9 @@
 {
-  "id": "osrsweekly",
-  "label": "Weeklies",
+  "id": "osrsmonthly",
+  "label": "Monthlies",
   "game": "osrs",
-  "displayOrder": 102,
-  "resetFrequency": "weekly",
+  "displayOrder": 103,
+  "resetFrequency": "monthly",
   "renderVariant": "standard",
   "shell": {
     "columns": [
@@ -15,12 +15,11 @@
     "showAddButton": false,
     "showResetButton": true,
     "showCountdown": true,
-    "countdownId": "countdown-osrsweekly"
+    "countdownId": "countdown-osrsmonthly"
   },
   "items": [],
-  "legacySectionId": "osrsweekly",
-  "containerId": "osrsweekly-container",
-  "tableId": "osrsweekly-table",
+  "containerId": "osrsmonthly-container",
+  "tableId": "osrsmonthly-table",
   "includedInAllMode": true,
   "supportsTaskNotifications": false
 }

@@ -22,7 +22,7 @@ export function applySettingsToDom(documentRef = document, settings: Settings = 
 
 	if (splitDaily) splitDaily.checked = settings.splitDailyTables !== false;
 	if (splitWeekly) splitWeekly.checked = settings.splitWeeklyTables !== false;
-	if (showCompleted) showCompleted.checked = settings.showCompletedTasks === true;
+	if (showCompleted) showCompleted.checked = settings.showCompletedTasks === true || settings.showCompletedTasks === 'true';
 	if (herbs3) herbs3.checked = settings.herbTicks === 3;
 	if (browserNotif) browserNotif.checked = !!settings.browserNotif;
 	if (webhook) webhook.value = settings.webhookUrl || '';

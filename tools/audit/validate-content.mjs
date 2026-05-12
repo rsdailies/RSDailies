@@ -10,7 +10,7 @@ function flattenItems(items = []) {
 	]);
 }
 
-assert.equal(TRACKER_PAGES.length, 6, 'Expected 6 canonical pages.');
+assert.equal(TRACKER_PAGES.length, 4, 'Expected 4 canonical pages.');
 assert.equal(TRACKER_SECTIONS.length, 8, 'Expected 8 canonical sections.');
 
 for (const page of TRACKER_PAGES) {

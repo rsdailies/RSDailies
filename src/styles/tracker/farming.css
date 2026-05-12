@@ -1,29 +1,39 @@
-.farming-child-row td.activity_name {
+.farming-child-row td.activity_name,
+.farming-parent-row td.activity_name {
   min-height: var(--ds-row-height);
 }
 
 .farming-child-row td.activity_name a,
 .farming-child-row td.activity_name a:active,
 .farming-child-row td.activity_name a:link,
-.farming-child-row td.activity_name a:visited {
+.farming-child-row td.activity_name a:visited,
+.farming-parent-row td.activity_name a,
+.farming-parent-row td.activity_name a:active,
+.farming-parent-row td.activity_name a:link,
+.farming-parent-row td.activity_name a:visited {
   color: #fff !important;
   text-decoration: none !important;
   pointer-events: auto;
 }
 
 .farming-child-row td.activity_notes,
-.farming-child-row td.activity_status {
+.farming-child-row td.activity_status,
+.farming-parent-row td.activity_notes,
+.farming-parent-row td.activity_status {
   font-size: 0.92rem;
   vertical-align: middle;
   min-height: var(--ds-row-height);
 }
 
 .farming-child-row td.activity_status .activity_check_off,
-.farming-child-row td.activity_status .activity_check_on {
+.farming-child-row td.activity_status .activity_check_on,
+.farming-parent-row td.activity_status .activity_check_off,
+.farming-parent-row td.activity_status .activity_check_on {
   min-height: var(--ds-row-height);
 }
 
-.farming-child-row .activity_desc {
+.farming-child-row .activity_desc,
+.farming-parent-row .activity_desc {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,13 +41,24 @@
   padding-top: 0;
 }
 
-.farming-location-row .activity_desc {
+.farming-location-row .activity_desc,
+.farming-parent-row .activity_desc {
   font-weight: 600;
   margin-top: 0;
 }
 
 .farming-location-row .activity_note_line,
 .farming-child-row .activity_note_line,
-.farming-child-row .activity_duration_note {
+.farming-child-row .activity_duration_note,
+.farming-parent-row .activity_note_line,
+.farming-parent-row .activity_duration_note {
   margin-top: 0;
+}
+
+.farming-parent-row .activity_duration_note,
+.farming-child-row .activity_duration_note {
+  color: #aad4ff;
+  font-size: 0.85rem;
+  line-height: 1.1rem;
+  font-weight: 700;
 }

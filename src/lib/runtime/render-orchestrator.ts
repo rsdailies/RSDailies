@@ -57,8 +57,8 @@ export function renderApp(deps: any) {
 	reorderDashboardSections(sectionKeys);
 	applyPageModeVisibility(mode);
 
-	clearAllSectionBodies(sectionKeys);
-	renderTrackerSections(sections, visibleSectionIds, deps, uiContext);
+	// clearAllSectionBodies(sectionKeys);
+	// renderTrackerSections(sections, visibleSectionIds, deps, uiContext);
 
 	movePenguinsBlockToBottom();
 	markVisibleSectionEdges(sectionKeys);

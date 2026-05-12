@@ -187,9 +187,8 @@
       "reset": "weekly"
     }
   ],
-  "legacySectionId": "gathering",
-  "containerId": "gathering-container",
-  "tableId": "gathering-table",
+  "containerId": "gathering_container",
+  "tableId": "gathering_table",
   "includedInAllMode": false,
   "supportsTaskNotifications": true
 }

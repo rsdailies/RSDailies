@@ -6,13 +6,16 @@ export function renderViewsList(
 	list.innerHTML = '';
 
 	groups.forEach((group) => {
-		const heading = document.createElement('li');
-		heading.className = 'profile-row';
-		heading.style.fontWeight = '700';
-		heading.style.opacity = '0.9';
-		heading.style.paddingTop = '6px';
-		heading.textContent = group.heading;
-		list.appendChild(heading);
+		// Only show heading if more than 1 item in group
+		if (group.items.length > 1) {
+			const heading = document.createElement('li');
+			heading.className = 'profile-row';
+			heading.style.fontWeight = '700';
+			heading.style.opacity = '0.9';
+			heading.style.paddingTop = '6px';
+			heading.textContent = group.heading;
+			list.appendChild(heading);
+		}
 
 		group.items.forEach((view) => {
 			const item = document.createElement('li');

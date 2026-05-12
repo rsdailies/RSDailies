@@ -8,6 +8,25 @@
     gap: 10px;
 }
 
+.overview-section-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    margin-left: 8px;
+    font-size: 0.65rem;
+    font-family: var(--ds-font-alt, 'Outfit', sans-serif);
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    vertical-align: middle;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+}
+
+.overview-row-compact {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
 div.table_container[data-hide="hide"] table tbody {
     display: none;
 }

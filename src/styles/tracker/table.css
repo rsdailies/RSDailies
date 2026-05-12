@@ -366,3 +366,24 @@
     overflow: hidden;
     background-clip: padding-box !important;
 }
+
+/* Preserve old DailyScape-style section bottom curvature without relying on the
+   removed legacy DOM pass that used to add block-end-row classes at runtime.
+   This applies to the visible last row in each section table and keeps the
+   parent sections from ending as square-edged rectangles. */
+.activity_table tbody tr:last-child {
+    clip-path: inset(0 10px round 0 0 var(--ds-rounding-radius) var(--ds-rounding-radius)) !important;
+}
+
+.activity_table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: var(--ds-rounding-radius);
+}
+
+.activity_table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: var(--ds-rounding-radius);
+}
+
+.activity_table tbody tr:last-child td {
+    overflow: hidden;
+    background-clip: padding-box !important;
+}

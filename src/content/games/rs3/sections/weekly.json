@@ -69,81 +69,6 @@
       "reset": "weekly"
     },
     {
-      "id": "penguins",
-      "name": "Penguins",
-      "wiki": "https://jq.world60pengs.com",
-      "note": "Weekly penguin route with compact child checklist rows. Child notes should display inline in the next JS pass.",
-      "reset": "weekly",
-      "alertDaysBeforeReset": 0,
-      "childRows": [
-        {
-          "id": "penguin-1",
-          "name": "Penguin 1",
-          "note": "1-point or 2-point location row. Replace label/location weekly if you want manual upkeep."
-        },
-        {
-          "id": "penguin-2",
-          "name": "Penguin 2",
-          "note": "Use note text for area, disguise, hint, or route guidance."
-        },
-        {
-          "id": "penguin-3",
-          "name": "Penguin 3",
-          "note": "Compact child row intended for mark-off and inline guidance."
-        },
-        {
-          "id": "penguin-4",
-          "name": "Penguin 4",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-5",
-          "name": "Penguin 5",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-6",
-          "name": "Penguin 6",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-7",
-          "name": "Penguin 7",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-8",
-          "name": "Penguin 8",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-9",
-          "name": "Penguin 9",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-10",
-          "name": "Penguin 10",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-11",
-          "name": "Penguin 11",
-          "note": "Store current weekly location or route clue here."
-        },
-        {
-          "id": "penguin-12",
-          "name": "Ghost Penguin",
-          "note": "Shadow Realm / ghost penguin can be tracked here if you want all 12 in one parent block."
-        },
-        {
-          "id": "penguin-polar-bear",
-          "name": "Polar Bear",
-          "note": "Weekly well location helper row."
-        }
-      ]
-    },
-    {
       "id": "wisps-of-the-grove",
       "name": "Wisps of the Grove",
       "wiki": "https://runescape.wiki/w/Wisps_of_the_Grove",
@@ -254,9 +179,83 @@
       "wiki": "https://runescape.wiki/w/Advance_Time",
       "note": "Cast the spell 3 times",
       "reset": "weekly"
+    },
+    {
+      "id": "penguins",
+      "name": "Penguins",
+      "wiki": "https://jq.world60pengs.com",
+      "note": "Weekly penguin route with compact child checklist rows. Child notes should display inline in the next JS pass.",
+      "reset": "weekly",
+      "alertDaysBeforeReset": 0,
+      "childRows": [
+        {
+          "id": "penguin-1",
+          "name": "Penguin 1",
+          "note": "1-point or 2-point location row. Replace label/location weekly if you want manual upkeep."
+        },
+        {
+          "id": "penguin-2",
+          "name": "Penguin 2",
+          "note": "Use note text for area, disguise, hint, or route guidance."
+        },
+        {
+          "id": "penguin-3",
+          "name": "Penguin 3",
+          "note": "Compact child row intended for mark-off and inline guidance."
+        },
+        {
+          "id": "penguin-4",
+          "name": "Penguin 4",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-5",
+          "name": "Penguin 5",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-6",
+          "name": "Penguin 6",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-7",
+          "name": "Penguin 7",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-8",
+          "name": "Penguin 8",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-9",
+          "name": "Penguin 9",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-10",
+          "name": "Penguin 10",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-11",
+          "name": "Penguin 11",
+          "note": "Store current weekly location or route clue here."
+        },
+        {
+          "id": "penguin-12",
+          "name": "Ghost Penguin",
+          "note": "Shadow Realm / ghost penguin can be tracked here if you want all 12 in one parent block."
+        },
+        {
+          "id": "penguin-polar-bear",
+          "name": "Polar Bear",
+          "note": "Weekly well location helper row."
+        }
+      ]
     }
   ],
-  "legacySectionId": "rs3weekly",
   "containerId": "rs3weekly-container",
   "tableId": "rs3weekly-table",
   "includedInAllMode": true,

@@ -1,5 +1,6 @@
 import { getTrackerSections } from '../../features/sections/section-registry.ts';
 import { StorageKeyBuilder } from '../../shared/storage/keys-builder.ts';
+import { getSettings } from '../../features/settings/settings-state.ts';
 import { getSectionElements, setSectionHiddenState, setSectionModeVisibility } from './section-helpers.ts';
 import { appendCustomEmptyPlaceholder } from './panel-helpers.ts';
 import { renderSectionPanelHeader as renderSectionHeader } from '../../widgets/section-panel-header.ts';
@@ -26,13 +27,17 @@ export function renderTrackerSections(sections: Record<string, any>, visibleSect
 		if (!tbody) return;
 
 		const sectionTasks = sections[key];
+		const sectionState = getSectionState(key, { load });
+		const globalSettings = getSettings({ load });
+		
 		const hidden = !!load(StorageKeyBuilder.sectionHidden(key), false);
-		const showHidden = !!load(StorageKeyBuilder.sectionShowHidden(key), false);
+		const showHidden = !!load(StorageKeyBuilder.sectionShowHidden(key), false) || 
+		                   globalSettings.showCompletedTasks === true || 
+		                   globalSettings.showCompletedTasks === 'true';
 		const visibleByMode = setSectionModeVisibility(key, visibleSectionIds);
 
 		if (!visibleByMode) return;
 
-		const sectionState = getSectionState(key, { load });
 		const colspan = table?.querySelector('colgroup')?.children?.length || 3;
 
 		if (thead) {

@@ -16,11 +16,18 @@ import '../styles/tracker/farming.css';
 import '../styles/pages/overview.css';
 import '../styles/shell/responsive.css';
 
+import Navbar from '../components/layout/Navbar.svelte';
+import Footer from '../components/layout/Footer.astro';
+import ModalContainer from '../components/modals/ModalContainer.svelte';
+
 interface Props {
 	title: string;
+	game?: string;
+	mode?: string;
+	navItems?: any[];
 }
 
-const { title } = Astro.props;
+const { title, game = 'rs3', mode = 'all', navItems = [] } = Astro.props;
 ---
 
 <!doctype html>
@@ -30,36 +37,22 @@ const { title } = Astro.props;
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>{title}</title>
 		<link rel="icon" type="image/png" href="/img/dailyscape.png" />
-
-		<meta
-			name="description"
-			content="Runescape Task Tracker. Custom Tasks, Dailies, Weeklies, Monthlies with reset timers, Timers (with Farming), and more!"
-		/>
+		<meta name="description" content="RSDailies is an Astro + Svelte RuneScape tracker for RS3 tasks, gathering, farming timers, and an intentionally empty OSRS task shell." />
 	</head>
-
-	<body id="app">
-		<nav id="main-nav" class="navbar nav-pills fixed-top navbar-expand-lg navbar-dark bg-dark"></nav>
-
-		<div id="landing-mount"></div>
-		<div class="container-xl" id="overview-mount"></div>
-
-		<div class="container-xl activity_tables" id="dashboard-container">
-			<div class="row" id="dashboard-mount"></div>
-		</div>
-
-		<footer id="main-footer"></footer>
-
+	<body id="app" data-game={game} data-mode={mode}>
+		<Navbar client:load {game} {mode} {navItems} />
+		<main class="container-xl activity_tables" id="dashboard-container">
+			<slot />
+		</main>
+		<footer id="main-footer">
+			<Footer />
+		</footer>
 		<div id="modals-mount">
-			<div id="token-modal" class="modal fade" tabindex="-1"></div>
-			<div id="custom-task-modal" class="modal fade" tabindex="-1"></div>
+			<ModalContainer client:load />
 		</div>
-
-		<template id="sample_row"></template>
-
 		<div id="tooltip" style="display:none; visibility:hidden;"></div>
-
 		<script>
-			import '../bootstrap/bootstrap-app.ts';
+			import '../bootstrap/entry.ts';
 		</script>
 	</body>
 </html>

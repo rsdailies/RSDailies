@@ -11,11 +11,15 @@ function getGamePageModeKey(game: string) {
 	return `pageMode:${game}`;
 }
 
+function getGameGatheringViewKey(game: string) {
+	return `gatheringView:${game}`;
+}
+
 export function getPageModeLabel(mode: string, game = getActiveGame()) {
 	const activeGame = getActiveGame(game);
 	const modeDef =
 		getTrackerPageMode(mode, activeGame) || getTrackerPageMode(getDefaultTrackerPageMode(activeGame), activeGame);
-	return modeDef?.buttonLabel || modeDef?.label || 'Overview';
+	return modeDef?.buttonLabel || modeDef?.navLabel || modeDef?.title || 'Overview';
 }
 
 export function syncStoredViewModeToPageMode(game = getActiveGame()) {
@@ -70,4 +74,17 @@ export function setPageMode(mode: string, game = getActiveGame()) {
 	}
 
 	return normalized;
+}
+
+export function getGatheringView(game = getActiveGame()) {
+	const activeGame = getActiveGame(game);
+	const view = load<string | null>(getGameGatheringViewKey(activeGame), 'all');
+	return view || 'all';
+}
+
+export function setGatheringView(view: string, game = getActiveGame()) {
+	const activeGame = getActiveGame(game);
+	const normalizedView = String(view || 'all').toLowerCase();
+	save(getGameGatheringViewKey(activeGame), normalizedView);
+	return normalizedView;
 }

@@ -3,9 +3,15 @@ import { resolveWeeklyPenguinTask } from '../penguins/penguin-task-resolution.ts
 import { resolveTimerGroups } from '../timers/timer-group-resolution.ts';
 import { getTrackerSections } from './section-registry.ts';
 
+function filterTasksByView(items: any[], view: string): any[] {
+	if (!view || view === 'all') return items;
+	const normalizedView = view.toLowerCase();
+	return items.filter((item) => String(item.reset || '').toLowerCase() === normalizedView);
+}
+
 function resolveSectionItems(
 	section: any,
-	options: { getCustomTasks?: () => any[]; getPenguinWeeklyData?: () => Record<string, any> }
+	options: { getCustomTasks?: () => any[]; getPenguinWeeklyData?: () => Record<string, any>; gatheringView?: string | null }
 ) {
 	if (section.id === 'custom') {
 		return typeof options.getCustomTasks === 'function' ? options.getCustomTasks() : [];
@@ -15,11 +21,17 @@ function resolveSectionItems(
 		return resolveTimerGroups(section.groups);
 	}
 
-	if (section.id !== 'rs3weekly') {
-		return Array.isArray(section.items) ? section.items : [];
+	const items = Array.isArray(section.items) ? section.items : [];
+
+	if (section.id === 'gathering') {
+		return items;
 	}
 
-	return (section.items || []).map((task: any) =>
+	if (section.id !== 'rs3weekly') {
+		return items;
+	}
+
+	return items.map((task: any) =>
 		resolveWeeklyPenguinTask(task, typeof options.getPenguinWeeklyData === 'function' ? options.getPenguinWeeklyData() : {})
 	);
 }
@@ -28,6 +40,7 @@ export function resolveTrackerSections(options: {
 	game?: string | null;
 	getCustomTasks?: () => any[];
 	getPenguinWeeklyData?: () => Record<string, any>;
+	gatheringView?: string | null;
 } = {}) {
 	const { game = null } = options;
 

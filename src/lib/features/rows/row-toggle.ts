@@ -1,4 +1,5 @@
 import { TIMER_SECTION_KEY } from '../timers/timer-runtime.ts';
+import { shouldIgnoreToggleClick } from './row-layout.ts';
 
 export function createToggleTaskHandler(
 	sectionKey: string,
@@ -6,7 +7,9 @@ export function createToggleTaskHandler(
 	task: any,
 	{ load, save, getTaskState, setTaskCompleted, clearTimer, startTimer, startCooldown, renderApp }: any
 ) {
-	return function toggleTask() {
+	return function toggleTask(event?: any) {
+		if (event && shouldIgnoreToggleClick(event)) return;
+
 		const state = getTaskState(sectionKey, taskId, task);
 		const isCompleted = state === 'true' || state === 'hide';
 		const cooldownMinutes = Number.isFinite(task?.cooldownMinutes)

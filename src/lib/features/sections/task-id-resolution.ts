@@ -44,8 +44,7 @@ export function getContentSectionTaskIdsByCadence(sectionId: string, cadence: st
 	}
 
 	const normalizedCadence = String(cadence || '').toLowerCase();
-	return section.items
-		.filter((task: any) => String(task?.reset || 'daily').toLowerCase() === normalizedCadence)
-		.map((task: any) => task.id)
-		.filter(Boolean);
+	const topLevelTasks = section.items.filter((task: any) => String(task?.reset || 'daily').toLowerCase() === normalizedCadence);
+	
+	return flattenTaskIds(topLevelTasks);
 }

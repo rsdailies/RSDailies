@@ -1,20 +1,45 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import Dashboard from '../../components/tracker/Dashboard.svelte';
+import Overview from '../../components/tracker/Overview.svelte';
+import { getCollection } from 'astro:content';
+import { getTrackerPrimaryNavItems } from '../../lib/features/navigation/page-registry.ts';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
 	return [
-		{ params: { game: 'rs3', page: 'overview' } },
 		{ params: { game: 'rs3', page: 'tasks' } },
 		{ params: { game: 'rs3', page: 'gathering' } },
 		{ params: { game: 'rs3', page: 'timers' } },
-		{ params: { game: 'osrs', page: 'overview' } },
 		{ params: { game: 'osrs', page: 'tasks' } },
 	];
 }
 
-const { game, page } = Astro.params;
+const game = Astro.params.game === 'osrs' ? 'osrs' : 'rs3';
+const page = Astro.params.page || 'tasks';
+const route = `/${game}/${page}`;
+const mode = page === 'tasks' ? 'all' : page;
+
+const pages = await getCollection('pages');
+const pageEntry = pages.find((entry) => entry.data.route === route);
+
+if (!pageEntry) {
+	return Astro.redirect('/rs3/tasks');
+}
+
+const sectionEntries = await getCollection('sections', (entry) => entry.data.game === game);
+const sectionById = new Map(sectionEntries.map((entry) => [entry.data.id, entry]));
+const sections = pageEntry.data.sections
+	.map((sectionId) => sectionById.get(sectionId))
+	.filter(Boolean)
+	.sort((a, b) => (a!.data.displayOrder ?? 100) - (b!.data.displayOrder ?? 100));
+
+const allSections = sectionEntries.sort((a, b) => (a.data.displayOrder ?? 100) - (b.data.displayOrder ?? 100));
+const navItems = getTrackerPrimaryNavItems(game);
 const gameLabel = game === 'osrs' ? 'OSRS' : 'RS3';
-const pageLabel = page ? page.charAt(0).toUpperCase() + page.slice(1) : 'Tracker';
+const pageLabel = pageEntry.data.title || page.charAt(0).toUpperCase() + page.slice(1);
 ---
 
-<MainLayout title={`RSDailies - ${gameLabel} ${pageLabel}`} />
+<MainLayout title={`RSDailies - ${gameLabel} ${pageLabel}`} {game} {mode} {navItems}>
+	<Overview client:load {allSections} />
+	<Dashboard client:load {sections} />
+</MainLayout>

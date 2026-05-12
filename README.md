@@ -1,244 +1,219 @@
-# Dailyscape
+# RSDailies / Dailyscape
 
-Dailyscape is a static Astro-based RuneScape tracker for RS3 and OSRS. The active app uses JSON-authored content, a hosted browser runtime, profile-scoped local storage, reset logic, timers, import/export, and a verification pipeline that covers content, routes, timer definitions, and browser smoke behavior.
+RSDailies is a static **Astro + Svelte** RuneScape daily tracker. Astro owns page routing, layout composition, and validated JSON content loading. Svelte owns the interactive tracker UI: navbar state, overview pins, task rows, collapsible sections, reset controls, and farming/timer rows.
 
-This repository is the current base project. Migration-era compatibility layers, duplicate asset roots, and alternate host configs have already been removed.
+This checkpoint is the cleaned migration baseline after removing the old active imperative renderer. There is no legacy table renderer, no injected shell HTML runtime, and no widget-renderer tree competing with Svelte.
 
-## Production
+## Current app contract
 
-- Live site: `https://rsdailies.vercel.app`
-- Host target: `Vercel`
-- Vercel project: `rsdailies`
-- Framework preset: `Astro`
-- Build command: `npm run build`
-- Output directory: `dist`
-- Node version: `22.x`
+| Route | Status | Purpose |
+|---|---|---|
+| `/` | Active | Game-selection landing page for RS3 or OSRS. |
+| `/rs3/tasks` | Active | RS3 daily, weekly, and monthly task tracker. |
+| `/rs3/gathering` | Active | RS3 gathering tracker. |
+| `/rs3/timers` | Active | RS3 farming/timer tracker with nested timer/plot rows. |
+| `/osrs/tasks` | Active shell | Empty OSRS Daily, Weekly, and Monthly sections by design. |
 
-Vercel notes:
+## What changed in this checkpoint
 
-1. Keep the project on Node `22.x`.
-2. Use `npm run build` as the deploy command.
-3. Do not use `verify:full` as the Vercel build command.
-4. Only set public env vars when explicitly needed, such as `PUBLIC_PENGUIN_API_URL`.
+- Removed the old runtime renderer from the active project.
+- Removed old injected shell HTML fragments.
+- Removed old widget/render helper files.
+- Consolidated content under `src/content/games/`.
+- Normalized page ids to dashed canonical ids.
+- Fixed the RS3 timers/farming page so timer parents and plot/location rows render correctly.
+- Preserved OSRS as a visible empty shell, per project decision.
+- Added project documentation under `/docs/` for future AI/human maintenance.
+- Added an npm `overrides` rule for `yaml` so `npm audit` reports zero known vulnerabilities with the current lockfile.
 
-## Canonical Routes
+## Install and run
 
-- `/`
-- `/rs3/overview`
-- `/rs3/tasks?view=all|daily|weekly|monthly`
-- `/rs3/gathering?view=daily|weekly`
-- `/rs3/timers`
-- `/osrs/overview`
-- `/osrs/tasks?view=all|daily|weekly|monthly`
+```bash
+npm install
+npm run dev
+```
 
-## Requirements
+The dev server serves the Astro app locally. Open the URL printed by Astro, then check:
 
-- Node `22.12.0` or newer in the `22.x` line
-- npm
+```text
+/rs3/tasks
+/rs3/gathering
+/rs3/timers
+/osrs/tasks
+```
 
-Version pins live in:
+## Verification commands
 
-- `.nvmrc`
-- `.node-version`
-- `package.json`
+```bash
+npm run check
+npm test
+npm run audit:content
+npm run audit:routes
+npm run audit:timers
+npm audit
+npm run build
+npm run verify:full
+```
 
-## Fresh Setup
+`npm run verify:full` runs the non-browser gate: Astro check, unit tests, content audit, route audit, timer audit, npm audit, and production build.
 
-From a clean clone:
+Browser smoke tests are separate because Playwright browsers are large machine-level assets:
+
+```bash
+npx playwright install
+npm run test:e2e
+```
+
+## Project tree
+
+```text
+src/
+├─ bootstrap/              Browser bootstrap. Bootstrap JS only; no renderer startup.
+├─ components/
+│  ├─ layout/              Navbar and footer.
+│  ├─ modals/              Import/export and custom task modal shell.
+│  └─ tracker/             Dashboard, overview, sections, rows, and timers.
+├─ content.config.ts       Astro content collection schemas.
+├─ content/games/          JSON source of truth for pages and sections.
+├─ layouts/                Astro document shell and global CSS imports.
+├─ lib/                    Pure domain/services/storage/timer helpers.
+├─ pages/                  Astro routes.
+├─ stores/                 Svelte browser state.
+└─ styles/                 Global visual system and tracker CSS.
+```
+
+## Ownership rules
+
+### Astro owns
+
+- `src/pages/**`
+- `src/layouts/**`
+- `src/content.config.ts`
+- static route generation
+- content collection loading
+
+### Svelte owns
+
+- tracker dashboard rendering
+- task row rendering
+- farming/timer hierarchy rendering
+- row completion/hidden/pin state
+- section/group collapse and reset controls
+- navbar/modal UI rendering
+
+### Services own
+
+- local storage namespacing
+- reset-boundary math
+- timer math
+- settings normalization
+- content and route audits
+
+## Forbidden architecture
+
+Do not reintroduce:
+
+- a global `renderApp()` table renderer
+- imperative dashboard row injection
+- old shell HTML fragments as active UI
+- a second tracker renderer beside Svelte
+- duplicate content folders outside `src/content/games/`
+- hidden legacy bridge logic controlling page rendering
+
+## Content model
+
+All page and section content lives under:
+
+```text
+src/content/games/
+├─ rs3/
+│  ├─ pages/
+│  └─ sections/
+└─ osrs/
+   ├─ pages/
+   └─ sections/
+```
+
+Canonical page ids:
+
+```text
+rs3-tasks
+rs3-gathering
+rs3-timers
+osrs-tasks
+```
+
+OSRS intentionally has empty `items` arrays until real OSRS task data is authored.
+
+## Timers/farming model
+
+The RS3 timers page supports:
+
+```text
+Timer section
+└─ group: Herbs / Trees / Specialty
+   ├─ timer parent: Regular Trees / Fruit Trees / Crystal Tree
+   └─ plot/location rows: Falador / Catherby / etc.
+```
+
+Timer locations are real task rows, not fake subgroup headers. This is important for preserving old visual structure while keeping Svelte as the only renderer.
+
+## Security/dependency policy
+
+- Keep `package-lock.json` committed.
+- Run `npm audit` before final review.
+- The project currently uses an npm `overrides` rule to force a patched `yaml` version for transitive tooling dependencies.
+- Avoid `npm audit fix --force` unless you have reviewed the breaking dependency downgrade/upgrade it proposes.
+
+## Documentation map
+
+Start with:
+
+- `docs/PROJECT_OVERVIEW.md`
+- `docs/architecture/OWNERSHIP.md`
+- `docs/architecture/FILE_TREE.md`
+- `docs/architecture/NO_LEGACY_POLICY.md`
+- `docs/features/CONTENT.md`
+- `docs/features/TIMERS.md`
+- `docs/features/OSRS.md`
+- `docs/framework/ASTRO.md`
+- `docs/framework/SVELTE.md`
+- `docs/testing/VERIFICATION.md`
+- `docs/maintenance/DEPENDENCIES_SECURITY.md`
+- `docs/agents/REQUEST_SCOPING.md`
+- `docs/sources/SOURCES.md`
+
+## Visual checkpoint
+
+The public legacy site remains the visual checkpoint:
+
+```text
+https://rsdailies.github.io/RSDailies/
+```
+
+Use it for visual comparison only. Do not restore its old runtime architecture.
+
+## Windows npm install troubleshooting
+
+This project intentionally ships without `node_modules`. Install dependencies with:
 
 ```bash
 npm install
 ```
 
-That restores `node_modules/`, which is required for:
+The project includes `.npmrc` to force the public npm registry:
 
-- `npm run dev`
-- `npm run build`
-- `npm test`
-- `npm run test:e2e`
-- `npm run verify:full`
-
-`node_modules/` is local install output and should not be committed.
-
-## Daily Commands
-
-```bash
-# local dev server
-npm run dev
-
-# production build
-npm run build
-
-# unit and feature tests
-npm test
-
-# validation scripts
-npm run audit:content
-npm run audit:routes
-npm run audit:timers
-
-# browser smoke tests against a built app
-npm run test:e2e
-
-# full local verification gate
-npm run verify:full
+```text
+registry=https://registry.npmjs.org/
+engine-strict=false
 ```
 
-## Verification Model
+If an install is interrupted on Windows and you see `EPERM` cleanup warnings, close running editors/terminals that may be locking files, delete `node_modules`, and run `npm install` again. If npm reports a stale or private registry URL, run:
 
-`npm run verify:full` is the main local quality gate. It runs:
+```bash
+npm config get registry
+npm config set registry https://registry.npmjs.org/
+```
 
-1. unit and feature tests
-2. content audit
-3. route audit
-4. timer audit
-5. production build
-6. Playwright smoke coverage against the built app
+Node `22.12.0` or newer is supported. Node `24.x` is accepted by the `engines` range.
 
-Current verification structure:
-
-- `tests/features/`
-  - settings normalization
-  - reset and storage behavior
-  - timer math
-  - tracker content and view resolution
-- `tests/e2e/`
-  - canonical route smoke coverage
-- `tools/audit/`
-  - content completeness and schema assumptions
-  - route contract validation
-  - timer definition validation
-- `tools/e2e/`
-  - local static serving for Playwright
-  - Playwright runner against the built app
-- `tools/verify/`
-  - cross-platform full verification runner
-
-The verification pipeline is intentionally part of the base project and should not be reduced to "build only."
-
-## Runtime Architecture
-
-The shipped app is an Astro static build with a hosted client runtime.
-
-High-level runtime ownership:
-
-- `src/bootstrap/`
-  browser startup and shell bootstrap
-- `src/layouts/`
-  document shell and style imports
-- `src/pages/`
-  Astro route entrypoints
-- `src/content/`
-  JSON source of truth for page and section content
-- `src/app/shell/html/`
-  injected shell fragments such as navbar, footer, overview, and modals
-- `src/lib/`
-  active domain, runtime, storage, feature logic, rendering, and UI helpers
-- `src/widgets/`
-  template fragments used by the hosted runtime
-- `public/`
-  static assets
-
-Runtime conventions:
-
-- public assets use the canonical `/img` path
-- Astro JSON content under `src/content` is the authored source of truth
-- the current runtime does not depend on `_vanilla_legacy` or `src/legacy-port`
-- the repo is intentionally Vercel-only
-- `PUBLIC_PENGUIN_API_URL` is optional and opt-in
-
-## `src/` Simplification Direction
-
-The next architecture step is **not** a broad rewrite. The correct path is an inspection-led refactor by vertical feature slices.
-
-Best-practice target shape:
-
-- not one giant file per feature
-- not dozens of abstract micro-files
-- recommended: one feature folder with a small number of clearly owned files inside it
-
-Why:
-
-- one folder to inspect for a feature
-- one obvious coordinator file
-- state, actions, render helpers, and DOM bindings colocated
-- fewer cross-layer scavenger hunts across `domain/`, `runtime/`, `widgets/`, and `ui/`
-
-Primary hotspot files identified in the inspection:
-
-1. `src/lib/domain/legacy-mode-content.ts`
-2. `src/lib/widgets/tracker-row-factory.ts`
-3. `src/lib/runtime/hosted-app-runtime.ts`
-4. `src/lib/runtime/view-controller.ts`
-5. `src/lib/features/sections/reset-service.ts`
-6. `src/lib/runtime/render-orchestrator.ts` and its submodules
-
-Observed problems:
-
-- large files mixing multiple responsibilities
-- feature logic split across broad layer folders
-- runtime orchestration files acting as feature coordinators and implementation owners at the same time
-- naming that still reflects migration history more than current ownership
-
-Forward target layout:
-
-- `features/navigation/`
-- `features/overview/`
-- `features/sections/`
-- `features/rows/`
-- `features/timers/`
-- `features/settings/`
-- `features/profiles/`
-- `features/custom-tasks/`
-- `features/import-export/`
-- `features/penguins/`
-
-Recommended refactor order:
-
-1. route, view, and navigation ownership
-2. row rendering and section rendering
-3. reset and section state behavior
-4. timers
-5. overview and custom tasks
-6. app assembly cleanup
-
-Refactor rule:
-
-- a developer should be able to answer "where does this feature live?" with one folder, not five top-level directories
-
-## Generated and Local-Only Paths
-
-These are local or generated paths and should stay out of git:
-
-- `node_modules/`
-- `dist/`
-- `.astro/`
-- `.vercel/`
-- `test-results/`
-- `playwright-report/`
-
-If you delete them intentionally for a clean workspace:
-
-- run `npm install` to restore dependencies
-- run `npm run build` or `npm run dev` to regenerate app output as needed
-
-## Root Files
-
-- `package.json`
-  scripts, dependency declarations, and Node engine contract
-- `package-lock.json`
-  locked dependency graph
-- `astro.config.mjs`
-  Astro config and integrations
-- `tsconfig.json`
-  TypeScript config
-- `vercel.json`
-  committed Vercel project build settings
-- `.github/workflows/verify.yml`
-  CI verification workflow
-
-## Base Project Notes
-
-- Keep the repo source clean; generated outputs are recreated locally.
-- Reinstall dependencies with `npm install` whenever `node_modules/` is removed.
-- Use `npm run verify:full` as the pre-change or pre-push local confidence gate once dependencies are installed.

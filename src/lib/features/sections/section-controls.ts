@@ -31,7 +31,10 @@ export function bindSectionControls(sectionKey: string, opts: { sortable?: boole
 
 	removeSectionRestoreControls(sectionKey, { documentRef });
 
-	const container = documentRef.getElementById(sectionKey)?.closest('.table_container') || documentRef;
+	const container =
+		documentRef.getElementById(`${sectionKey}-container`) ||
+		documentRef.getElementById(sectionKey)?.closest('.table_container') ||
+		documentRef;
 
 	container.querySelectorAll('.section-restore-all-btn').forEach((btn) => {
 		btn.addEventListener('click', (event) => {

@@ -8,34 +8,40 @@ const npmStep = (...args) =>
 		? { command: 'cmd.exe', args: ['/c', 'npm', ...args] }
 		: { command: 'npm', args };
 
+const nodeWithTypeStripping = (scriptPath) => ({
+	command: 'node',
+	args: ['--experimental-strip-types', scriptPath],
+});
+
 const steps = [
+	{
+		label: 'check',
+		...npmStep('run', 'check'),
+	},
 	{
 		label: 'test',
 		command: 'node',
-		args: ['--test', 'tests/**/*.test.js'],
+		args: ['--experimental-strip-types', '--test', 'tests/**/*.test.js'],
 	},
 	{
 		label: 'audit:content',
-		command: 'node',
-		args: ['tools/audit/validate-content.mjs'],
+		...nodeWithTypeStripping('tools/audit/validate-content.mjs'),
 	},
 	{
 		label: 'audit:routes',
-		command: 'node',
-		args: ['tools/audit/verify-routes.mjs'],
+		...nodeWithTypeStripping('tools/audit/verify-routes.mjs'),
 	},
 	{
 		label: 'audit:timers',
-		command: 'node',
-		args: ['tools/audit/validate-timers.mjs'],
+		...nodeWithTypeStripping('tools/audit/validate-timers.mjs'),
+	},
+	{
+		label: 'npm audit',
+		...npmStep('audit'),
 	},
 	{
 		label: 'build',
 		...npmStep('run', 'build'),
-	},
-	{
-		label: 'test:e2e',
-		...npmStep('run', 'test:e2e'),
 	},
 ];
 

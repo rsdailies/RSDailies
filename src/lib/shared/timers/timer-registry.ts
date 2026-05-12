@@ -1,4 +1,3 @@
-// Timer Registry Logic - Ported from legacy shared/lib/timers/timer-registry.js
 export function buildFarmingTimerEntries(timerGroups: any[]) {
   const entries: [string, any][] = [];
 

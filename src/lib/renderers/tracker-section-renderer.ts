@@ -49,13 +49,13 @@ function renderTimerGroupsSection(tbody: HTMLElement, context: any) {
 }
 
 function renderGroupedSectionsSection(tbody: HTMLElement, context: any) {
-	const { sortedTasks, isCollapsedBlock, uiContext } = context;
+	const { sortedTasks, isCollapsedBlock, uiContext, load } = context;
 
 	renderGroupedGathering(tbody, sortedTasks, {
 		isCollapsedBlock,
 		createHeaderRow,
 		createRow,
-		context: uiContext,
+		context: { ...uiContext, getSettingsValue: () => getSettings({ load }) },
 		getGroupCountdown: (groupName: string) =>
 			getGroupCountdown(groupName, {
 				formatDurationMsCore,
@@ -67,20 +67,23 @@ function renderGroupedSectionsSection(tbody: HTMLElement, context: any) {
 }
 
 function renderParentChildrenSection(tbody: HTMLElement, context: any) {
-	const { sortedTasks, isCollapsedBlock, uiContext } = context;
+	const { sortedTasks, isCollapsedBlock, uiContext, load } = context;
 
 	renderWeekliesWithChildren(tbody, sortedTasks, {
 		isCollapsedBlock,
 		createHeaderRow,
 		createRow,
 		createRightSideChildRow,
-		context: uiContext,
+		context: { ...uiContext, getSettingsValue: () => getSettings({ load }) },
 	});
 }
 
 function renderStandardTrackerSection(tbody: HTMLElement, context: any) {
-	const { key, sortedTasks, uiContext } = context;
-	renderStandardSection(tbody, key, sortedTasks, { createRow, context: uiContext });
+	const { key, sortedTasks, uiContext, load } = context;
+	renderStandardSection(tbody, key, sortedTasks, { 
+		createRow, 
+		context: { ...uiContext, getSettingsValue: () => getSettings({ load }) } 
+	});
 }
 
 export const TRACKER_SECTION_RENDERERS = Object.freeze({

@@ -6,7 +6,7 @@ import {
 	cleanupReadyTimers,
 	initProfileContext,
 	migrateStorageShape,
-	renderApp,
+	// renderApp,
 	setupCustomAdd,
 	setupGlobalClickCloser,
 	setupImportExport,
@@ -19,6 +19,7 @@ import {
 	syncStoredViewModeToPageMode,
 	updateCountdowns,
 } from '../lib/runtime/app-runtime.ts';
+import { tracker } from '../stores/tracker.svelte';
 
 declare global {
 	interface Window {
@@ -52,7 +53,8 @@ function startHostedLoops() {
 		const cooldownChanged = cleanupReadyCooldowns();
 
 		if (resetChanged || timerChanged || cooldownChanged) {
-			renderApp();
+			// renderApp();
+			tracker.reloadAll();
 		}
 	}, 1000);
 
@@ -88,7 +90,7 @@ function runHostedStartup() {
 	setupCustomAdd();
 	setupNavigation();
 
-	renderApp();
+	// renderApp();
 	if (canStartPenguinSync()) {
 		startPenguinSync?.();
 	}

@@ -2,4 +2,15 @@
 import MainLayout from '../layouts/MainLayout.astro';
 ---
 
-<MainLayout title="RSDailies - Runescape Task Checklist for both RS3 and OSRS" />
+<MainLayout title="RSDailies - Choose Game" game="rs3" mode="landing" navItems={[]}>
+	<section class="game-selection-page" aria-labelledby="game-selection-title">
+		<div class="game-selection-card">
+			<img src="/img/dailyscapebig.png" alt="RSDailies" class="game-selection-logo" />
+			<h1 id="game-selection-title">Choose Your Tracker</h1>
+			<div class="game-selection-actions">
+				<a class="btn btn-primary btn-lg" href="/rs3/tasks">Open RS3 Tracker</a>
+				<a class="btn btn-warning btn-lg" href="/osrs/tasks">Open OSRS Tracker</a>
+			</div>
+		</div>
+	</section>
+</MainLayout>

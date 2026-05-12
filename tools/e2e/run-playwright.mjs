@@ -2,7 +2,6 @@ import { spawn } from 'node:child_process';
 
 const host = process.env.HOST || '127.0.0.1';
 const port = Number(process.env.PORT || 4174);
-const isWindows = process.platform === 'win32';
 const serverUrl = `http://${host}:${port}`;
 
 function waitForServerReady(serverProcess, timeoutMs = 30000) {
@@ -24,12 +23,8 @@ function waitForServerReady(serverProcess, timeoutMs = 30000) {
 			}
 		};
 
-		const handleErrorOutput = (chunk) => {
-			process.stderr.write(chunk.toString());
-		};
-
 		serverProcess.stdout?.on('data', handleReady);
-		serverProcess.stderr?.on('data', handleErrorOutput);
+		serverProcess.stderr?.on('data', (chunk) => process.stderr.write(chunk.toString()));
 		serverProcess.on('error', (error) => {
 			if (settled) return;
 			settled = true;
@@ -55,42 +50,28 @@ async function main() {
 	const shutdownServer = () => {
 		if (shuttingDown) return;
 		shuttingDown = true;
-		if (!serverProcess.killed) {
-			serverProcess.kill('SIGTERM');
-		}
+		if (!serverProcess.killed) serverProcess.kill('SIGTERM');
 	};
 
-	process.on('SIGINT', () => {
-		shutdownServer();
-		process.exit(130);
-	});
-	process.on('SIGTERM', () => {
-		shutdownServer();
-		process.exit(143);
-	});
+	process.on('SIGINT', () => { shutdownServer(); process.exit(130); });
+	process.on('SIGTERM', () => { shutdownServer(); process.exit(143); });
 
 	try {
 		await waitForServerReady(serverProcess);
+		const runner = spawn('node', ['node_modules/playwright/cli.js', 'test', ...process.argv.slice(2)], {
+			stdio: 'inherit',
+			env: { ...process.env, PLAYWRIGHT_TEST_BASE_URL: serverUrl },
+		});
+		const exitCode = await new Promise((resolve, reject) => {
+			runner.on('exit', (code) => resolve(code ?? 1));
+			runner.on('error', reject);
+		});
+		shutdownServer();
+		process.exit(exitCode);
 	} catch (error) {
 		shutdownServer();
 		throw error;
 	}
-
-	const runnerCommand = isWindows ? 'cmd.exe' : 'npx';
-	const runnerArgs = isWindows ? ['/c', 'npx', 'playwright', 'test', ...process.argv.slice(2)] : ['playwright', 'test', ...process.argv.slice(2)];
-
-	const runner = spawn(runnerCommand, runnerArgs, {
-		stdio: 'inherit',
-		env: { ...process.env, PLAYWRIGHT_TEST_BASE_URL: serverUrl },
-	});
-
-	const exitCode = await new Promise((resolve, reject) => {
-		runner.on('exit', (code) => resolve(code ?? 1));
-		runner.on('error', reject);
-	});
-
-	shutdownServer();
-	process.exit(exitCode);
 }
 
 main().catch((error) => {

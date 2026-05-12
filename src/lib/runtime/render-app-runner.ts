@@ -41,6 +41,7 @@ export function createRenderAppRunner(renderAppCore: any, deps: any) {
 			hideTooltip: deps.hideTooltip,
 			getTaskState: (sectionKey: string, taskId: string, task: any) => {
 				const section = getSectionState(sectionKey, { load });
+				const gameContext = deps.getPageMode()?.game || (typeof window !== 'undefined' && window.location.pathname.includes('/osrs/') ? 'osrs' : 'rs3');
 
 				return determineTaskState(taskId, task, {
 					sectionKey,
@@ -48,9 +49,10 @@ export function createRenderAppRunner(renderAppCore: any, deps: any) {
 					completed: section.completed || {},
 					cooldowns: getCooldowns(),
 					timers: getTimers(),
-					settings: getSettings({ load }),
+					settings: getSettings({ load: deps.load }),
 					timerSectionKey: TIMER_SECTION_KEY,
 					now: Date.now(),
+					gameContext,
 				});
 			},
 			getResolvedSections,
