@@ -16,6 +16,8 @@ import '../styles/tracker/farming.css';
 import '../styles/pages/overview.css';
 import '../styles/shell/responsive.css';
 
+import { StorageKeyBuilder } from '../lib/shared/storage/keys-builder.ts';
+import { initStorageService, load, save } from '../lib/shared/storage/storage-service.ts';
 import Navbar from '../components/layout/Navbar.svelte';
 import Footer from '../components/layout/Footer.astro';
 import ModalContainer from '../components/modals/ModalContainer.svelte';
@@ -28,6 +30,20 @@ interface Props {
 }
 
 const { title, game = 'rs3', mode = 'all', navItems = [] } = Astro.props;
+
+// Initialize storage with defaults
+initStorageService(load('activeProfile', 'default'));
+if (!load(StorageKeyBuilder.settings(), null)) {
+	save(StorageKeyBuilder.settings(), {
+		splitDailyTables: true,
+		splitWeeklyTables: true,
+		showCompletedTasks: false,
+		herbTicks: 4,
+		growthOffsetMinutes: 0,
+		browserNotif: false,
+		overviewVisible: true,
+	});
+}
 ---
 
 <!doctype html>
@@ -52,7 +68,12 @@ const { title, game = 'rs3', mode = 'all', navItems = [] } = Astro.props;
 		</div>
 		<div id="tooltip" style="display:none; visibility:hidden;"></div>
 		<script>
-			import '../bootstrap/entry.ts';
+			// Seed route state from URL
+			const pathParts = window.location.pathname.split('/').filter(Boolean);
+			const game = pathParts[0] === 'osrs' ? 'osrs' : 'rs3';
+			const page = pathParts[1] || 'tasks';
+			document.body.dataset.game = game;
+			document.body.dataset.mode = page === 'tasks' ? 'all' : page;
 		</script>
 	</body>
 </html>

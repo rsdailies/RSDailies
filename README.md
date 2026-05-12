@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://rsdailies.github.io/RSDailies/">Live Site</a>
+  <a href="https://rsdailies.vercel.app">Live Site</a>
   ·
   <a href="#features">Features</a>
   ·
@@ -529,7 +529,7 @@ This makes the project easier to review, maintain, and safely improve.
 
 ## Disclaimer
 
-Dailyscape is an unofficial fan-made tracker project.
+RSDailies is an unofficial fan-made tracker project. It originated from Dailyscape and their work they did. Thanks to them, I was able to do this!
 
 It is not affiliated with, endorsed by, sponsored by, or approved by Jagex.
 
