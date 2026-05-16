@@ -1,9 +1,9 @@
 ---
-import MainLayout from '../../layouts/MainLayout.astro';
-import Dashboard from '../../components/tracker/Dashboard.svelte';
-import Overview from '../../components/tracker/Overview.svelte';
+export const prerender = true;
+import MainLayout from '@app/layout/MainLayout.astro';
+import { Dashboard, Overview } from '@features/tracker';
 import { getCollection } from 'astro:content';
-import { getTrackerPrimaryNavItems } from '../../lib/features/navigation/page-registry.ts';
+import { getTrackerPrimaryNavItems } from '@features/navigation';
 
 export async function getStaticPaths() {
 	return [
@@ -37,9 +37,23 @@ const allSections = sectionEntries.sort((a, b) => (a.data.displayOrder ?? 100) -
 const navItems = getTrackerPrimaryNavItems(game);
 const gameLabel = game === 'osrs' ? 'OSRS' : 'RS3';
 const pageLabel = pageEntry.data.title || page.charAt(0).toUpperCase() + page.slice(1);
+const pageHeading = page === 'tasks' ? 'Daily Tasks' : pageLabel;
+const pageSubtitle = "Daily, Weekly, and Monthly Task Trackers";
+const showOsrsNotice = game === 'osrs';
 ---
 
 <MainLayout title={`RSDailies - ${gameLabel} ${pageLabel}`} {game} {mode} {navItems}>
+	<header class="tracker-page-header">
+		<p class="tracker-kicker">{game === 'osrs' ? 'Old School RuneScape' : 'RuneScape 3'}</p>
+		<h1>{pageHeading}</h1>
+		<p class="tracker-subtitle">{pageSubtitle}</p>
+	</header>
+	{showOsrsNotice && (
+		<section class="tracker-route-notice" aria-label="OSRS tracker status">
+			<strong>OSRS tracker is being built.</strong>
+			<p>RS3 is fully available now. OSRS task data will appear here as sections are added.</p>
+		</section>
+	)}
 	<Overview client:load {allSections} />
 	<Dashboard client:load {sections} />
 </MainLayout>

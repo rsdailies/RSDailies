@@ -32,3 +32,6 @@ test-results/
 playwright-report/
 
 .vercel
+
+# SOMA Body OS local runtime metadata
+.soma/

@@ -1,0 +1,125 @@
+.ds-modal-shell {
+	position: fixed;
+	inset: 0;
+	z-index: 1200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	background: rgba(0, 0, 0, 0.72);
+}
+
+.ds-modal-shell .ds-modal-frame {
+	width: min(100%, 720px);
+	margin: 0;
+}
+
+.ds-modal-frame-centered {
+	display: flex;
+	align-items: center;
+	min-height: min(100%, calc(100vh - 2rem));
+}
+
+.ds-modal-frame-wide {
+	max-width: 720px;
+}
+
+.ds-modal-card {
+	background-color: #343a40;
+	color: #fff;
+	border: 1px solid #5a6573;
+	border-radius: 10px;
+	box-shadow: 0 22px 44px rgba(0, 0, 0, 0.5);
+	overflow: hidden;
+}
+
+.ds-modal-header,
+.ds-modal-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 1rem 1.1rem;
+	background: rgba(14, 20, 27, 0.45);
+}
+
+.ds-modal-header {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ds-modal-footer {
+	justify-content: flex-end;
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ds-modal-title {
+	margin: 0;
+	font-weight: 800;
+	color: #f2f5f8;
+	font-size: 1.125rem;
+}
+
+.ds-modal-body {
+	padding: 1rem 1.1rem 1.1rem;
+}
+
+.ds-modal-close {
+	position: relative;
+	width: 32px;
+	height: 32px;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: #fff;
+	cursor: pointer;
+}
+
+.ds-modal-close::before,
+.ds-modal-close::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 16px;
+	height: 2px;
+	background: currentColor;
+	transform-origin: center;
+}
+
+.ds-modal-close::before {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.ds-modal-close::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.ds-modal-close:hover,
+.ds-modal-close:focus-visible {
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.ds-field[readonly] {
+	color: #555;
+	background: #d7dde5;
+}
+
+.ds-modal-copy {
+	margin: 0 0 1rem;
+}
+
+.ds-modal-copy-tight {
+	margin-bottom: 0;
+}
+
+.ds-modal-field-block {
+	margin-bottom: 1rem;
+}
+
+.ds-modal-status {
+	margin-top: 0.25rem;
+}
+
+body.modal-open {
+	overflow: hidden;
+}

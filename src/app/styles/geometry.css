@@ -1,0 +1,44 @@
+/* Geometry Authority
+   The sole source of truth for all widths, heights, spacing, and rounding.
+   Editing this file updates the entire repository's layout. */
+
+:root {
+    /* Base Column Sizing */
+    --ds-name-col-width: 265px;
+    /* Ultra-condensed wrap for longest standard tasks */
+    --ds-checkbox-width: 50px;
+    --ds-checkbox-width-sm: 42px;
+
+    /* Layout Spacing */
+    --ds-section-gap: 4px;
+    --ds-rounding-radius: 12px;
+
+    /* Default Density (Compact) */
+    --ds-row-height: 25px;
+    --ds-table-font-size: 0.88rem;
+    --ds-row-padding-y: 0.15rem;
+    --ds-row-padding-x: 0.6rem;
+    --ds-name-padding-left: 18px;
+    --ds-name-padding-right: 12px;
+    --ds-row-action-button-size: 24px;
+}
+
+:root[data-density='compact'] {
+    --ds-row-height: 25px;
+    --ds-table-font-size: 0.88rem;
+    --ds-row-padding-y: 0.15rem;
+    --ds-row-padding-x: 0.6rem;
+    --ds-name-padding-left: 18px;
+    --ds-name-padding-right: 12px;
+    --ds-row-action-button-size: 24px;
+}
+
+:root[data-density='comfortable'] {
+    --ds-row-height: 34px;
+    --ds-table-font-size: 0.94rem;
+    --ds-row-padding-y: 0.4rem;
+    --ds-row-padding-x: 0.8rem;
+    --ds-name-padding-left: 18px;
+    --ds-name-padding-right: 12px;
+    --ds-row-action-button-size: 24px;
+}

@@ -1,0 +1,97 @@
+.ds-button {
+  --ds-button-bg: #22303b;
+  --ds-button-bg-hover: #2d3c49;
+  --ds-button-border: #4d5b69;
+  --ds-button-color: #eef3f8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 40px;
+  padding: 0.58rem 0.9rem;
+  border: 1px solid var(--ds-button-border);
+  border-radius: 6px;
+  background: var(--ds-button-bg);
+  color: var(--ds-button-color);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.ds-button:hover,
+.ds-button:focus-visible {
+  background: var(--ds-button-bg-hover);
+  color: #fff;
+}
+
+.ds-button-small {
+  min-height: 32px;
+  padding: 0.42rem 0.68rem;
+  font-size: 0.86rem;
+}
+
+.ds-button-large {
+  min-height: 46px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+}
+
+.ds-button-primary {
+  --ds-button-bg: #2d5c8b;
+  --ds-button-bg-hover: #3a72ab;
+  --ds-button-border: #4c87be;
+}
+
+.ds-button-secondary {
+  --ds-button-bg: #2a3641;
+  --ds-button-bg-hover: #36424f;
+  --ds-button-border: #556170;
+}
+
+.ds-button-accent {
+  --ds-button-bg: #80611f;
+  --ds-button-bg-hover: #9a7727;
+  --ds-button-border: #bb9737;
+}
+
+.ds-button-ghost-primary {
+  --ds-button-bg: transparent;
+  --ds-button-bg-hover: rgba(64, 131, 202, 0.12);
+  --ds-button-border: #4c87be;
+  --ds-button-color: #b9d7f4;
+}
+
+.ds-button-danger {
+  --ds-button-bg: #6d2727;
+  --ds-button-bg-hover: #853131;
+  --ds-button-border: #a84545;
+}
+
+.ds-button-ghost-danger {
+  --ds-button-bg: transparent;
+  --ds-button-bg-hover: rgba(168, 69, 69, 0.12);
+  --ds-button-border: #a84545;
+  --ds-button-color: #f2c7c7;
+}
+
+.ds-button.active {
+  box-shadow: inset 0 0 0 999px rgba(255, 255, 255, 0.03);
+}
+
+.ds-button-primitive {
+  box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ds-button-primitive:hover,
+.ds-button-primitive:focus,
+.ds-button-primitive:focus-visible {
+  transform: none !important;
+  outline: 1px solid rgba(255, 255, 255, 0.38);
+  outline-offset: 0;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ds-link-hover) 40%, transparent);
+}

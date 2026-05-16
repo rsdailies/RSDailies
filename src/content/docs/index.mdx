@@ -1,0 +1,34 @@
+---
+title: Welcome to the Dailyscape Wiki
+description: Comprehensive technical documentation and user guides for the Dailyscape RuneScape tracker.
+template: splash
+hero:
+  tagline: Explore the architecture, features, and maintenance guides for the next-gen tracker.
+  actions:
+    - text: Project Overview
+      link: /project_overview
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/anthony/dailyscape
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Quick Navigation
+
+<CardGrid stagger>
+	<Card title="Architecture" icon="setting">
+		Learn about the **Islands Architecture** using Astro 6 and Svelte 5.
+	</Card>
+	<Card title="Features" icon="list-format">
+		Deep dive into RS3 trackers, gathering, and the boundary reset logic.
+	</Card>
+	<Card title="Developer Guides" icon="open-book">
+		Explore the new **Astro Actions** persistence layer and Content Collection schemas.
+	</Card>
+	<Card title="QA & Hardening" icon="approve-check">
+		Review the BiomeJS linting standards and Playwright E2E testing suite.
+	</Card>
+</CardGrid>

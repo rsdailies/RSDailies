@@ -1,0 +1,122 @@
+---
+import '../styles/tokens.css';
+import '../styles/geometry.css';
+import '../styles/base.css';
+import '../styles/states.css';
+import '../styles/modal.css';
+import '../styles/button.css';
+import '../styles/header.css';
+import '../styles/layout.css';
+import '../styles/controls.css';
+import '../styles/legacy-tracker/row.css';
+import '../styles/legacy-tracker/table.css';
+import '../styles/legacy-tracker/farming.css';
+import '../styles/overview.css';
+import '../styles/responsive.css';
+
+import { StorageKeyBuilder } from '@shared/storage/keys-builder';
+import { initStorageService, load, save } from '@shared/storage/storage-service';
+import type { NavItem } from '@features/navigation';
+import Navbar from './Navbar.svelte';
+import Footer from './Footer.astro';
+import ModalContainer from '@shared/ui/modal/ModalContainer.svelte';
+
+interface Props {
+	title: string;
+	game?: string;
+	mode?: string;
+	navItems?: NavItem[];
+}
+
+const { title, game = 'rs3', mode = 'all', navItems = [] } = Astro.props;
+
+const description = game === 'osrs' 
+  ? "The ultimate Old School RuneScape (OSRS) daily task tracker. Manage your bird house runs, battlestaves, and more."
+  : "The premium RuneScape 3 (RS3) daily tracker. Organize your gathering loops, farming timers, and reset progress efficiently.";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		<link rel="icon" type="image/png" href="/img/dailyscape.png" />
+		<link rel="canonical" href={Astro.url.href} />
+
+		<!-- SEO Metadata -->
+		<meta name="description" content={description} />
+		<meta name="keywords" content="RuneScape, RS3, OSRS, Daily Tasks, Weekly Tasks, Monthly Tasks, Tracker, Dailyscape" />
+		<meta name="author" content="Dailyscape" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url.href} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL('/img/banner.png', Astro.url).href} />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={Astro.url.href} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={new URL('/img/banner.png', Astro.url).href} />
+
+		<script is:inline>
+			(() => {
+				const storageRoot = 'rsdailies';
+				const activeProfileKey = `${storageRoot}:active-profile`;
+				const activeProfile = window.localStorage.getItem(activeProfileKey);
+				let profileName = 'default';
+				try {
+					profileName = activeProfile ? JSON.parse(activeProfile) || 'default' : 'default';
+				} catch {
+					profileName = 'default';
+				}
+				const settingsKey = `${storageRoot}:${profileName}:settings`;
+				let densityMode = 'compact';
+				try {
+					const rawSettings = window.localStorage.getItem(settingsKey);
+					if (rawSettings) {
+						const settings = JSON.parse(rawSettings);
+						if (settings?.densityMode === 'comfortable') densityMode = 'comfortable';
+					}
+				} catch {}
+				document.documentElement.dataset.density = densityMode;
+			})();
+		</script>
+	</head>
+	<body id="app" data-game={game} data-mode={mode}>
+		<Navbar client:load {game} {mode} {navItems} />
+		<main class="ds-shell-container activity_tables" id="dashboard-container">
+			<slot />
+		</main>
+		<footer id="main-footer">
+			<Footer />
+		</footer>
+		<div id="modals-mount">
+			<ModalContainer client:load />
+		</div>
+		<div id="tooltip" style="display:none; visibility:hidden;"></div>
+		<script>
+			import { initStorageService, load, save } from '@shared/storage/storage-service';
+			import { StorageKeyBuilder } from '@shared/storage/keys-builder';
+
+			// Initialize storage on client
+			initStorageService(load('activeProfile', 'default'));
+			if (!load(StorageKeyBuilder.settings(), null)) {
+				save(StorageKeyBuilder.settings(), {
+					splitDailyTables: true,
+					splitWeeklyTables: true,
+					showCompletedTasks: false,
+					densityMode: 'compact',
+					herbTicks: 4,
+					growthOffsetMinutes: 0,
+					browserNotif: false,
+					overviewVisible: true,
+				});
+			}
+		</script>
+	</body>
+</html>

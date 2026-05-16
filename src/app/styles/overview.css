@@ -1,0 +1,156 @@
+/* Overview panel
+   The Overview section is intentionally a normal tracker section first:
+   same width, same outer margin, same parent header geometry as Dailies,
+   Weeklies, and Monthlies. Only the body is visually distinct so it can show
+   the old overview drop-down panel and pinned-task preview. */
+
+#overview-root {
+    margin: 0 0 16px;
+}
+
+#overview-root #overview-container.table_container {
+    margin-top: 0;
+    margin-bottom: 22px;
+    padding-top: 0;
+}
+
+/* Header table: inherit normal section-header sizing/background from shared
+   table/header styles. Do not special-card or shrink the header. */
+#overview-root #overview-table.activity_table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+#overview-root #overview-table thead td.header_like_color {
+    padding: 0 !important;
+}
+
+#overview-root #overview-table .header_like_inner,
+#overview-root #overview-table .header_like_name,
+#overview-root #overview-table .header_like_text {
+    min-height: 42px;
+}
+
+/* Old-style overview drop-down body. This sits below the parent header with a
+   clear gap and inset width, matching the preserved overview feel without
+   changing the global row/table system. */
+#overview-root .overview-panel-body {
+    margin: 12px 14px 0;
+    padding: 12px 14px 14px;
+    background: #2f353d;
+    border: 1px solid rgba(80, 89, 99, 1);
+    border-radius: 0 0 var(--ds-rounding-radius, 5px) var(--ds-rounding-radius, 5px);
+    color: #ffffff;
+    overflow: hidden;
+}
+
+#overview-root .overview-note {
+    text-align: right;
+    font-size: 0.8rem;
+    color: rgba(198, 207, 219, 1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#overview-root .overview-divider {
+    margin: 0.58rem 0 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+#overview-root .overview-empty-message {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(235, 239, 244, 1);
+    font-size: 0.98rem;
+}
+
+#overview-root .overview-empty-message strong {
+    display: block;
+    margin-bottom: 0.28rem;
+}
+
+/* Pinned rows live inside the overview body. They keep TaskRow behavior, but
+   columns blend into the overview panel instead of using completion-state red
+   and green backgrounds. */
+#overview-root .overview-pins-table.activity_table {
+    width: 100%;
+    margin: 0;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+}
+
+#overview-root .overview-pins-table tbody tr {
+    clip-path: none;
+    background: transparent !important;
+}
+
+#overview-root .overview-pins-table tbody tr:first-child td {
+    border-top: 0 !important;
+}
+
+#overview-root .overview-pins-table tbody td,
+#overview-root .overview-pins-table tbody td.activity_name,
+#overview-root .overview-pins-table tbody td.activity_notes,
+#overview-root .overview-pins-table tbody td.activity_status {
+    background: #2f353d !important;
+    background-color: #2f353d !important;
+    color: #ffffff;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: none !important;
+    vertical-align: middle;
+}
+
+#overview-root .overview-pins-table tbody tr:last-child td {
+    border-bottom: 0 !important;
+}
+
+#overview-root .overview-pins-table tbody tr:hover td,
+#overview-root .overview-pins-table tbody tr:focus-within td {
+    background: #363d46 !important;
+    background-color: #363d46 !important;
+}
+
+#overview-root .overview-pins-table td.activity_name,
+#overview-root .overview-pins-table td.activity_name a,
+#overview-root .overview-pins-table td.activity_name a:active,
+#overview-root .overview-pins-table td.activity_name a:link,
+#overview-root .overview-pins-table td.activity_name a:visited {
+    color: #ffffff;
+}
+
+#overview-root .overview-pins-table td.activity_notes {
+    text-align: center;
+}
+
+#overview-root .overview-pins-table .activity_desc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    width: 100%;
+    color: #ffffff;
+}
+
+#overview-root .overview-pins-table td.activity_status {
+    width: 46px;
+    text-align: center;
+}
+
+#overview-root .overview-pins-table td.activity_name::before,
+#overview-root .overview-pins-table td.activity_notes::before,
+#overview-root .overview-pins-table td.activity_status::before {
+    display: none !important;
+    background: transparent !important;
+}

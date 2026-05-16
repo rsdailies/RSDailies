@@ -1,5 +1,6 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+export const prerender = true;
+import MainLayout from '@app/layout/MainLayout.astro';
 ---
 
 <MainLayout title="RSDailies - Choose Game" game="rs3" mode="landing" navItems={[]}>
@@ -8,8 +9,8 @@ import MainLayout from '../layouts/MainLayout.astro';
 			<img src="/img/dailyscapebig.png" alt="RSDailies" class="game-selection-logo" />
 			<h1 id="game-selection-title">Choose Your Tracker</h1>
 			<div class="game-selection-actions">
-				<a class="btn btn-primary btn-lg" href="/rs3/tasks">Open RS3 Tracker</a>
-				<a class="btn btn-warning btn-lg" href="/osrs/tasks">Open OSRS Tracker</a>
+				<a class="ds-button ds-button-primary ds-button-large" href="/rs3/tasks">Open RS3 Tracker</a>
+				<a class="ds-button ds-button-accent ds-button-large" href="/osrs/tasks">Open OSRS Tracker</a>
 			</div>
 		</div>
 	</section>

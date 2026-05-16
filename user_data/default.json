@@ -1,0 +1,57 @@
+{
+  "completed:osrsdaily": {},
+  "notified:rs3weekly": {
+    "herby-werby": "2026-05-12T00:00:00.000Z"
+  },
+  "hideSection:rs3daily": true,
+  "selectedGame": "rs3",
+  "last_monthly_reset_time": 1778561621934,
+  "pageMode:rs3": "all",
+  "settings": {
+    "splitDailyTables": true,
+    "splitWeeklyTables": true,
+    "showCompletedTasks": false,
+    "herbTicks": 4,
+    "growthOffsetMinutes": 0,
+    "browserNotif": false,
+    "overviewVisible": true
+  },
+  "completed:rs3weekly": {},
+  "completed:gathering": {},
+  "pageMode": "all",
+  "hideSection:timers": true,
+  "lastVisit": 1778564093097,
+  "pageMode:osrs": "osrsall",
+  "completed:rs3daily": {},
+  "hideSection:gathering": true,
+  "schemaVersion": 3,
+  "last_daily_reset_time": 1778888384106,
+  "hiddenRows:gathering": {},
+  "collapsedBlocks": {
+    "gathering_daily": true,
+    "gathering_weekly": true,
+    "farm-herbs": true,
+    "farm-allotments": true,
+    "farm-hops": true,
+    "farm-belladonna": true,
+    "farm-mushrooms": true,
+    "farm-cactus": true,
+    "farm-bushes": true,
+    "group-parent-specialty": true,
+    "timer-group-herbs": true,
+    "timer-group-allotments": true,
+    "timers": true
+  },
+  "completed:osrsweekly": {},
+  "removedRows:gathering": {},
+  "last_weekly_reset_time": 1778888384106,
+  "cooldowns": {},
+  "overviewPins": {
+    "rs3daily::daily-challenge": true,
+    "rs3daily::vis-wax": true,
+    "rs3daily::wicked-hood": true,
+    "rs3daily::crystal-tree-blossom": true
+  },
+  "_syncedAt": "2026-05-15T23:41:09.908Z",
+  "_timestamp": 1778888469905
+}

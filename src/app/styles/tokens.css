@@ -1,0 +1,52 @@
+/* Token Authority
+   The sole source of truth for all colors, backgrounds, borders, and shadows. */
+
+:root {
+    /* Global Colors */
+    --ds-bg: rgba(0, 0, 0, 1);
+    --ds-text: rgba(195, 195, 195, 1);
+    --ds-muted: rgba(185, 185, 185, 1);
+    --ds-muted-2: rgba(207, 207, 207, 1);
+    --ds-footer: rgba(119, 119, 119, 1);
+    --ds-link-hover: rgba(64, 131, 202, 1);
+
+    /* UI Elements */
+    --ds-nav-bg: rgba(31, 47, 56, 1);
+    --ds-menu-bg: rgba(52, 58, 64, 1);
+    --ds-panel-bg: rgba(17, 17, 17, 1);
+    --ds-panel-border: rgba(42, 42, 42, 1);
+    
+    /* Headers */
+    --ds-panel-header-start: rgba(21, 21, 21, 1);
+    --ds-panel-header-end: rgba(29, 35, 43, 1);
+    --ds-panel-header-border: rgba(45, 45, 45, 1);
+    
+    /* Rows */
+    --ds-row-name-bg: rgba(47, 53, 61, 1); /* Synced to #2f353d Slate */
+    --ds-row-child-bg: rgba(10, 10, 10, 1);
+    --ds-row-group-start: rgba(20, 20, 20, 1);
+    --ds-row-group-end: rgba(27, 34, 42, 1);
+    --ds-row-subgroup-start: rgba(23, 23, 23, 1);
+    --ds-row-subgroup-end: rgba(32, 32, 32, 1);
+    
+    /* Completion States */
+    --ds-row-complete: rgba(27, 67, 0, 0.4);
+    --ds-row-complete-hover: rgba(16, 39, 0, 0.5);
+    --ds-row-incomplete: rgba(89, 5, 5, 0.4);
+    --ds-row-incomplete-hover: rgba(59, 4, 4, 0.5);
+    --ds-row-hidden: rgba(74, 58, 8, 0.4);
+    --ds-row-hidden-hover: rgba(56, 44, 6, 0.5);
+    
+    /* Special States */
+    --ds-row-name-overlay: rgba(40, 130, 73, 0.18);
+    --ds-row-name-overlay-hover: rgba(40, 130, 73, 0.25);
+    --ds-row-status-border: rgba(0, 0, 0, 0.18);
+    
+    /* Notes & Metadata */
+    --ds-duration-note: rgba(170, 212, 255, 1);
+    --ds-location-note: rgba(184, 216, 176, 1);
+    --ds-profit: rgba(193, 153, 28, 1);
+    
+    /* Borders */
+    --ds-checkbox-border: rgba(255, 255, 255, 0.15);
+}

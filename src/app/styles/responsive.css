@@ -1,0 +1,57 @@
+@media (max-width: 767px) {
+    .activity_table col.activity_col_status {
+        width: 48px;
+    }
+
+    .activity_table td.activity_name a,
+    .activity_table td.activity_name a:active,
+    .activity_table td.activity_name a:link,
+    .activity_table td.activity_name a:visited {
+        font-size: 0.95rem;
+    }
+
+    .activity_desc .activity_note_line,
+    .activity_desc .activity_child_name {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .activity_table a {
+        text-decoration: underline;
+    }
+
+    .overview_header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-panel-controls {
+        right: 14px;
+        gap: 4px;
+    }
+
+    .section-panel-controls .ds-button,
+    .section-panel-countdown {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 992px) {
+    #profile-control,
+    #settings-control,
+    #views-control {
+        right: auto;
+        left: 0;
+    }
+
+    #profile-button,
+    #settings-button {
+        padding: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    .activity_table col.activity_col_status {
+        width: 52px;
+    }
+}

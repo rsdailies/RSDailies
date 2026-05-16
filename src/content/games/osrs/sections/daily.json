@@ -17,7 +17,29 @@
     "showCountdown": true,
     "countdownId": "countdown-osrsdaily"
   },
-  "items": [],
+  "items": [
+    {
+      "id": "osrs_bird_house",
+      "name": "Bird House Run",
+      "wiki": "https://oldschool.runescape.wiki/w/Bird_house_trapping",
+      "note": "Fossil Island",
+      "reset": "daily"
+    },
+    {
+      "id": "osrs_battlestaves",
+      "name": "Zaff's Battlestaves",
+      "wiki": "https://oldschool.runescape.wiki/w/Zaff",
+      "note": "Varrock",
+      "reset": "daily"
+    },
+    {
+      "id": "osrs_herb_boxes",
+      "name": "Nightmare Zone Herb Boxes",
+      "wiki": "https://oldschool.runescape.wiki/w/Nightmare_Zone",
+      "note": "Yanille",
+      "reset": "daily"
+    }
+  ],
   "containerId": "osrsdaily-container",
   "tableId": "osrsdaily-table",
   "includedInAllMode": true,

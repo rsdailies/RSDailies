@@ -1,0 +1,172 @@
+.ds-nav-list > li > .ds-menu {
+  background-color: var(--ds-menu-bg);
+  margin-bottom: 10px;
+}
+
+.ds-nav-list > li > .ds-menu a {
+  color: #fff;
+}
+
+.ds-nav-list > li > .ds-menu a:hover {
+  color: #000;
+}
+
+.ds-nav-list-secondary {
+  flex-direction: row;
+}
+
+.ds-nav-list-secondary .ds-nav-link,
+.ds-nav-list-secondary .ds-nav-link:focus,
+.ds-nav-list-secondary .ds-nav-link:hover {
+  display: inline-block;
+  background-color: var(--ds-nav-bg);
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.08rem;
+  line-height: 1rem;
+  margin-left: 5px;
+}
+
+.ds-nav-button.ds-nav-button-caret::after {
+  content: '▾';
+  font-size: 0.7rem;
+  margin-left: 0.4rem;
+}
+
+#profile-name {
+  font-size: 0.95rem;
+  font-weight: normal;
+  vertical-align: top;
+  margin-right: 5px;
+  display: inline;
+  visibility: visible;
+}
+
+#profile-control,
+#settings-control,
+#views-control {
+  top: calc(100% + 8px);
+  position: absolute;
+  right: 0;
+  min-width: 320px;
+  background: var(--ds-panel-bg);
+  border: 1px solid var(--ds-panel-border);
+  padding: 8px;
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+#views-control {
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+}
+
+#settings-control .ds-checkbox,
+#settings-control .settings-block {
+  margin-top: 8px;
+}
+
+#profile-list,
+#views-list {
+  margin: 0 0 7px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.profile-link {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+}
+
+.profile-delete {
+  margin-left: 5px;
+}
+
+#profile-button span.ds-expand-label,
+#settings-button span.ds-expand-label,
+#layout-button span.ds-expand-label,
+#token-button span.ds-expand-label,
+#overview-button span.ds-expand-label {
+  font-size: 0.95rem;
+  font-weight: normal;
+}
+
+.ds-nav-expand {
+  white-space: nowrap;
+}
+
+.ds-nav-expand span.ds-expand-label {
+  max-width: 0;
+  transition: max-width 0.5s;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ds-nav-expand:hover span.ds-expand-label,
+.ds-nav-expand:focus-visible span.ds-expand-label {
+  max-width: 7rem;
+}
+
+.activity_table thead .ds-nav-expand span.ds-expand-label {
+  display: none;
+}
+
+.activity_table thead .ds-nav-expand:hover span.ds-expand-label,
+.activity_table thead .ds-nav-expand:focus-visible span.ds-expand-label {
+  max-width: 0;
+}
+
+.activity_table thead .ds-button:focus,
+.activity_table thead .ds-button:focus-visible,
+.activity_table thead .ds-button:active,
+.activity_table thead .ds-button.active:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+div.table_container[data-show-hidden="true"] .show_hidden_button {
+  background: var(--ds-warning);
+  border-color: var(--ds-warning);
+  color: #fff;
+}
+
+.profile-form-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.profile-form-input {
+  flex: 1;
+  padding-left: 5px;
+}
+
+.profile-form-submit {
+  padding-right: 5px;
+}
+
+.ds-settings-density {
+  align-items: flex-start;
+}
+
+.ds-settings-density-select {
+  margin-top: 0.25rem;
+}
