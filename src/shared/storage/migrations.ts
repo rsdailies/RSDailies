@@ -1,13 +1,19 @@
-import { ACTIVE_PROFILE_KEY, GLOBAL_PROFILES_KEY, createProfilePrefix } from './namespace';
 import { StorageKeyBuilder } from './keys-builder';
 import {
-	renameValue,
-	renameObjectKeys,
-	migrateLegacySectionValue,
-	migrateLegacyPageMode,
-	migrateLegacyTimerStorage,
-	migrateLegacyOverviewPins,
+	ACTIVE_PROFILE_KEY,
+	GLOBAL_PROFILES_KEY,
+	STORAGE_EXPORT_SCHEMA_VERSION,
+	STORAGE_SCHEMA_VERSION,
+	createProfilePrefix,
+} from './namespace';
+import {
 	migrateLegacyCollapsedBlocks,
+	migrateLegacyOverviewPins,
+	migrateLegacyPageMode,
+	migrateLegacySectionValue,
+	migrateLegacyTimerStorage,
+	renameObjectKeys,
+	renameValue,
 } from './schema-v3.ts';
 
 function loadJson(key: string, fallback: any, storage: Storage) {
@@ -23,8 +29,8 @@ function saveJson(key: string, value: any, storage: Storage) {
 	storage.setItem(key, JSON.stringify(value));
 }
 
-export const CURRENT_STORAGE_SCHEMA_VERSION = 3;
-export const CURRENT_EXPORT_SCHEMA_VERSION = 1;
+export const CURRENT_STORAGE_SCHEMA_VERSION = STORAGE_SCHEMA_VERSION;
+export const CURRENT_EXPORT_SCHEMA_VERSION = STORAGE_EXPORT_SCHEMA_VERSION;
 
 const LEGACY_TIMER_SECTION_KEY = 'rs3farming';
 const TIMER_SECTION_KEY = 'timers';
@@ -96,13 +102,16 @@ function migrateProfileStorage(profileName: string, storage: Storage) {
 		changed = migrateLegacyCollapsedBlocks(storage, profileName, profileStorageKey, StorageKeyBuilder) || changed;
 
 		['completed', 'hiddenRows', 'removedRows'].forEach((key) => {
-			changed = migrateLegacySectionValue(storage, profileName, key, profileStorageKey, (value) => renameObjectKeys(value, replacements)) || changed;
+			changed =
+				migrateLegacySectionValue(storage, profileName, key, profileStorageKey, (value) =>
+					renameObjectKeys(value, replacements),
+				) || changed;
 		});
 
 		['order'].forEach((key) => {
 			changed =
 				migrateLegacySectionValue(storage, profileName, key, profileStorageKey, (value) =>
-					Array.isArray(value) ? value.map((entry) => renameValue(entry, replacements)) : value
+					Array.isArray(value) ? value.map((entry) => renameValue(entry, replacements)) : value,
 				) || changed;
 		});
 

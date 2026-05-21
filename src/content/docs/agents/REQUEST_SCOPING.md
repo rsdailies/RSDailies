@@ -1,3 +1,8 @@
+---
+title: Request Scoping
+description: Guidance for scoping repo changes and keeping implementation requests targeted.
+---
+
 # AI request scoping guide
 
 Use narrow prompts. Do not ask an agent to rewrite the whole app unless you are prepared to review everything.
@@ -9,9 +14,9 @@ Use narrow prompts. Do not ask an agent to rewrite the whole app unless you are 
 Scope:
 
 - `src/pages/`
-- `src/layouts/`
-- `src/components/layout/`
-- `src/bootstrap/`
+- `src/app/layout/`
+- `src/features/navigation/`
+- `src/shared/ui/`
 
 Do not touch tracker rows, timer data, or content JSON.
 
@@ -21,7 +26,7 @@ Scope:
 
 - `src/content.config.ts`
 - `src/content/games/`
-- `src/lib/domain/`
+- `src/entities/task/`
 
 Do not touch Svelte markup or CSS.
 
@@ -29,9 +34,9 @@ Do not touch Svelte markup or CSS.
 
 Scope:
 
-- `src/components/tracker/timers/`
+- `src/features/tracker/components/TimerGroups.svelte`
+- `src/features/timers/services/`
 - `src/content/games/rs3/sections/timers.json`
-- `src/lib/features/timers/`
 
 Do not touch RS3 daily/weekly/monthly, OSRS, navbar, or modals.
 
@@ -39,9 +44,9 @@ Do not touch RS3 daily/weekly/monthly, OSRS, navbar, or modals.
 
 Scope:
 
-- `src/components/tracker/TaskRow.svelte`
-- `src/styles/tracker/`
-- `src/styles/base/states.css`
+- `src/features/tracker/components/TaskRow.svelte`
+- `src/features/tracker/components/row/`
+- `src/app/styles/`
 
 Do not touch content loading or routing.
 

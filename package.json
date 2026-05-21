@@ -1,50 +1,53 @@
 {
-  "name": "dailyscape",
-  "type": "module",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
-  "scripts": {
-    "dev": "node node_modules/astro/bin/astro.mjs dev",
-    "build": "node node_modules/astro/bin/astro.mjs build",
-    "preview": "node node_modules/astro/bin/astro.mjs preview",
-    "astro": "node node_modules/astro/bin/astro.mjs",
-    "check": "node node_modules/astro/bin/astro.mjs check",
-    "test": "node --experimental-strip-types --test tests/**/*.test.js",
-    "audit:content": "node --experimental-strip-types tools/audit/validate-content.mjs",
-    "audit:routes": "node --experimental-strip-types tools/audit/verify-routes.mjs",
-    "audit:no-bootstrap": "node --experimental-strip-types tools/audit/no-bootstrap-js-controls.mjs",
-    "audit:no-bootstrap-vocabulary": "node --experimental-strip-types tools/audit/no-bootstrap-class-vocabulary.mjs",
-    "audit:no-legacy-surface": "node --experimental-strip-types tools/audit/no-legacy-shipped-surface.mjs",
-    "audit:no-hash-links": "node --experimental-strip-types tools/audit/no-hash-action-links.mjs",
-    "audit:dependencies": "node --experimental-strip-types tools/audit/dependency-audit.mjs",
-    "audit:timers": "node --experimental-strip-types tools/audit/validate-timers.mjs",
-    "audit:headings": "node --experimental-strip-types tools/audit/heading-audit.mjs",
-    "audit:asset-budget": "node --experimental-strip-types tools/audit/asset-budget.mjs",
-    "test:e2e": "npm run build && node tools/e2e/run-playwright.mjs",
-    "test:e2e:install": "playwright install --with-deps chromium",
-    "lint": "biome check .",
-    "format": "biome format . --write",
-    "verify:full": "npm run lint && node --experimental-strip-types tools/verify/run-full.mjs"
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@astrojs/starlight": "^0.39.2",
-    "@astrojs/svelte": "^8.1.0",
-    "@astrojs/vercel": "^10.0.7",
-    "astro": "^6.2.2",
-    "svelte": "^5.55.6",
-    "typescript": "^5.9.3"
-  },
-  "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
-    "@playwright/test": "^1.59.1",
-    "playwright": "^1.59.1"
-  },
-  "description": "Astro + Svelte RuneScape daily task tracker.",
-  "overrides": {
-    "yaml": "2.9.0",
-    "path-to-regexp": "^6.3.0"
-  }
+	"name": "dailyscape",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"dev": "node node_modules/astro/bin/astro.mjs dev",
+		"build": "node node_modules/astro/bin/astro.mjs build",
+		"preview": "node node_modules/astro/bin/astro.mjs preview",
+		"astro": "node node_modules/astro/bin/astro.mjs",
+		"check": "node node_modules/astro/bin/astro.mjs check",
+		"test": "node --experimental-strip-types --test tests/**/*.test.js",
+		"audit:content": "node --experimental-strip-types tools/audit/validate-content.mjs",
+		"audit:routes": "node --experimental-strip-types tools/audit/verify-routes.mjs",
+		"audit:no-bootstrap": "node --experimental-strip-types tools/audit/no-bootstrap-js-controls.mjs",
+		"audit:no-bootstrap-vocabulary": "node --experimental-strip-types tools/audit/no-bootstrap-class-vocabulary.mjs",
+		"audit:no-legacy-surface": "node --experimental-strip-types tools/audit/no-legacy-shipped-surface.mjs",
+		"audit:no-hash-links": "node --experimental-strip-types tools/audit/no-hash-action-links.mjs",
+		"audit:dependencies": "node --experimental-strip-types tools/audit/dependency-audit.mjs",
+		"audit:timers": "node --experimental-strip-types tools/audit/validate-timers.mjs",
+		"audit:headings": "node --experimental-strip-types tools/audit/heading-audit.mjs",
+		"audit:asset-budget": "node --experimental-strip-types tools/audit/asset-budget.mjs",
+		"test:e2e": "node node_modules/astro/bin/astro.mjs build && node tools/e2e/run-playwright.mjs",
+		"test:e2e:install": "playwright install --with-deps chromium",
+		"lint": "biome check src tests tools astro.config.mjs playwright.config.js svelte.config.js package.json tsconfig.json vercel.json biome.json",
+		"format": "biome format src tests tools astro.config.mjs playwright.config.js svelte.config.js package.json tsconfig.json vercel.json biome.json --write",
+		"verify:full": "npm run lint && node --experimental-strip-types tools/verify/run-full.mjs"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.9.9",
+		"@astrojs/starlight": "^0.39.2",
+		"@astrojs/svelte": "^8.1.0",
+		"@astrojs/vercel": "^10.0.7",
+		"@tanstack/svelte-query": "^6.1.29",
+		"astro": "^6.2.2",
+		"picocolors": "^1.1.1",
+		"svelte": "^5.55.6",
+		"typescript": "^5.9.3"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@axe-core/playwright": "^4.11.3",
+		"@playwright/test": "^1.59.1",
+		"playwright": "^1.59.1"
+	},
+	"description": "Astro + Svelte RuneScape daily task tracker.",
+	"overrides": {
+		"yaml": "2.9.0",
+		"path-to-regexp": "^6.3.0"
+	}
 }

@@ -1,7 +1,7 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
+import test from 'node:test';
 
-import { normalizeSettings } from '../../../src/lib/features/settings/settings-service.ts';
+import { normalizeSettings } from '../../../src/features/settings/settings-service.ts';
 
 test('settings normalize hides completed tasks by default', () => {
 	const settings = normalizeSettings({});

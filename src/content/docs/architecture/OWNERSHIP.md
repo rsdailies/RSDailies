@@ -1,9 +1,14 @@
+---
+title: Ownership
+description: Module ownership boundaries for layouts, features, entities, shared utilities, and content.
+---
+
 # Ownership boundaries
 
 ## Astro owns
 
 - route files in `src/pages/`
-- global document layout in `src/layouts/`
+- global document layout in `src/app/layout/`
 - content collection loading through `src/content.config.ts`
 - static HTML composition before hydration
 
@@ -33,3 +38,4 @@ Do not add any new code that:
 - imperatively injects tracker rows into the dashboard
 - keeps a duplicate renderer beside Svelte
 - uses old injected shell HTML as the active UI source
+- imports `src/app/styles/legacy-tracker/` into active layouts

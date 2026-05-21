@@ -1,3 +1,8 @@
+---
+title: Install Troubleshooting
+description: Installation and verification troubleshooting notes for local development environments.
+---
+
 # Install troubleshooting
 
 ## Expected install path
@@ -7,6 +12,8 @@ npm install
 npm run verify:full
 npm run dev
 ```
+
+`npm install` provisions the local Biome executable used by `npm run lint` and the first step of `npm run verify:full`.
 
 ## Registry safety
 
@@ -20,6 +27,8 @@ audit=true
 ```
 
 This prevents lockfile entries generated in a private CI or AI sandbox registry from leaking into local installs. The checked `package-lock.json` should not contain private registry hosts.
+
+If `npm audit` fails because the registry audit endpoint is unavailable, treat that as an operational warning and rerun the command later. It is not equivalent to a zero-vulnerability result.
 
 ## Windows EPERM cleanup warnings
 

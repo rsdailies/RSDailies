@@ -32,7 +32,7 @@ export function migrateLegacySectionValue(
 	profileName: string,
 	sectionValueKey: string,
 	profileStorageKey: (profileName: string, key: string) => string,
-	transform = (value: any) => value
+	transform = (value: any) => value,
 ) {
 	const legacyKey = profileStorageKey(profileName, `${sectionValueKey}:${LEGACY_TIMER_SECTION_KEY}`);
 	const nextKey = profileStorageKey(profileName, `${sectionValueKey}:${TIMER_SECTION_KEY}`);
@@ -57,7 +57,12 @@ export function migrateLegacyPageMode(storage: Storage, profileName: string, key
 	return true;
 }
 
-export function migrateLegacyTimerStorage(storage: Storage, profileName: string, profileStorageKey: any, StorageKeyBuilder: any) {
+export function migrateLegacyTimerStorage(
+	storage: Storage,
+	profileName: string,
+	profileStorageKey: any,
+	StorageKeyBuilder: any,
+) {
 	const legacyKey = profileStorageKey(profileName, 'farmingTimers');
 	const nextKey = profileStorageKey(profileName, StorageKeyBuilder.timers());
 	const hasLegacyValue = storage.getItem(legacyKey) !== null;
@@ -70,7 +75,12 @@ export function migrateLegacyTimerStorage(storage: Storage, profileName: string,
 	return true;
 }
 
-export function migrateLegacyOverviewPins(storage: Storage, profileName: string, profileStorageKey: any, StorageKeyBuilder: any) {
+export function migrateLegacyOverviewPins(
+	storage: Storage,
+	profileName: string,
+	profileStorageKey: any,
+	StorageKeyBuilder: any,
+) {
 	const key = profileStorageKey(profileName, StorageKeyBuilder.overviewPins());
 	const pins = loadJson(key, null, storage);
 	const nextPins = renameObjectKeys(pins, [[`${LEGACY_TIMER_SECTION_KEY}::`, `${TIMER_SECTION_KEY}::`]]);
@@ -81,10 +91,17 @@ export function migrateLegacyOverviewPins(storage: Storage, profileName: string,
 	return true;
 }
 
-export function migrateLegacyCollapsedBlocks(storage: Storage, profileName: string, profileStorageKey: any, StorageKeyBuilder: any) {
+export function migrateLegacyCollapsedBlocks(
+	storage: Storage,
+	profileName: string,
+	profileStorageKey: any,
+	StorageKeyBuilder: any,
+) {
 	const key = profileStorageKey(profileName, StorageKeyBuilder.collapsedBlocks());
 	const collapsedBlocks = loadJson(key, null, storage);
-	const nextBlocks = renameObjectKeys(collapsedBlocks, [[`group-collapse-${LEGACY_TIMER_SECTION_KEY}`, `group-collapse-${TIMER_SECTION_KEY}`]]);
+	const nextBlocks = renameObjectKeys(collapsedBlocks, [
+		[`group-collapse-${LEGACY_TIMER_SECTION_KEY}`, `group-collapse-${TIMER_SECTION_KEY}`],
+	]);
 
 	if (!nextBlocks || JSON.stringify(nextBlocks) === JSON.stringify(collapsedBlocks)) return false;
 

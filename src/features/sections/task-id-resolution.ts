@@ -12,7 +12,9 @@ function flattenGroupTaskIds(sectionId: string, groups: any[] = []) {
 	return groups.flatMap((group) => {
 		const timers = Array.isArray(group.timers) ? group.timers : [];
 		const plots = Array.isArray(group.plots) ? group.plots : [];
-		const timerChildIds = timers.flatMap((timer: any) => plots.map((plot: any) => `${sectionId}::${timer.id}::${plot.id}`));
+		const timerChildIds = timers.flatMap((timer: any) =>
+			plots.map((plot: any) => `${sectionId}::${timer.id}::${plot.id}`),
+		);
 		const plotIdsWithoutTimers = timers.length === 0 ? plots.map((plot: any) => plot.id) : [];
 		return [...timerChildIds, ...plotIdsWithoutTimers].filter(Boolean);
 	});
@@ -44,7 +46,9 @@ export function getContentSectionTaskIdsByCadence(sectionId: string, cadence: st
 	}
 
 	const normalizedCadence = String(cadence || '').toLowerCase();
-	const topLevelTasks = section.items.filter((task: any) => String(task?.reset || 'daily').toLowerCase() === normalizedCadence);
-	
+	const topLevelTasks = section.items.filter(
+		(task: any) => String(task?.reset || 'daily').toLowerCase() === normalizedCadence,
+	);
+
 	return flattenTaskIds(topLevelTasks);
 }

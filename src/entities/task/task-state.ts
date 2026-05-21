@@ -11,7 +11,7 @@ export function determineTaskState(
 		timerSectionKey = 'timers',
 		now = Date.now(),
 		gameContext = null,
-	}: any
+	}: any,
 ) {
 	// PRE-CHECK: If the task belongs to a different game, hide it immediately to prevent leakage.
 	if (gameContext && task?.game && task.game !== gameContext) {
@@ -32,7 +32,7 @@ export function determineTaskState(
 		if (sectionKey === timerSectionKey || !!task.isTimerParent) {
 			return 'running';
 		}
-		
+
 		// Other tasks (Gathering/Daily) vanish UNLESS showCompleted is enabled
 		return isShowCompletedEnabled ? 'running' : 'hide';
 	}

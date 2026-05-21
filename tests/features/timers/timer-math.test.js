@@ -1,15 +1,15 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
+import test from 'node:test';
 
-import { getTimerMinutes } from '../../../src/lib/features/timers/timer-math.ts';
+import { getTimerMinutes } from '../../../src/features/timers/services/timer-math.ts';
 
 test('timer math preserves base farming duration without speedy growth', () => {
 	assert.equal(
 		getTimerMinutes(
 			{ timerCategory: 'farming', useHerbSetting: true, cycleMinutes: 20, stages: 4 },
-			{ herbTicks: 4, growthOffsetMinutes: 0 }
+			{ herbTicks: 4, growthOffsetMinutes: 0 },
 		),
-		80
+		80,
 	);
 });
 
@@ -17,8 +17,8 @@ test('timer math applies speedy growth for farming timers', () => {
 	assert.equal(
 		getTimerMinutes(
 			{ timerCategory: 'farming', useHerbSetting: true, cycleMinutes: 20, stages: 4 },
-			{ herbTicks: 3, growthOffsetMinutes: 20 }
+			{ herbTicks: 3, growthOffsetMinutes: 20 },
 		),
-		60
+		60,
 	);
 });

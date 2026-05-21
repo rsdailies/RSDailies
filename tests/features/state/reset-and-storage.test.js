@@ -1,11 +1,11 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
+import test from 'node:test';
 
-import { StorageKeyBuilder } from '../../../src/lib/shared/storage/keys-builder.ts';
-import * as StorageService from '../../../src/lib/shared/storage/storage-service.ts';
-import { checkAutoReset } from '../../../src/lib/features/sections/auto-reset.ts';
-import { resetSectionView } from '../../../src/lib/features/sections/reset-view.ts';
-import { upsertCustomTask } from '../../../src/lib/features/custom-tasks/custom-task-state.ts';
+import { upsertCustomTask } from '../../../src/features/custom-tasks/custom-task-state.ts';
+import { checkAutoReset } from '../../../src/features/sections/auto-reset.ts';
+import { resetSectionView } from '../../../src/features/sections/reset-view.ts';
+import { StorageKeyBuilder } from '../../../src/shared/storage/keys-builder.ts';
+import * as StorageService from '../../../src/shared/storage/storage-service.ts';
 import { createMemoryStorage } from '../../helpers/memory-storage.js';
 
 function initMemoryProfile() {

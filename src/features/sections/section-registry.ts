@@ -1,6 +1,8 @@
-import { TRACKER_SECTIONS } from '../../domain/static-content.ts';
+import { TRACKER_SECTIONS } from '@entities/task/section-definitions.ts';
+import type { GameId, TrackerSection } from '@entities/task/types.ts';
 
-const sectionById = new Map(TRACKER_SECTIONS.map((section) => [section.id, section]));
+const sections = TRACKER_SECTIONS as TrackerSection[];
+const sectionById = new Map<string, TrackerSection>(sections.map((section) => [section.id, section]));
 
 export function requireTrackerSection(sectionId: string) {
 	const section = sectionById.get(sectionId);
@@ -11,11 +13,11 @@ export function requireTrackerSection(sectionId: string) {
 }
 
 export function getTrackerSectionDefinitions() {
-	return TRACKER_SECTIONS;
+	return sections;
 }
 
-export function getTrackerSections(game: string | null = null) {
-	return game ? TRACKER_SECTIONS.filter((section) => section.game === game) : TRACKER_SECTIONS;
+export function getTrackerSections(game: GameId | string | null = null) {
+	return game ? sections.filter((section) => section.game === game) : sections;
 }
 
 export function getTrackerSection(sectionId: string) {
@@ -24,17 +26,17 @@ export function getTrackerSection(sectionId: string) {
 
 export const getContentSectionDefinition = getTrackerSection;
 
-export function getTrackerSectionIds(game: string | null = null) {
+export function getTrackerSectionIds(game: GameId | string | null = null) {
 	return getTrackerSections(game).map((section) => section.id);
 }
 
 export function getTrackerSectionIdMaps() {
-	return getTrackerSections().reduce(
+	return getTrackerSections().reduce<{ containerIds: Record<string, string>; tableIds: Record<string, string> }>(
 		(maps, section) => {
-			maps.containerIds[section.id] = section.containerId;
-			maps.tableIds[section.id] = section.tableId;
+			if (section.containerId) maps.containerIds[section.id] = section.containerId;
+			if (section.tableId) maps.tableIds[section.id] = section.tableId;
 			return maps;
 		},
-		{ containerIds: {} as Record<string, string>, tableIds: {} as Record<string, string> }
+		{ containerIds: {}, tableIds: {} },
 	);
 }

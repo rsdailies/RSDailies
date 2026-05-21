@@ -1,3 +1,8 @@
+---
+title: No Legacy Policy
+description: Rules for removing legacy runtime patterns and keeping the app on the Astro and Svelte stack.
+---
+
 # No legacy renderer policy
 
 The migration goal is not to preserve a bridge forever. The old imperative renderer was removed from the active project because it competed with Svelte and caused duplicate/ambiguous rendering.

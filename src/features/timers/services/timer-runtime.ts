@@ -1,6 +1,6 @@
-import { formatDurationMs } from '@shared/time/formatters';
+import { getSettings } from '@features/settings/settings-service.ts';
 import { StorageKeyBuilder } from '@shared/storage/keys-builder';
-import { getSettings } from '../settings/settings-service.ts';
+import { formatDurationMs } from '@shared/time/formatters';
 import { getTimerMinutes } from './timer-math.ts';
 
 type LoadFn = <T = any>(key: string, fallback?: T) => T;
@@ -44,8 +44,12 @@ function clearChildProgressForTimer(taskId: string, { load, save }: { load?: Loa
 	const read = reader(load);
 	const write = writer(save);
 	const prefix = `${TIMER_SECTION_KEY}::${taskId}::`;
-	const completed = { ...(read<Record<string, boolean>>(StorageKeyBuilder.sectionCompletion(TIMER_SECTION_KEY), {}) || {}) };
-	const hiddenRows = { ...(read<Record<string, boolean>>(StorageKeyBuilder.sectionHiddenRows(TIMER_SECTION_KEY), {}) || {}) };
+	const completed = {
+		...(read<Record<string, boolean>>(StorageKeyBuilder.sectionCompletion(TIMER_SECTION_KEY), {}) || {}),
+	};
+	const hiddenRows = {
+		...(read<Record<string, boolean>>(StorageKeyBuilder.sectionHiddenRows(TIMER_SECTION_KEY), {}) || {}),
+	};
 
 	let changed = false;
 	Object.keys(completed).forEach((key) => {
@@ -72,7 +76,11 @@ function clearChildProgressForTimer(taskId: string, { load, save }: { load?: Loa
 
 export function startTimer(
 	task: any,
-	{ load, save, getSettingsValue = getSettings }: { load?: LoadFn; save?: SaveFn; getSettingsValue?: typeof getSettings } = {}
+	{
+		load,
+		save,
+		getSettingsValue = getSettings,
+	}: { load?: LoadFn; save?: SaveFn; getSettingsValue?: typeof getSettings } = {},
 ) {
 	if (!task?.id) return false;
 

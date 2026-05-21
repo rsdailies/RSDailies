@@ -1,0 +1,10 @@
+[   97179ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:4321/@vite/client:1598
+[   99214ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4321/node_modules/.vite/deps/svelte.js?v=447bbb68:0
+[   99216ms] [ERROR] [astro-island] Error hydrating %s /src/features/tracker/index.ts TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4321/src/features/tracker/index.ts @ http://127.0.0.1:4321/rs3/tasks:2472
+[   99220ms] [ERROR] [astro-island] Error hydrating %s /src/features/tracker/index.ts TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4321/node_modules/@astrojs/svelte/dist/client.svelte.js @ http://127.0.0.1:4321/rs3/tasks:2472
+[   99220ms] [ERROR] [astro-island] Error hydrating %s /src/features/navigation/components/Navbar.svelte TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4321/src/features/navigation/components/Navbar.svelte @ http://127.0.0.1:4321/rs3/tasks:2472
+[   99220ms] [ERROR] [astro-island] Error hydrating %s /src/shared/ui/modal/ModalContainer.svelte TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4321/node_modules/@astrojs/svelte/dist/client.svelte.js @ http://127.0.0.1:4321/rs3/tasks:2472
+[   99220ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4321/node_modules/.vite/deps/svelte_store.js?v=447bbb68:0
+[   99220ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4321/node_modules/.vite/deps/svelte_internal_disclose-version.js?v=447bbb68:0
+[   99220ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4321/node_modules/.vite/deps/svelte_internal_flags_legacy.js?v=447bbb68:0
+[   99220ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4321/node_modules/.vite/deps/svelte_internal_client.js?v=447bbb68:0

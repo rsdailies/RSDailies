@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const routes = [
-	{ route: '/rs3/tasks', file: 'dist/rs3/tasks/index.html', heading: 'Daily Tasks' },
-	{ route: '/rs3/gathering', file: 'dist/rs3/gathering/index.html', heading: 'Gathering' },
-	{ route: '/rs3/timers', file: 'dist/rs3/timers/index.html', heading: 'Timers' },
-	{ route: '/osrs/tasks', file: 'dist/osrs/tasks/index.html', heading: 'Daily Tasks' },
+	{ route: '/rs3/tasks', file: 'dist/client/rs3/tasks/index.html', heading: 'Daily Tasks' },
+	{ route: '/rs3/gathering', file: 'dist/client/rs3/gathering/index.html', heading: 'Gathering' },
+	{ route: '/rs3/timers', file: 'dist/client/rs3/timers/index.html', heading: 'Timers' },
+	{ route: '/osrs/tasks', file: 'dist/client/osrs/tasks/index.html', heading: 'Daily Tasks' },
 ];
 
 for (const route of routes) {

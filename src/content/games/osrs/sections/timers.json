@@ -1,0 +1,81 @@
+{
+	"id": "osrs-timers",
+	"game": "osrs",
+	"label": "Timers & Runs",
+	"displayOrder": 103,
+	"resetFrequency": "rolling",
+	"renderVariant": "timer-groups",
+	"shell": {
+		"columns": ["activity_col_name", "activity_col_notes", "activity_col_status"],
+		"showAddButton": false,
+		"showResetButton": true,
+		"showCountdown": false
+	},
+	"items": [],
+	"containerId": "osrstimers-container",
+	"tableId": "osrstimers-table",
+	"includedInAllMode": false,
+	"supportsTaskNotifications": false,
+	"groups": [
+		{
+			"id": "osrs-bird-houses",
+			"label": "Bird House Run",
+			"plots": [
+				{
+					"id": "bird-house-1",
+					"name": "Bird House 1",
+					"wiki": "https://oldschool.runescape.wiki/w/Bird_house_trapping",
+					"cycleMinutes": 50
+				},
+				{
+					"id": "bird-house-2",
+					"name": "Bird House 2",
+					"wiki": "https://oldschool.runescape.wiki/w/Bird_house_trapping",
+					"cycleMinutes": 50
+				},
+				{
+					"id": "bird-house-3",
+					"name": "Bird House 3",
+					"wiki": "https://oldschool.runescape.wiki/w/Bird_house_trapping",
+					"cycleMinutes": 50
+				},
+				{
+					"id": "bird-house-4",
+					"name": "Bird House 4",
+					"wiki": "https://oldschool.runescape.wiki/w/Bird_house_trapping",
+					"cycleMinutes": 50
+				}
+			]
+		},
+		{
+			"id": "osrs-herbs",
+			"label": "Herb Run",
+			"plots": [
+				{
+					"id": "herb-catherby",
+					"name": "Catherby",
+					"wiki": "https://oldschool.runescape.wiki/w/Herb_patch",
+					"cycleMinutes": 80
+				},
+				{
+					"id": "herb-falador",
+					"name": "Falador",
+					"wiki": "https://oldschool.runescape.wiki/w/Herb_patch",
+					"cycleMinutes": 80
+				},
+				{
+					"id": "herb-ardougne",
+					"name": "Ardougne",
+					"wiki": "https://oldschool.runescape.wiki/w/Herb_patch",
+					"cycleMinutes": 80
+				},
+				{
+					"id": "herb-phasmatys",
+					"name": "Port Phasmatys",
+					"wiki": "https://oldschool.runescape.wiki/w/Herb_patch",
+					"cycleMinutes": 80
+				}
+			]
+		}
+	]
+}

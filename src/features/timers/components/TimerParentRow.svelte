@@ -1,6 +1,6 @@
 <script lang="ts">
-	// Reserved for the next visual pass if timer parent rows need richer controls than SubgroupHeader.
-	let { name = '', note = '' } = $props();
+// Reserved for the next visual pass if timer parent rows need richer controls than SubgroupHeader.
+let { name = '', note = '' } = $props();
 </script>
 
 <tr class="header_like_row subgroup-header-row farming-parent-row">

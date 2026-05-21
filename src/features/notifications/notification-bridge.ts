@@ -3,7 +3,7 @@ import {
 	getTaskNextReset as getHostedTaskNextReset,
 	maybeBrowserNotify as hostedMaybeBrowserNotify,
 	maybeWebhookNotify as hostedMaybeWebhookNotify,
-} from '../../logic/notifications.ts';
+} from './notifications.ts';
 
 type LoadFn = <T = any>(key: string, fallback?: T) => T;
 type SaveFn = (key: string, value: any) => void;
@@ -32,11 +32,7 @@ export function getTaskAlertTarget(task: any) {
 	return new Date(nextReset.getTime() - alertDaysBeforeReset * 86400000);
 }
 
-export function maybeNotifyTaskAlert(
-	task: any,
-	sectionKey: string,
-	{ load, save }: { load: LoadFn; save: SaveFn }
-) {
+export function maybeNotifyTaskAlert(task: any, sectionKey: string, { load, save }: { load: LoadFn; save: SaveFn }) {
 	if (!task?.reset) return;
 
 	const target = getTaskAlertTarget(task);
@@ -55,9 +51,6 @@ export function maybeNotifyTaskAlert(
 	save(`notified:${sectionKey}`, notified);
 }
 
-export function cleanupTaskNotificationsForReset(
-	sectionKey: string,
-	{ removeKey }: { removeKey?: RemoveFn } = {}
-) {
+export function cleanupTaskNotificationsForReset(sectionKey: string, { removeKey }: { removeKey?: RemoveFn } = {}) {
 	removeKey?.(`notified:${sectionKey}`);
 }

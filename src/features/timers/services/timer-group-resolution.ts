@@ -38,11 +38,7 @@ export function resolveTimerGroups(groups: any[]) {
 				const timerSubgroups = Array.isArray(group?.timers)
 					? group.timers.map((timer: any, index: number) => {
 							const timerTask = normalizeTimerEntry(timer, group, index);
-							const plots = Array.isArray(timer?.plots)
-								? timer.plots
-								: Array.isArray(group?.plots)
-									? group.plots
-									: [];
+							const plots = Array.isArray(timer?.plots) ? timer.plots : Array.isArray(group?.plots) ? group.plots : [];
 
 							return {
 								id: timerTask.id,
@@ -54,7 +50,7 @@ export function resolveTimerGroups(groups: any[]) {
 									id: plot.id,
 								})),
 							};
-					  })
+						})
 					: [];
 
 				return {
@@ -63,6 +59,6 @@ export function resolveTimerGroups(groups: any[]) {
 					note: group.note || '',
 					subgroups: [...timerSubgroups, ...normalizeStandalonePlots(group)],
 				};
-		  })
+			})
 		: [];
 }

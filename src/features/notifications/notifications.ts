@@ -1,4 +1,4 @@
-import type { Settings } from '../features/settings/settings-defaults.ts';
+import type { Settings } from '@features/settings/settings-defaults.ts';
 import { nextDailyBoundary, nextMonthlyBoundary, nextWeeklyBoundary } from '@shared/time/boundaries';
 
 export function maybeBrowserNotify(title: string, body: string, settings: Settings) {

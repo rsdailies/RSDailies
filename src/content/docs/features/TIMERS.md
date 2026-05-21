@@ -1,6 +1,11 @@
+---
+title: Timers
+description: Timer-group rendering rules, farming behavior, and cooldown handling notes.
+---
+
 # Timers and farming page
 
-The timers page is rendered by `src/components/tracker/timers/TimerGroups.svelte`.
+The timers page is rendered by `src/features/tracker/components/TimerGroups.svelte` through `src/features/tracker/components/section/SectionBody.svelte`.
 
 ## Data shape
 

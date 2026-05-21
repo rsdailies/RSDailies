@@ -1,25 +1,21 @@
 {
-  "id": "osrsmonthly",
-  "label": "Monthlies",
-  "game": "osrs",
-  "displayOrder": 103,
-  "resetFrequency": "monthly",
-  "renderVariant": "standard",
-  "shell": {
-    "columns": [
-      "activity_col_name",
-      "activity_col_notes",
-      "activity_col_status"
-    ],
-    "extraTableClasses": [],
-    "showAddButton": false,
-    "showResetButton": true,
-    "showCountdown": true,
-    "countdownId": "countdown-osrsmonthly"
-  },
-  "items": [],
-  "containerId": "osrsmonthly-container",
-  "tableId": "osrsmonthly-table",
-  "includedInAllMode": true,
-  "supportsTaskNotifications": false
+	"id": "osrs-monthly",
+	"label": "Monthlies",
+	"game": "osrs",
+	"displayOrder": 103,
+	"resetFrequency": "monthly",
+	"renderVariant": "standard",
+	"shell": {
+		"columns": ["activity_col_name", "activity_col_notes", "activity_col_status"],
+		"extraTableClasses": [],
+		"showAddButton": false,
+		"showResetButton": true,
+		"showCountdown": true,
+		"countdownId": "countdown-osrsmonthly"
+	},
+	"items": [],
+	"containerId": "osrsmonthly-container",
+	"tableId": "osrsmonthly-table",
+	"includedInAllMode": true,
+	"supportsTaskNotifications": false
 }

@@ -1,13 +1,14 @@
+import { StorageKeyBuilder } from './keys-builder.ts';
 import {
 	ACTIVE_PROFILE_KEY,
 	GLOBAL_PROFILES_KEY,
 	STORAGE_EVENT_NAME,
+	STORAGE_EXPORT_SCHEMA_VERSION,
 	STORAGE_ROOT,
 	STORAGE_SCHEMA_VERSION,
 	createProfileKey,
 	createProfilePrefix,
 } from './namespace.ts';
-import { StorageKeyBuilder } from './keys-builder.ts';
 
 type StoragePayload = Storage | null;
 
@@ -26,7 +27,7 @@ function emitStorageChange(detail: Record<string, unknown>) {
 				profile: currentProfileName,
 				...detail,
 			},
-		})
+		}),
 	);
 }
 
@@ -56,14 +57,18 @@ function removeKeyInternal(key: string, storage: StoragePayload) {
 }
 
 function ensureProfilesGlobal(storage: StoragePayload) {
-	const profiles = loadJsonInternal(GLOBAL_PROFILES_KEY, null, storage);
+	const profiles = loadJsonInternal<string[] | null>(GLOBAL_PROFILES_KEY, null, storage);
 	if (!Array.isArray(profiles) || profiles.length === 0) {
 		saveJsonInternal(GLOBAL_PROFILES_KEY, ['default'], storage);
 	}
 }
 
 function ensureSchema(storage: StoragePayload) {
-	const schemaVersion = loadJsonInternal(createProfileKey(createProfilePrefix(currentProfileName), StorageKeyBuilder.schemaVersion()), 0, storage);
+	const schemaVersion = loadJsonInternal(
+		createProfileKey(createProfilePrefix(currentProfileName), StorageKeyBuilder.schemaVersion()),
+		0,
+		storage,
+	);
 	if (!schemaVersion) {
 		save(StorageKeyBuilder.schemaVersion(), STORAGE_SCHEMA_VERSION);
 	}
@@ -150,7 +155,11 @@ export function getAllProfilesGlobal(): string[] {
 }
 
 export function saveAllProfilesGlobal(profileList: string[]) {
-	const unique = Array.from(new Set((Array.isArray(profileList) ? profileList : []).map((profile) => String(profile || '').trim()).filter(Boolean)));
+	const unique = Array.from(
+		new Set(
+			(Array.isArray(profileList) ? profileList : []).map((profile) => String(profile || '').trim()).filter(Boolean),
+		),
+	);
 	saveGlobal(GLOBAL_PROFILES_KEY, unique.length > 0 ? unique : ['default']);
 }
 
@@ -201,7 +210,9 @@ export function listCurrentProfileEntries() {
 function encodeBase64Unicode(value: string) {
 	const bytes = new TextEncoder().encode(value);
 	let binary = '';
-	bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+	bytes.forEach((byte) => {
+		binary += String.fromCharCode(byte);
+	});
 	return btoa(binary);
 }
 
@@ -216,7 +227,7 @@ export function buildExportToken() {
 
 	const profile = getActiveProfile();
 	const payload = {
-		exportVersion: 1,
+		exportVersion: STORAGE_EXPORT_SCHEMA_VERSION,
 		storageSchemaVersion: STORAGE_SCHEMA_VERSION,
 		exportedAt: new Date().toISOString(),
 		profile,

@@ -1,5 +1,5 @@
-import { StorageKeyBuilder } from '@shared/storage/keys-builder';
-import { writer, type LoadFn, type RemoveFn, type SaveFn } from './reset-internals.ts';
+import { StorageKeyBuilder } from '../../shared/storage/keys-builder.ts';
+import { type LoadFn, type RemoveFn, type SaveFn, writer } from './reset-internals.ts';
 export function resetSectionView(sectionKey: string, { save }: { load?: LoadFn; save?: SaveFn; removeKey?: RemoveFn }) {
 	const write = writer(save);
 	write(StorageKeyBuilder.sectionCompletion(sectionKey), {});
@@ -11,4 +11,6 @@ export function resetSectionView(sectionKey: string, { save }: { load?: LoadFn; 
 	write(StorageKeyBuilder.sectionHidden(sectionKey), false);
 	if (sectionKey === 'timers') write(StorageKeyBuilder.timers(), {});
 }
-export function clearSectionCompletionsOnly(sectionKey: string, { save }: { save?: SaveFn }) { writer(save)(StorageKeyBuilder.sectionCompletion(sectionKey), {}); }
+export function clearSectionCompletionsOnly(sectionKey: string, { save }: { save?: SaveFn }) {
+	writer(save)(StorageKeyBuilder.sectionCompletion(sectionKey), {});
+}

@@ -328,8 +328,7 @@ Dailyscape is built with:
 - Astro
 - Svelte
 - TypeScript
-- Bootstrap
-- CSS
+- Custom CSS tokens and component styles
 - Static JSON content collections
 
 Astro handles:
@@ -355,17 +354,24 @@ Svelte handles:
 
 Main project folders:
 
-- `public/` — static images and public assets
-- `src/pages/` — Astro routes
-- `src/layouts/` — shared page layouts
-- `src/components/` — Svelte and Astro UI components
-- `src/content/` — tracker page and section data
-- `src/stores/` — client-side state
-- `src/styles/` — visual styling
-- `src/bootstrap/` — browser startup entry files
-- `docs/` — deeper project documentation
-- `tests/` — project tests
-- `tools/` — validation and audit scripts
+- `public/` � static images and public assets
+- `src/pages/` � Astro routes
+- `src/app/` � shared Astro shell layout, app state, and global style layers
+- `src/features/` � Svelte feature modules for tracker, timers, settings, navigation, and modals
+- `src/entities/` � domain types plus static content adapters
+- `src/shared/` � storage, time, API helpers, shared UI, and utilities
+- `src/content/` � tracker page and section data
+- `src/content/docs/` � internal project documentation
+- `tests/` � project tests
+- `tools/` � validation and audit scripts
+
+Current source layout is centered around:
+
+- `src/app/` â€” shell layout, app state, and global style entrypoints
+- `src/features/` â€” tracker, timers, navigation, settings, and modal workflows
+- `src/entities/` â€” task and game domain models plus static content adapters
+- `src/shared/` â€” storage, time, utilities, and shared UI primitives
+- `src/content/docs/` â€” internal documentation that replaced the old standalone docs tree
 
 Tracker content lives under:
 
@@ -472,25 +478,28 @@ Runs the main verification sequence.
 
 This is the best command to run before committing or deploying.
 
+It includes repo-managed Biome linting, Astro checks, unit tests, custom audits, build verification, and Playwright E2E coverage.
+
+`npm audit` remains part of the gate. Real vulnerability findings still fail verification. If the npm audit service itself is unavailable, the run continues with a warning and security status is considered incomplete until `npm audit` can be rerun successfully.
 ---
 
 ## Documentation
 
-More detailed documentation lives in the `docs/` folder.
+More detailed documentation lives in the `src/content/docs/` tree.
 
 Recommended docs areas:
 
-- `docs/architecture/`
-- `docs/features/`
-- `docs/framework/`
-- `docs/verification/`
-- `docs/deployment/`
-- `docs/agents/`
-- `docs/sources/`
+- `src/content/docs/architecture/`
+- `src/content/docs/features/`
+- `src/content/docs/framework/`
+- `src/content/docs/testing/`
+- `src/content/docs/deployment/`
+- `src/content/docs/agents/`
+- `src/content/docs/sources/`
 
 The root README is intended to be the GitHub front page for the project.
 
-The `docs/` folder is intended for deeper technical notes and maintenance details.
+The `src/content/docs/` tree is intended for deeper technical notes and maintenance details.
 
 ---
 
@@ -520,7 +529,7 @@ When changing the project, try to keep work scoped:
 - Content changes should stay in content files.
 - Visual changes should stay in style and component files.
 - Tracker behavior changes should stay in Svelte components and stores.
-- Documentation changes should stay in README or `docs/`.
+- Documentation changes should stay in README or `src/content/docs/`.
 - Verification changes should stay in tests or tools.
 
 This makes the project easier to review, maintain, and safely improve.
@@ -536,3 +545,4 @@ It is not affiliated with, endorsed by, sponsored by, or approved by Jagex.
 RuneScape, Old School RuneScape, and related names belong to their respective owners.
 
 ---
+

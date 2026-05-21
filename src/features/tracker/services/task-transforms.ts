@@ -13,7 +13,7 @@ export function transformTasks(tasks: any[], sectionId: string): any[] {
 function injectPenguinData(sourceTasks: any[]) {
 	// Note: We check window inside load(), but we keep the logic consistent with the original.
 	const penguinData = load('penguinWeeklyData', {} as Record<string, any>);
-	
+
 	return sourceTasks.map((task) => {
 		if (task.id !== 'penguins' || !task.childRows) return task;
 		return {

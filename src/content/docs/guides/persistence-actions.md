@@ -45,7 +45,7 @@ handler: async (input) => {
 ```
 
 ### TrackerStore Integration
-Located in `src/stores/tracker.svelte.ts`. It uses `debounce` to minimize network traffic.
+Located in `src/features/tracker/stores/tracker.svelte.ts`. It uses `debounce` to minimize network traffic.
 
 ```typescript
 async syncToServer() {

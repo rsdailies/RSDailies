@@ -1,90 +1,107 @@
 div.table_container:not([data-show-hidden="true"]) .activity_table tr[data-completed="hide"] {
-    display: none;
-    visibility: hidden;
+	display: none;
+	visibility: hidden;
 }
 
 div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="hide"] .activity_notes,
 div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="hide"] .activity_status {
-    background-color: #4a3a08;
-    box-shadow: inset 0 0 0 9999px #4a3a08;
-    cursor: not-allowed;
+	background-color: #4a3a08;
+	box-shadow: inset 0 0 0 9999px #4a3a08;
+	cursor: not-allowed;
 }
 
 div.table_container[data-show-hidden="true"] .activity_table tr:hover[data-completed="hide"] .activity_notes,
 div.table_container[data-show-hidden="true"] .activity_table tr:hover[data-completed="hide"] .activity_status {
-    background-color: #382c06;
-    box-shadow: inset 0 0 0 9999px #382c06;
+	background-color: #382c06;
+	box-shadow: inset 0 0 0 9999px #382c06;
 }
 
 div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="hide"] .activity_check_off {
-    display: inline-flex;
-    visibility: visible;
-    opacity: 0.55;
+	display: inline-flex;
+	visibility: visible;
+	opacity: 0.55;
 }
 
 div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="hide"] .activity_check_on {
-    display: none;
-    visibility: hidden;
+	display: none;
+	visibility: hidden;
 }
 
 div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="hide"] .activity_desc,
 div.table_container[data-show-hidden="true"] .activity_table tr[data-completed="hide"] .activity_name a {
-    opacity: 0.8;
+	opacity: 0.8;
 }
 
 /* keep completed rows visually green for the current tracker state model */
 .activity_table tr[data-completed="true"] td,
 .activity_table tr[data-completed="running"] td {
-    background-color: var(--ds-row-complete, #1b4300) !important;
-    box-shadow: inset 0 0 0 9999px var(--ds-row-complete, #1b4300) !important;
+	background-color: var(--ds-row-complete, #1b4300) !important;
+	box-shadow: inset 0 0 0 9999px var(--ds-row-complete, #1b4300) !important;
 }
 
 .activity_table tr[data-completed="true"] td.activity_name::before,
 .activity_table tr[data-completed="running"] td.activity_name::before {
-    background: transparent !important;
+	background: transparent !important;
 }
 
 /* Status Checkbox Logic - Global Parity */
+.ds-icon-box {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	border-radius: 3px;
+	vertical-align: middle;
+	background: transparent;
+}
+
+.ds-icon-check {
+	display: inline-block;
+	font-weight: bold;
+	color: #fff;
+	vertical-align: middle;
+}
+
 .activity_table tr[data-completed="true"] .activity_status .activity_check_on,
 .activity_table tr[data-completed="running"] .activity_status .activity_check_on {
-    display: inline-flex !important;
-    visibility: visible !important;
+	display: inline-flex !important;
+	visibility: visible !important;
 }
 
 .activity_table tr[data-completed="true"] .activity_status .activity_check_off,
 .activity_table tr[data-completed="running"] .activity_status .activity_check_off {
-    display: none !important;
-    visibility: hidden !important;
+	display: none !important;
+	visibility: hidden !important;
 }
 
 .activity_table tr[data-completed="false"] .activity_status .activity_check_on,
 .activity_table tr[data-completed="idle"] .activity_status .activity_check_on {
-    display: none !important;
-    visibility: hidden !important;
+	display: none !important;
+	visibility: hidden !important;
 }
 
 .activity_table tr[data-completed="false"] .activity_status .activity_check_off,
 .activity_table tr[data-completed="idle"] .activity_status .activity_check_off {
-    display: inline-flex !important;
-    visibility: visible !important;
+	display: inline-flex !important;
+	visibility: visible !important;
 }
 
 .activity_table tr:hover[data-completed="true"] td.activity_name::before {
-    background: transparent;
+	background: transparent;
 }
 
 .activity_table tr[data-completed="false"] .activity_notes,
 .activity_table tr[data-completed="false"] .activity_status,
 .activity_table tr[data-completed="idle"] .activity_notes,
 .activity_table tr[data-completed="idle"] .activity_status {
-    background-color: #590505;
-    box-shadow: inset 0 0 0 9999px #590505;
+	background-color: #590505;
+	box-shadow: inset 0 0 0 9999px #590505;
 }
 
 .activity_table tr:hover[data-completed="false"] .activity_notes,
 .activity_table tr:hover[data-completed="false"] .activity_status,
 .activity_table tr:hover[data-completed="idle"] .activity_notes,
 .activity_table tr:hover[data-completed="idle"] .activity_status {
-    background-color: #3b0404;
-    box-shadow: inset 0 0 0 9999px #3b0404;
+	background-color: #3b0404;
+	box-shadow: inset 0 0 0 9999px #3b0404;
 }

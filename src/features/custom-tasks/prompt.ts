@@ -1,5 +1,5 @@
+import { tracker } from '@features/tracker/stores/tracker.svelte';
 import { buildCustomTask, isValidOptionalUrl } from './builders.ts';
-import { tracker } from '../../../stores/tracker.svelte';
 
 export function promptAddCustomTask(deps: any) {
 	const { getCustomTasks, saveCustomTasks } = deps;

@@ -1,6 +1,11 @@
+---
+title: Vercel Deployment
+description: Deployment notes and expectations for the Vercel-hosted Astro build.
+---
+
 # Deployment notes
 
-The project is a static Astro site and can be deployed to Vercel or another static host.
+The project uses Astro server output with the Vercel adapter and should be deployed as a server-rendered Vercel app.
 
 ## Build command
 

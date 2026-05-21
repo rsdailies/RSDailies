@@ -1,3 +1,8 @@
+---
+title: OSRS
+description: Scope and current implementation status for the OSRS tracker shell.
+---
+
 # OSRS shell
 
 OSRS is intentionally visible but empty in this checkpoint.

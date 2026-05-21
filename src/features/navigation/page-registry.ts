@@ -1,3 +1,6 @@
+import { TRACKER_PAGES } from '@entities/task/page-definitions';
+import type { TrackerPage } from '@entities/task/types';
+
 export type Game = 'rs3' | 'osrs';
 
 export type NavItem =
@@ -18,60 +21,33 @@ export type CompatPage = {
 	sections?: readonly string[];
 };
 
-const pages: CompatPage[] = [
-	{
-		id: 'rs3-tasks',
-		mode: 'all',
-		game: 'rs3',
-		label: 'Tasks',
-		buttonLabel: 'Tasks',
-		navLabel: 'Tasks',
-		title: 'Tasks',
-		href: '/rs3/tasks',
-		order: 1,
-		aliases: ['tasks', 'all', 'daily', 'weekly', 'monthly'],
-		sections: ['rs3daily', 'rs3weekly', 'rs3monthly'],
-	},
-	{
-		id: 'rs3-gathering',
-		mode: 'gathering',
-		game: 'rs3',
-		label: 'Gathering',
-		buttonLabel: 'Gathering',
-		navLabel: 'Gathering',
-		title: 'Gathering',
-		href: '/rs3/gathering',
-		order: 2,
-		aliases: ['gathering'],
-		sections: ['gathering'],
-	},
-	{
-		id: 'rs3-timers',
-		mode: 'timers',
-		game: 'rs3',
-		label: 'Timers',
-		buttonLabel: 'Timers',
-		navLabel: 'Timers',
-		title: 'Timers',
-		href: '/rs3/timers',
-		order: 3,
-		aliases: ['timers'],
-		sections: ['timers'],
-	},
-	{
-		id: 'osrs-tasks',
-		mode: 'all',
-		game: 'osrs',
-		label: 'Tasks',
-		buttonLabel: 'Tasks',
-		navLabel: 'Tasks',
-		title: 'Tasks',
-		href: '/osrs/tasks',
-		order: 1,
-		aliases: ['tasks', 'all', 'daily', 'weekly', 'monthly'],
-		sections: ['osrsdaily', 'osrsweekly', 'osrsmonthly'],
-	},
-];
+const pageAliases: Record<string, readonly string[]> = {
+	'rs3-tasks': ['tasks', 'all', 'daily', 'weekly', 'monthly'],
+	'rs3-gathering': ['gathering'],
+	'rs3-timers': ['timers'],
+	'osrs-tasks': ['tasks', 'all', 'daily', 'weekly', 'monthly'],
+};
+
+function getPageMode(page: TrackerPage) {
+	if (page.id.endsWith('tasks')) return 'all';
+	if (page.id.endsWith('gathering')) return 'gathering';
+	if (page.id.endsWith('timers')) return 'timers';
+	return page.id;
+}
+
+const pages: CompatPage[] = (TRACKER_PAGES as TrackerPage[]).map((page) => ({
+	id: page.id,
+	mode: getPageMode(page),
+	game: page.game,
+	label: page.navLabel || page.title || page.id,
+	buttonLabel: page.navLabel || page.title || page.id,
+	navLabel: page.navLabel || page.title || page.id,
+	title: page.title,
+	href: page.route,
+	order: page.displayOrder,
+	aliases: pageAliases[page.id] || [],
+	sections: page.sections,
+}));
 
 export function getTrackerPrimaryNavItems(game: string | null = 'rs3'): NavItem[] {
 	return pages

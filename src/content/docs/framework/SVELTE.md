@@ -1,3 +1,8 @@
+---
+title: Svelte
+description: Svelte 5 component and state guidance used across the tracker application.
+---
+
 # Svelte notes
 
 This project uses Svelte 5 style component state in the tracker layer.

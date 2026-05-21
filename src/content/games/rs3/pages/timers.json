@@ -1,14 +1,12 @@
 {
-  "id": "rs3-timers",
-  "title": "Timers",
-  "navLabel": "Timers",
-  "game": "rs3",
-  "route": "/rs3/timers",
-  "layout": "tracker",
-  "displayOrder": 4,
-  "primaryNav": true,
-  "availableViews": [],
-  "sections": [
-    "timers"
-  ]
+	"id": "rs3-timers",
+	"title": "Timers",
+	"navLabel": "Timers",
+	"game": "rs3",
+	"route": "/rs3/timers",
+	"layout": "tracker",
+	"displayOrder": 4,
+	"primaryNav": true,
+	"availableViews": [],
+	"sections": ["timers"]
 }

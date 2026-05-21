@@ -1,3 +1,8 @@
+---
+title: Astro
+description: Astro-specific architectural notes, route ownership, and reference links for this project.
+---
+
 # Astro notes
 
 This project uses Astro for static page composition.

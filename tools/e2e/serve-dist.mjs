@@ -1,9 +1,9 @@
-import http from 'node:http';
 import { createReadStream, existsSync, statSync } from 'node:fs';
+import http from 'node:http';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const rootDir = normalize(join(fileURLToPath(new URL('.', import.meta.url)), '..', '..', 'dist'));
+const rootDir = normalize(join(fileURLToPath(new URL('.', import.meta.url)), '..', '..', 'dist', 'client'));
 const host = process.env.HOST || '127.0.0.1';
 const port = Number(process.env.PORT || 4174);
 

@@ -1,11 +1,15 @@
+import { resolveTimerGroups } from '@features/timers/services/timer-group-resolution.ts';
 import { getTrackerPage } from '../navigation/page-registry.ts';
 import { resolveWeeklyPenguinTask } from '../penguins/penguin-task-resolution.ts';
-import { resolveTimerGroups } from '../timers/timer-group-resolution.ts';
 import { getTrackerSection, getTrackerSections } from './section-registry.ts';
 
 function resolveSectionItems(
 	section: any,
-	options: { getCustomTasks?: () => any[]; getPenguinWeeklyData?: () => Record<string, any>; gatheringView?: string | null }
+	options: {
+		getCustomTasks?: () => any[];
+		getPenguinWeeklyData?: () => Record<string, any>;
+		gatheringView?: string | null;
+	},
 ) {
 	if (section.id === 'custom') {
 		return typeof options.getCustomTasks === 'function' ? options.getCustomTasks() : [];
@@ -26,22 +30,30 @@ function resolveSectionItems(
 	}
 
 	return items.map((task: any) =>
-		resolveWeeklyPenguinTask(task, typeof options.getPenguinWeeklyData === 'function' ? options.getPenguinWeeklyData() : {})
+		resolveWeeklyPenguinTask(
+			task,
+			typeof options.getPenguinWeeklyData === 'function' ? options.getPenguinWeeklyData() : {},
+		),
 	);
 }
 
-export function resolveTrackerSections(options: {
-	game?: string | null;
-	getCustomTasks?: () => any[];
-	getPenguinWeeklyData?: () => Record<string, any>;
-	gatheringView?: string | null;
-} = {}) {
+export function resolveTrackerSections(
+	options: {
+		game?: string | null;
+		getCustomTasks?: () => any[];
+		getPenguinWeeklyData?: () => Record<string, any>;
+		gatheringView?: string | null;
+	} = {},
+) {
 	const { game = null } = options;
 
-	return getTrackerSections(game).reduce((sections, section) => {
-		sections[section.id] = resolveSectionItems(section, options);
-		return sections;
-	}, {} as Record<string, any>);
+	return getTrackerSections(game).reduce(
+		(sections: Record<string, any>, section) => {
+			sections[section.id] = resolveSectionItems(section, options);
+			return sections;
+		},
+		{} as Record<string, any>,
+	);
 }
 
 export function resolveTrackerPage(
@@ -50,7 +62,7 @@ export function resolveTrackerPage(
 		game?: string | null;
 		getCustomTasks?: () => any[];
 		getPenguinWeeklyData?: () => Record<string, any>;
-	} = {}
+	} = {},
 ) {
 	const page = getTrackerPage(pageId, options.game || null);
 	if (!page) {
@@ -59,13 +71,15 @@ export function resolveTrackerPage(
 
 	return {
 		...page,
-		sections: (page.sections || []).map((sectionId) => {
-			const section = getTrackerSection(sectionId);
-			if (!section) return null;
-			return {
-				...section,
-				resolvedItems: resolveSectionItems(section, options),
-			};
-		}).filter(Boolean),
+		sections: (page.sections || [])
+			.map((sectionId) => {
+				const section = getTrackerSection(sectionId);
+				if (!section) return null;
+				return {
+					...section,
+					resolvedItems: resolveSectionItems(section, options),
+				};
+			})
+			.filter(Boolean),
 	};
 }

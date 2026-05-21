@@ -1,7 +1,6 @@
 <script lang="ts">
-	import Section from './Section.svelte';
-	import { tracker } from '@features/tracker';
-	let { sections = [] } = $props();
+import Section from './Section.svelte';
+let { sections = [] } = $props();
 </script>
 
 <div class="ds-layout-row" id="dashboard-root">

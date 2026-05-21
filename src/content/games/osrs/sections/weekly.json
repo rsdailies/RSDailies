@@ -1,25 +1,39 @@
 {
-  "id": "osrsweekly",
-  "label": "Weeklies",
-  "game": "osrs",
-  "displayOrder": 102,
-  "resetFrequency": "weekly",
-  "renderVariant": "standard",
-  "shell": {
-    "columns": [
-      "activity_col_name",
-      "activity_col_notes",
-      "activity_col_status"
-    ],
-    "extraTableClasses": [],
-    "showAddButton": false,
-    "showResetButton": true,
-    "showCountdown": true,
-    "countdownId": "countdown-osrsweekly"
-  },
-  "items": [],
-  "containerId": "osrsweekly-container",
-  "tableId": "osrsweekly-table",
-  "includedInAllMode": true,
-  "supportsTaskNotifications": false
+	"id": "osrs-weekly",
+	"game": "osrs",
+	"label": "Weekly Tasks",
+	"displayOrder": 102,
+	"resetFrequency": "weekly",
+	"renderVariant": "standard",
+	"shell": {
+		"columns": ["activity_col_name", "activity_col_notes", "activity_col_status"],
+		"showAddButton": false,
+		"showResetButton": true,
+		"showCountdown": true,
+		"countdownId": "countdown-osrsweekly"
+	},
+	"items": [
+		{
+			"id": "tears-of-guthix",
+			"name": "Tears of Guthix",
+			"wiki": "https://oldschool.runescape.wiki/w/Tears_of_Guthix_(minigame)",
+			"note": "Lowest skill XP"
+		},
+		{
+			"id": "miscellania-approval",
+			"name": "Miscellania Approval",
+			"wiki": "https://oldschool.runescape.wiki/w/Managing_Miscellania",
+			"note": "Maintain 100% approval"
+		},
+		{
+			"id": "miscellania-resources",
+			"name": "Miscellania Resources",
+			"wiki": "https://oldschool.runescape.wiki/w/Managing_Miscellania",
+			"note": "Collect resource drop"
+		}
+	],
+	"containerId": "osrsweekly-container",
+	"tableId": "osrsweekly-table",
+	"includedInAllMode": true,
+	"supportsTaskNotifications": false
 }

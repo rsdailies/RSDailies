@@ -1,3 +1,8 @@
+---
+title: Sources
+description: Reference links for Astro, Svelte, and other external sources used during maintenance.
+---
+
 # Sources and reference links
 
 ## Framework sources

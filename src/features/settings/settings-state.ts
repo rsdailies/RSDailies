@@ -1,9 +1,9 @@
 import { StorageKeyBuilder } from '@shared/storage/keys-builder';
 import {
+	type Settings,
 	getSettings as getHostedSettings,
 	normalizeSettings as normalizeHostedSettings,
 	saveSettings as saveHostedSettings,
-	type Settings,
 } from './settings-service.ts';
 
 type LoadFn = <T = any>(key: string, fallback?: T) => T;

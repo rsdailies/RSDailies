@@ -1,3 +1,8 @@
+---
+title: Content Model
+description: Structure and expectations for tracker pages, sections, and static content definitions.
+---
+
 # Content model
 
 The content source of truth is `src/content/games/`.

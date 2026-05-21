@@ -1,7 +1,7 @@
-import { formatDurationMs } from '@shared/time/formatters';
+import { TRACKER_SECTIONS } from '@entities/task/section-definitions';
+import { tracker } from '@features/tracker/stores/tracker.svelte';
 import { StorageKeyBuilder } from '@shared/storage/keys-builder';
-import { TRACKER_SECTIONS } from '@entities/task/static-content';
-import { getSectionState, saveSectionValue } from '@features/sections/section-state-service';
+import { formatDurationMs } from '@shared/time/formatters';
 
 type LoadFn = <T = any>(key: string, fallback?: T) => T;
 type SaveFn = (key: string, value: any) => void;
@@ -12,35 +12,32 @@ function getCooldownsMap({ load }: { load?: LoadFn } = {}): Record<string, { rea
 	return value && typeof value === 'object' ? value : {};
 }
 
-function saveCooldownsMap(data: Record<string, { readyAt: number; minutes: number }>, { save }: { save?: SaveFn } = {}) {
+function saveCooldownsMap(
+	data: Record<string, { readyAt: number; minutes: number }>,
+	{ save }: { save?: SaveFn } = {},
+) {
 	(save || (() => {}))(StorageKeyBuilder.cooldowns(), data);
 }
 
-function restoreTaskInSection(sectionKey: string, taskId: string, { load, save }: { load?: LoadFn; save?: SaveFn }) {
-	const section = getSectionState(sectionKey, { load });
-	const completed = { ...(section.completed || {}) };
-	const hiddenRows = { ...(section.hiddenRows || {}) };
-
+function restoreTaskInSection(sectionKey: string, taskId: string) {
 	let changed = false;
-	if (completed[taskId]) {
-		delete completed[taskId];
+
+	// Check reactive store completions
+	if (tracker.completed[sectionKey]?.[taskId]) {
+		tracker.toggleComplete(sectionKey, taskId); // sets completion to false reactively
 		changed = true;
 	}
 
-	if (hiddenRows[taskId]) {
-		delete hiddenRows[taskId];
+	// Check reactive store hidden rows
+	if (tracker.hiddenRows[sectionKey]?.[taskId]) {
+		tracker.restore(sectionKey, taskId); // restores hidden status reactively
 		changed = true;
-	}
-
-	if (changed) {
-		saveSectionValue(sectionKey, 'completed', completed, { save });
-		saveSectionValue(sectionKey, 'hiddenRows', hiddenRows, { save });
 	}
 
 	return changed;
 }
 
-export function startCooldown(taskId: string, minutes: number, { load, save }: { load?: LoadFn; save?: SaveFn }) {
+export function startCooldown(taskId: string, minutes: number, { load, save }: { load?: LoadFn; save?: SaveFn } = {}) {
 	if (!taskId) return false;
 
 	const durationMinutes = Math.max(1, Math.floor(Number(minutes) || 0));
@@ -54,7 +51,7 @@ export function startCooldown(taskId: string, minutes: number, { load, save }: {
 	return true;
 }
 
-export function clearCooldown(taskId: string, { load, save }: { load?: LoadFn; save?: SaveFn }) {
+export function clearCooldown(taskId: string, { load, save }: { load?: LoadFn; save?: SaveFn } = {}) {
 	if (!taskId) return false;
 
 	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
@@ -81,9 +78,11 @@ export function getCooldownStatus(taskId: string, { load }: { load?: LoadFn } = 
 	return { state: 'running', note: `Ready in ${formatDurationMs(remaining)}` };
 }
 
-export function cleanupReadyCooldowns({ load, save }: { load?: LoadFn; save?: SaveFn }) {
+export function cleanupReadyCooldowns({ load, save }: { load?: LoadFn; save?: SaveFn } = {}) {
 	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
-	const sections = TRACKER_SECTIONS.filter((section) => section.renderVariant !== 'timer-groups').map((section) => section.id);
+	const sections = TRACKER_SECTIONS.filter(
+		(section) => !('renderVariant' in section) || section.renderVariant !== 'timer-groups',
+	).map((section) => section.id);
 	let changed = false;
 
 	Object.entries(cooldowns).forEach(([taskId, state]) => {
@@ -93,7 +92,7 @@ export function cleanupReadyCooldowns({ load, save }: { load?: LoadFn; save?: Sa
 		changed = true;
 
 		sections.forEach((sectionKey) => {
-			restoreTaskInSection(sectionKey, taskId, { load, save });
+			restoreTaskInSection(sectionKey, taskId);
 		});
 	});
 

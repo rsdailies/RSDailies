@@ -1,4 +1,4 @@
-import type { Settings } from '../settings/settings-defaults';
+import type { Settings } from '@features/settings/settings-defaults.ts';
 
 function getBaseTimerMinutes(task: any) {
 	if (Number.isFinite(task?.growthMinutes)) return task.growthMinutes;

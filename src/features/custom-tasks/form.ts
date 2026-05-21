@@ -1,4 +1,12 @@
-export function resetCustomTaskForm({ nameInput, noteInput, wikiInput, resetSelect, alertInput, timerMinsInput, timerBlock }: any) {
+export function resetCustomTaskForm({
+	nameInput,
+	noteInput,
+	wikiInput,
+	resetSelect,
+	alertInput,
+	timerMinsInput,
+	timerBlock,
+}: any) {
 	nameInput.value = '';
 	noteInput.value = '';
 	wikiInput.value = '';
@@ -11,7 +19,11 @@ export function resetCustomTaskForm({ nameInput, noteInput, wikiInput, resetSele
 	wikiInput.classList.remove('is-invalid');
 }
 
-export function syncTimerVisibility(resetSelect: HTMLSelectElement, timerBlock: HTMLElement, alertInput: HTMLInputElement | null) {
+export function syncTimerVisibility(
+	resetSelect: HTMLSelectElement,
+	timerBlock: HTMLElement,
+	alertInput: HTMLInputElement | null,
+) {
 	const isTimer = resetSelect.value === 'timer';
 	timerBlock.style.display = isTimer ? '' : 'none';
 	timerBlock.style.visibility = isTimer ? 'visible' : 'hidden';
@@ -26,7 +38,9 @@ export function readTaskForm({ nameInput, noteInput, wikiInput, resetSelect, ale
 		rawName: String(nameInput.value || '').trim(),
 		rawNote: String(noteInput.value || '').trim(),
 		rawWiki: String(wikiInput.value || '').trim(),
-		rawReset: String(resetSelect.value || 'daily').trim().toLowerCase(),
+		rawReset: String(resetSelect.value || 'daily')
+			.trim()
+			.toLowerCase(),
 		rawAlertDaysBeforeReset: String(alertInput.value || '0').trim(),
 		rawTimerMinutes: String(timerMinsInput.value || '60').trim(),
 	};

@@ -1,17 +1,22 @@
 ---
 export const prerender = true;
-import MainLayout from '@app/layout/MainLayout.astro';
-import { Dashboard, Overview } from '@features/tracker';
 import { getCollection } from 'astro:content';
+import MainLayout from '@app/layout/MainLayout.astro';
 import { getTrackerPrimaryNavItems } from '@features/navigation';
+import { Dashboard, Overview } from '@features/tracker';
 
 export async function getStaticPaths() {
-	return [
-		{ params: { game: 'rs3', page: 'tasks' } },
-		{ params: { game: 'rs3', page: 'gathering' } },
-		{ params: { game: 'rs3', page: 'timers' } },
-		{ params: { game: 'osrs', page: 'tasks' } },
-	];
+	const pages = await getCollection('pages');
+
+	return pages.map((entry) => {
+		const [, game, page] = entry.data.route.split('/');
+		return {
+			params: {
+				game,
+				page,
+			},
+		};
+	});
 }
 
 const game = Astro.params.game === 'osrs' ? 'osrs' : 'rs3';
@@ -28,17 +33,18 @@ if (!pageEntry) {
 
 const sectionEntries = await getCollection('sections', (entry) => entry.data.game === game);
 const sectionById = new Map(sectionEntries.map((entry) => [entry.data.id, entry]));
+const hasEntry = (entry: (typeof sectionEntries)[number] | undefined): entry is (typeof sectionEntries)[number] =>
+	Boolean(entry);
 const sections = pageEntry.data.sections
 	.map((sectionId) => sectionById.get(sectionId))
-	.filter(Boolean)
-	.sort((a, b) => (a!.data.displayOrder ?? 100) - (b!.data.displayOrder ?? 100));
+	.filter(hasEntry)
+	.sort((a, b) => (a.data.displayOrder ?? 100) - (b.data.displayOrder ?? 100));
 
 const allSections = sectionEntries.sort((a, b) => (a.data.displayOrder ?? 100) - (b.data.displayOrder ?? 100));
 const navItems = getTrackerPrimaryNavItems(game);
 const gameLabel = game === 'osrs' ? 'OSRS' : 'RS3';
 const pageLabel = pageEntry.data.title || page.charAt(0).toUpperCase() + page.slice(1);
 const pageHeading = page === 'tasks' ? 'Daily Tasks' : pageLabel;
-const pageSubtitle = "Daily, Weekly, and Monthly Task Trackers";
 const showOsrsNotice = game === 'osrs';
 ---
 
@@ -46,7 +52,6 @@ const showOsrsNotice = game === 'osrs';
 	<header class="tracker-page-header">
 		<p class="tracker-kicker">{game === 'osrs' ? 'Old School RuneScape' : 'RuneScape 3'}</p>
 		<h1>{pageHeading}</h1>
-		<p class="tracker-subtitle">{pageSubtitle}</p>
 	</header>
 	{showOsrsNotice && (
 		<section class="tracker-route-notice" aria-label="OSRS tracker status">

@@ -1,47 +1,75 @@
 {
-  "id": "osrsdaily",
-  "label": "Dailies",
-  "game": "osrs",
-  "displayOrder": 101,
-  "resetFrequency": "daily",
-  "renderVariant": "standard",
-  "shell": {
-    "columns": [
-      "activity_col_name",
-      "activity_col_notes",
-      "activity_col_status"
-    ],
-    "extraTableClasses": [],
-    "showAddButton": false,
-    "showResetButton": true,
-    "showCountdown": true,
-    "countdownId": "countdown-osrsdaily"
-  },
-  "items": [
-    {
-      "id": "osrs_bird_house",
-      "name": "Bird House Run",
-      "wiki": "https://oldschool.runescape.wiki/w/Bird_house_trapping",
-      "note": "Fossil Island",
-      "reset": "daily"
-    },
-    {
-      "id": "osrs_battlestaves",
-      "name": "Zaff's Battlestaves",
-      "wiki": "https://oldschool.runescape.wiki/w/Zaff",
-      "note": "Varrock",
-      "reset": "daily"
-    },
-    {
-      "id": "osrs_herb_boxes",
-      "name": "Nightmare Zone Herb Boxes",
-      "wiki": "https://oldschool.runescape.wiki/w/Nightmare_Zone",
-      "note": "Yanille",
-      "reset": "daily"
-    }
-  ],
-  "containerId": "osrsdaily-container",
-  "tableId": "osrsdaily-table",
-  "includedInAllMode": true,
-  "supportsTaskNotifications": false
+	"id": "osrs-daily",
+	"game": "osrs",
+	"label": "Daily Tasks",
+	"displayOrder": 101,
+	"resetFrequency": "daily",
+	"renderVariant": "standard",
+	"shell": {
+		"columns": ["activity_col_name", "activity_col_notes", "activity_col_status"],
+		"showAddButton": false,
+		"showResetButton": true,
+		"showCountdown": true,
+		"countdownId": "countdown-osrsdaily"
+	},
+	"items": [
+		{
+			"id": "zaff-battlestaves",
+			"name": "Zaff's Battlestaves",
+			"wiki": "https://oldschool.runescape.wiki/w/Battlestave",
+			"note": "Varrock Diary reward"
+		},
+		{
+			"id": "bert-sand",
+			"name": "Bert's Sand",
+			"wiki": "https://oldschool.runescape.wiki/w/Bert",
+			"note": "84 Buckets of sand"
+		},
+		{
+			"id": "ardougne-essence",
+			"name": "Ardougne Pure Essence",
+			"wiki": "https://oldschool.runescape.wiki/w/Wizard_Cromperty",
+			"note": "Wizard Cromperty reward"
+		},
+		{
+			"id": "flax-bowstring",
+			"name": "Kandarin Bowstrings",
+			"wiki": "https://oldschool.runescape.wiki/w/Flax_keeper",
+			"note": "Convert flax to bowstring"
+		},
+		{
+			"id": "ogre-arrows",
+			"name": "Rantz Ogre Arrows",
+			"wiki": "https://oldschool.runescape.wiki/w/Rantz",
+			"note": "Western Provinces Diary"
+		},
+		{
+			"id": "robin-prayer",
+			"name": "Robin's Bonemeal",
+			"wiki": "https://oldschool.runescape.wiki/w/Robin",
+			"note": "Bonemeal & Slime"
+		},
+		{
+			"id": "nmz-herb-boxes",
+			"name": "NMZ Herb Boxes",
+			"wiki": "https://oldschool.runescape.wiki/w/Herb_box",
+			"note": "15 boxes per day"
+		},
+		{
+			"id": "dynamite-thirus",
+			"name": "Thirus Dynamite",
+			"wiki": "https://oldschool.runescape.wiki/w/Thirus",
+			"note": "Kourend Diary reward"
+		},
+		{
+			"id": "explorers-ring-alc",
+			"name": "Explorer's Ring Alchemy",
+			"wiki": "https://oldschool.runescape.wiki/w/Explorer%27s_ring",
+			"note": "Lumbridge Diary reward"
+		}
+	],
+	"containerId": "osrsdaily-container",
+	"tableId": "osrsdaily-table",
+	"includedInAllMode": true,
+	"supportsTaskNotifications": false
 }

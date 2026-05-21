@@ -1,3 +1,8 @@
+---
+title: Verification
+description: The canonical local verification workflow for linting, checks, audits, builds, and E2E tests.
+---
+
 # Verification guide
 
 ## Daily local gate
@@ -10,13 +15,21 @@ npm run verify:full
 
 This runs:
 
-1. `npm run check`
-2. `npm test`
-3. `npm run audit:content`
-4. `npm run audit:routes`
-5. `npm run audit:timers`
-6. `npm audit`
-7. `npm run build`
+1. `npm run lint`
+2. `npm run check`
+3. `npm test`
+4. `npm run audit:content`
+5. `npm run audit:routes`
+6. `npm run audit:timers`
+7. `npm audit`
+8. `npm run build`
+9. `npm run test:e2e`
+
+Notes:
+
+- `npm run lint` uses the repo-managed Biome dependency from `devDependencies`; no global install is required after `npm install`.
+- `npm audit` remains a zero-vulnerability gate when the audit service is reachable.
+- If the npm audit endpoint is unavailable, `verify:full` logs an explicit warning and continues, but the security check is incomplete and must be rerun later.
 
 ## Browser smoke gate
 

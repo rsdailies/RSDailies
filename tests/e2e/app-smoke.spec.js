@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test('root renders game selection landing page and opens rs3 canonical tasks view', async ({ page }) => {
 	await page.goto('/');
@@ -23,17 +23,18 @@ test('rs3 canonical routes render tracker sections on direct load', async ({ pag
 
 	await page.goto('/rs3/timers');
 	await expect(page.locator('#timers-container')).toBeVisible();
-	await expect(page.getByText('Regular Trees')).toBeVisible();
-	await expect(page.getByText('Gnome Stronghold').first()).toBeVisible();
+	await expect(page.getByText('Herbs')).toBeVisible();
+	await expect(page.getByText('Falador').first()).toBeVisible();
 	await expect(page.getByRole('heading', { level: 1, name: 'Timers' })).toBeVisible();
 });
 
-test('osrs canonical tasks route renders empty osrs section shells only', async ({ page }) => {
+test('osrs canonical tasks route renders the current osrs task, weekly, and timer sections', async ({ page }) => {
 	await page.goto('/osrs/tasks');
 	await expect(page.locator('#dashboard-root')).toBeVisible();
 	await expect(page.locator('#osrsdaily-container')).toBeVisible();
 	await expect(page.locator('#osrsweekly-container')).toBeVisible();
 	await expect(page.locator('#osrsmonthly-container')).toBeVisible();
+	await expect(page.locator('#osrstimers-container')).toBeVisible();
 	await expect(page.locator('#rs3daily-container')).toHaveCount(0);
 	await expect(page.getByRole('heading', { level: 1, name: 'Daily Tasks' })).toBeVisible();
 	await expect(page.getByText('OSRS tracker is being built.')).toBeVisible();

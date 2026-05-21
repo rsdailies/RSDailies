@@ -53,8 +53,14 @@ async function main() {
 		if (!serverProcess.killed) serverProcess.kill('SIGTERM');
 	};
 
-	process.on('SIGINT', () => { shutdownServer(); process.exit(130); });
-	process.on('SIGTERM', () => { shutdownServer(); process.exit(143); });
+	process.on('SIGINT', () => {
+		shutdownServer();
+		process.exit(130);
+	});
+	process.on('SIGTERM', () => {
+		shutdownServer();
+		process.exit(143);
+	});
 
 	try {
 		await waitForServerReady(serverProcess);

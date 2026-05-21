@@ -1,4 +1,5 @@
 import { defineCollection } from 'astro:content';
+import { docsSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
@@ -81,20 +82,22 @@ const sectionSchema = z.object({
 	tableId: z.string().optional(),
 	includedInAllMode: z.boolean().default(false),
 	supportsTaskNotifications: z.boolean().default(false),
-	shell: z.object({
-		columns: z.array(z.string()).default(['activity_col_name', 'activity_col_notes', 'activity_col_status']),
-		countdownId: z.string().optional(),
-		extraTableClasses: z.array(z.string()).default([]),
-		showAddButton: z.boolean().default(false),
-		showResetButton: z.boolean().default(true),
-		showCountdown: z.boolean().default(true),
-	}).default({
-		columns: ['activity_col_name', 'activity_col_notes', 'activity_col_status'],
-		extraTableClasses: [],
-		showAddButton: false,
-		showResetButton: true,
-		showCountdown: true,
-	}),
+	shell: z
+		.object({
+			columns: z.array(z.string()).default(['activity_col_name', 'activity_col_notes', 'activity_col_status']),
+			countdownId: z.string().optional(),
+			extraTableClasses: z.array(z.string()).default([]),
+			showAddButton: z.boolean().default(false),
+			showResetButton: z.boolean().default(true),
+			showCountdown: z.boolean().default(true),
+		})
+		.default({
+			columns: ['activity_col_name', 'activity_col_notes', 'activity_col_status'],
+			extraTableClasses: [],
+			showAddButton: false,
+			showResetButton: true,
+			showCountdown: true,
+		}),
 	items: z.array(taskSchema).default([]),
 	groups: z.array(timerGroupSchema).default([]),
 });
@@ -118,6 +121,10 @@ const pageSchema = z.object({
 });
 
 export const collections = {
+	docs: defineCollection({
+		loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
+		schema: docsSchema(),
+	}),
 	sections: defineCollection({
 		loader: glob({ pattern: '**/sections/*.json', base: './src/content/games' }),
 		schema: sectionSchema,

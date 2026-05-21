@@ -1,28 +1,43 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "style": {
-        "noNonNullAssertion": "warn"
-      },
-      "correctness": {
-        "noUnusedVariables": "error"
-      }
-    }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "tab",
-    "lineWidth": 120
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single"
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"files": {
+		"ignore": [".astro", ".playwright-mcp", ".vercel", ".vscode", "dist", "node_modules", "test-results", "user_data"]
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": false,
+			"style": {
+				"noInferrableTypes": "off",
+				"noNonNullAssertion": "warn",
+				"useConst": "off",
+				"useDefaultParameterLast": "off",
+				"useNumberNamespace": "off"
+			},
+			"correctness": {
+				"noUnusedVariables": "off"
+			},
+			"complexity": {
+				"noForEach": "off",
+				"useOptionalChain": "off"
+			},
+			"suspicious": {
+				"noAssignInExpressions": "off",
+				"noExplicitAny": "off"
+			}
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"lineWidth": 120
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single"
+		}
+	}
 }

@@ -6,11 +6,11 @@ export default defineConfig({
 	fullyParallel: false,
 	retries: 0,
 	reporter: 'list',
-  use: {
-    baseURL: 'http://127.0.0.1:4174',
-    trace: 'retain-on-failure',
-  },
-  projects: [
+	use: {
+		baseURL: 'http://127.0.0.1:4174',
+		trace: 'retain-on-failure',
+	},
+	projects: [
 		{
 			name: 'chromium-smoke',
 			use: {

@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
-import { readdir, readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
-const targets = ['src/components', 'src/layouts', 'src/pages', 'src/lib', 'tests'];
+const targets = ['src/app', 'src/features', 'src/shared', 'src/entities', 'src/pages', 'tests'];
 const forbiddenPatterns = [/href=\s*["']#["']/g, /\|\|\s*["']#["']/g, /\?\?\s*["']#["']/g];
 const matches = [];
 
