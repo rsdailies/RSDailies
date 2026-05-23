@@ -1,4 +1,20 @@
-import { slugify } from '@shared/utils/table-utils';
+import type { TrackerTask } from '@entities/task/types.ts';
+import { slugify } from '../../shared/utils/slugify.ts';
+
+type CustomTaskReset = 'daily' | 'weekly' | 'monthly' | 'timer';
+type BuildCustomTaskInput = {
+	rawName: string;
+	rawNote: string;
+	rawWiki: string;
+	rawReset: string;
+	rawAlertDaysBeforeReset: string;
+	rawTimerMinutes: string;
+};
+
+export type CustomTask = TrackerTask & {
+	alertDaysBeforeReset: number;
+	reset: CustomTaskReset;
+};
 
 export function parsePositiveInt(value: unknown, fallback: number) {
 	const parsed = parseInt(String(value ?? '').trim(), 10);
@@ -24,12 +40,12 @@ export function buildCustomTask({
 	rawReset,
 	rawAlertDaysBeforeReset,
 	rawTimerMinutes,
-}: any) {
-	const allowed = ['daily', 'weekly', 'monthly', 'timer'];
-	const reset = allowed.includes(rawReset) ? rawReset : 'daily';
+}: BuildCustomTaskInput): CustomTask {
+	const allowed: CustomTaskReset[] = ['daily', 'weekly', 'monthly', 'timer'];
+	const reset = allowed.includes(rawReset as CustomTaskReset) ? (rawReset as CustomTaskReset) : 'daily';
 	const alertDaysBeforeReset = parsePositiveInt(rawAlertDaysBeforeReset, 0);
 
-	const task: Record<string, any> = {
+	const task: CustomTask = {
 		id: `custom-${slugify(rawName)}-${Date.now()}`,
 		name: rawName,
 		note: rawNote,

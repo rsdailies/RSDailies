@@ -1,7 +1,7 @@
 import { defineAction } from 'astro:actions';
+import { readProfileBackup, writeProfileBackup } from '@shared/server/profile-storage';
 import { z } from 'astro/zod';
 import pc from 'picocolors';
-import { readProfileBackup, writeProfileBackup } from '@shared/server/profile-storage';
 
 export const server = {
 	/**

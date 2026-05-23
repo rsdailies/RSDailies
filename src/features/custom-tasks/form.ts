@@ -1,3 +1,13 @@
+type CustomTaskFormControls = {
+	nameInput: HTMLInputElement;
+	noteInput: HTMLInputElement | HTMLTextAreaElement;
+	wikiInput: HTMLInputElement;
+	resetSelect: HTMLSelectElement;
+	alertInput: HTMLInputElement;
+	timerMinsInput: HTMLInputElement;
+	timerBlock: HTMLElement;
+};
+
 export function resetCustomTaskForm({
 	nameInput,
 	noteInput,
@@ -6,7 +16,7 @@ export function resetCustomTaskForm({
 	alertInput,
 	timerMinsInput,
 	timerBlock,
-}: any) {
+}: CustomTaskFormControls) {
 	nameInput.value = '';
 	noteInput.value = '';
 	wikiInput.value = '';
@@ -33,7 +43,14 @@ export function syncTimerVisibility(
 	}
 }
 
-export function readTaskForm({ nameInput, noteInput, wikiInput, resetSelect, alertInput, timerMinsInput }: any) {
+export function readTaskForm({
+	nameInput,
+	noteInput,
+	wikiInput,
+	resetSelect,
+	alertInput,
+	timerMinsInput,
+}: Omit<CustomTaskFormControls, 'timerBlock'>) {
 	return {
 		rawName: String(nameInput.value || '').trim(),
 		rawNote: String(noteInput.value || '').trim(),

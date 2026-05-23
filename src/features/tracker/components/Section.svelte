@@ -1,12 +1,18 @@
 <script lang="ts">
-import { tracker } from '@features/tracker/stores/tracker.svelte';
+import type { TrackerSection, TrackerTask } from '@entities/task/types';
+import { clearTimer } from '@features/timers';
 import { buildSectionTaskGroups } from '@features/tracker/services/section-groups';
+import { tracker } from '@features/tracker/stores/tracker.svelte';
+import { load, save } from '@shared/storage/storage-service';
 import { onMount } from 'svelte';
+import TrackerHeader from './TrackerHeader.svelte';
 import SectionBody from './section/SectionBody.svelte';
-import SectionHeader from './section/SectionHeader.svelte';
 import SectionTable from './section/SectionTable.svelte';
 
-let { section, tasks = [] } = $props();
+let { section, tasks = [] as TrackerTask[] } = $props<{
+	section: TrackerSection;
+	tasks?: TrackerTask[];
+}>();
 
 onMount(() => {
 	tracker.loadSection(section.id);
@@ -32,8 +38,8 @@ function isPenguinTask(taskId: string) {
 	return PENGUIN_IDS.has(taskId);
 }
 
-const normalTasks = $derived(tasks.filter((t: any) => !isPenguinTask(t.id)));
-const penguinTasks = $derived(tasks.filter((t: any) => isPenguinTask(t.id)));
+const normalTasks = $derived(tasks.filter((task) => !isPenguinTask(task.id)));
+const penguinTasks = $derived(tasks.filter((task) => isPenguinTask(task.id)));
 
 const taskGroups = $derived(buildSectionTaskGroups(section, normalTasks));
 const penguinGroups = $derived([{ id: 'default', name: '', tasks: penguinTasks }]);
@@ -52,6 +58,11 @@ const isCollapsed = $derived(tracker.isCollapsedBlock(section.id));
 
 function handleReset() {
 	tracker.clearCompletions(section.id);
+	for (const task of tasks) {
+		if (task.timerId) {
+			clearTimer(task.timerId, { load, save });
+		}
+	}
 }
 function handleRestore() {
 	tracker.restoreAll(section.id);
@@ -76,10 +87,15 @@ function handleToggleCollapse() {
 					<col class="activity_col_notes" />
 					<col class="activity_col_status" />
 				</colgroup>
-				<SectionHeader
-					{section}
-					columns={['activity_col_name', 'activity_col_notes', 'activity_col_status']}
+				<TrackerHeader
+					type="section"
+					id={section.id}
+					label={section.label}
+					colspan={3}
 					tasks={normalTasks}
+					sectionId={section.id}
+					showCountdown={section.shell?.showCountdown ?? true}
+					showResetButton={section.shell?.showResetButton ?? true}
 					onReset={handleReset}
 					onRestore={handleRestore}
 					onToggleCollapse={handleToggleCollapse}
@@ -116,7 +132,19 @@ function handleToggleCollapse() {
 	{:else}
 		<SectionTable tableId={section.tableId} {columns} collapsed={isCollapsed}>
 			{#snippet header()}
-				<SectionHeader {section} {columns} {tasks} onReset={handleReset} onRestore={handleRestore} onToggleCollapse={handleToggleCollapse} />
+				<TrackerHeader
+					type="section"
+					id={section.id}
+					label={section.label}
+					colspan={columns.length}
+					tasks={tasks}
+					sectionId={section.id}
+					showCountdown={section.shell?.showCountdown ?? true}
+					showResetButton={section.shell?.showResetButton ?? true}
+					onReset={handleReset}
+					onRestore={handleRestore}
+					onToggleCollapse={handleToggleCollapse}
+				/>
 			{/snippet}
 			{#snippet children()}
 				<SectionBody {section} {taskGroups} {columns} />

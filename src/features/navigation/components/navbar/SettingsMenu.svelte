@@ -1,5 +1,6 @@
 <script lang="ts">
 import { type Settings, getSettings, saveSettings } from '@features/settings';
+import { AppButton, AppPanel } from '@shared/ui';
 
 let { isOpen, onToggle } = $props();
 
@@ -30,13 +31,13 @@ function handleSave() {
 	</button>
 
 	{#if isOpen}
-		<div id="settings-control">
+		<AppPanel id="settings-control" variant="popover" className="ds-nav-popover" role="dialog">
 			<strong>Settings</strong>
 			<div class="ds-checkbox">
 				<input type="checkbox" id="split-dailies" bind:checked={settings.splitDailyTables} />
 				<label for="split-dailies">Split Dailies</label>
 			</div>
-			
+
 			<div class="ds-checkbox">
 				<label for="setting-density-mode">Density</label>
 				<select id="setting-density-mode" bind:value={settings.densityMode}>
@@ -46,15 +47,19 @@ function handleSave() {
 			</div>
 
 			<div class="ds-checkbox">
-				<input type="checkbox" id="speedy-growth" checked={settings.herbTicks === 3} 
-					onchange={(e) => settings.herbTicks = e.currentTarget.checked ? 3 : 4} />
+				<input
+					type="checkbox"
+					id="speedy-growth"
+					checked={settings.herbTicks === 3}
+					onchange={(e) => (settings.herbTicks = e.currentTarget.checked ? 3 : 4)}
+				/>
 				<label for="speedy-growth">Speedy Growth</label>
 			</div>
 
 			<div class="settings-actions">
-				<button id="save-settings-button" class="ds-button ds-button-primary ds-button-small" onclick={handleSave}>Save</button>
+				<AppButton id="save-settings-button" variant="primary" size="sm" onclick={handleSave}>Save</AppButton>
 				{#if message}<span>{message}</span>{/if}
 			</div>
-		</div>
+		</AppPanel>
 	{/if}
 </li>

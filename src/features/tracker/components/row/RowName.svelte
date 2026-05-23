@@ -1,5 +1,6 @@
 <script lang="ts">
 import { usePenguinStore } from '@features/penguins/stores/penguin.svelte';
+import { AppLink } from '@shared/ui';
 import { resolveWikiHref } from '@shared/utils/wiki';
 import RowActions from './RowActions.svelte';
 
@@ -12,9 +13,9 @@ const href = $derived(resolveWikiHref(wiki));
 
 <td class="activity_name">
 	{#if href}
-		<a href={href} target="_blank" rel="noopener noreferrer">
+		<AppLink variant="tracker-row" href={href} target="_blank" rel="noopener noreferrer">
 			{displayName}
-		</a>
+		</AppLink>
 	{:else}
 		<span class="activity_name_text">{displayName}</span>
 	{/if}

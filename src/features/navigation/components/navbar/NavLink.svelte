@@ -1,15 +1,11 @@
 <script lang="ts">
+import { AppLink } from '@shared/ui';
+
 let { href, label, active = false, onClick } = $props();
 </script>
 
 <li class="ds-nav-entry">
-	<a
-		class="ds-nav-link"
-		class:active
-		{href}
-		data-astro-prefetch
-		onclick={onClick}
-	>
+	<AppLink variant="nav" {href} {active} prefetch={true} onclick={onClick}>
 		{label}
-	</a>
+	</AppLink>
 </li>

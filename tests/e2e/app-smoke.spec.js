@@ -1,5 +1,28 @@
 import { expect, test } from '@playwright/test';
 
+async function expectFirstColumnLabelLeftAligned(page) {
+	return page
+		.locator('.activity_table tbody tr[data-task-id] td.activity_name')
+		.first()
+		.evaluate((cell) => {
+			const label = cell.querySelector('a, .activity_name_text');
+			if (!(label instanceof HTMLElement)) {
+				throw new Error('Expected tracker row label.');
+			}
+
+			const cellRect = cell.getBoundingClientRect();
+			const labelRect = label.getBoundingClientRect();
+			const styles = getComputedStyle(label);
+
+			return {
+				offsetLeft: labelRect.left - cellRect.left,
+				justifyContent: styles.justifyContent,
+				display: styles.display,
+				textAlign: styles.textAlign,
+			};
+		});
+}
+
 test('root renders game selection landing page and opens rs3 canonical tasks view', async ({ page }) => {
 	await page.goto('/');
 	await expect(page.locator('#game-selection-title')).toBeVisible();
@@ -91,6 +114,75 @@ test('density mode persists and changes tracker row spacing', async ({ page }) =
 
 	await page.reload();
 	await expect(page.locator('html')).toHaveAttribute('data-density', 'comfortable');
+});
+
+test('tracker pages share the same header and row action framework', async ({ page }) => {
+	for (const route of ['/rs3/tasks', '/rs3/gathering', '/rs3/timers', '/osrs/tasks']) {
+		await page.goto(route);
+		await expect(page.locator('.section-panel-header').first()).toBeVisible();
+		await expect(page.locator('.section-panel-reset-button').first()).toBeVisible();
+		await expect(page.locator('.section-panel-toggle-button').first()).toBeVisible();
+		await expect(page.locator('.activity_table .row-actions').first()).toBeVisible();
+	}
+});
+
+test('canonical tracker pages keep first-column labels left aligned', async ({ page }) => {
+	for (const route of ['/rs3/tasks', '/rs3/gathering', '/rs3/timers', '/osrs/tasks']) {
+		await page.goto(route);
+		const metrics = await expectFirstColumnLabelLeftAligned(page);
+		expect(metrics.display).toBe('flex');
+		expect(metrics.justifyContent).toBe('flex-start');
+		expect(metrics.textAlign).toBe('start');
+		expect(metrics.offsetLeft).toBeLessThan(40);
+	}
+});
+
+test('overview reset menu renders above lower sections without clipping', async ({ page }) => {
+	await page.goto('/rs3/tasks');
+
+	const trigger = page.locator('#overview .section-panel-reset-button');
+	await trigger.click();
+
+	const menu = page.locator('.tracker-header-menu').last();
+	await expect(menu).toBeVisible();
+
+	const menuBox = await menu.boundingBox();
+	const overviewBox = await page.locator('#overview-table').boundingBox();
+
+	expect(menuBox).not.toBeNull();
+	expect(overviewBox).not.toBeNull();
+
+	expect(menuBox.x).toBeGreaterThanOrEqual(0);
+	expect(menuBox.y).toBeGreaterThanOrEqual(0);
+	expect(menuBox.x + menuBox.width).toBeLessThanOrEqual(page.viewportSize().width);
+	expect(menuBox.y + menuBox.height).toBeGreaterThan(overviewBox.y + overviewBox.height);
+});
+
+test('preview runtime serves profile and penguin api routes', async ({ request }) => {
+	const profileName = 'preview-smoke';
+	const syncResponse = await request.post('/api/profile', {
+		data: {
+			profileName,
+			timestamp: Date.now(),
+			data: {
+				'test:key': { ok: true },
+			},
+		},
+	});
+	expect(syncResponse.ok()).toBeTruthy();
+
+	const fetchResponse = await request.get(`/api/profile?profileName=${encodeURIComponent(profileName)}`);
+	expect(fetchResponse.ok()).toBeTruthy();
+	const fetchPayload = await fetchResponse.json();
+	expect(fetchPayload.success).toBeTruthy();
+	expect(fetchPayload.data['test:key'].ok).toBeTruthy();
+
+	const penguinResponse = await request.get('/api/penguins');
+	expect(penguinResponse.status()).not.toBe(404);
+	const penguinPayload = await penguinResponse.json();
+	expect(
+		Boolean(penguinPayload?.Activepenguin?.length) || Array.isArray(penguinPayload?.failures) || penguinPayload?.error,
+	).toBeTruthy();
 });
 
 test('canonical routes stay free of console errors', async ({ page }) => {

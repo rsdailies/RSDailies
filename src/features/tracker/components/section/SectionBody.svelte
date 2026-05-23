@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { TaskGroup, TrackerSection, TrackerTask } from '@entities/task/types';
 import { usePenguinStore } from '@features/penguins/stores/penguin.svelte';
 import { clearTimer } from '@features/timers';
 import { tracker } from '@features/tracker/stores/tracker.svelte';
@@ -6,12 +7,20 @@ import { load, save } from '@shared/storage/storage-service';
 import { nextDailyBoundary, nextWeeklyBoundary } from '@shared/time/boundaries';
 import { formatDurationMs } from '@shared/time/formatters';
 import { timeStore } from '@shared/time/time-store';
-import SubgroupHeader from '../SubgroupHeader.svelte';
 import TaskRow from '../TaskRow.svelte';
+import TrackerHeader from '../TrackerHeader.svelte';
 import RowName from '../row/RowName.svelte';
 import RowStatus from '../row/RowStatus.svelte';
 
-let { section, taskGroups = [], columns = [] } = $props();
+let {
+	section,
+	taskGroups = [] as TaskGroup[],
+	columns = [] as string[],
+} = $props<{
+	section: TrackerSection;
+	taskGroups?: TaskGroup[];
+	columns?: string[];
+}>();
 
 const penguins = usePenguinStore();
 
@@ -50,19 +59,20 @@ function isPenguinTask(taskId: string) {
 }
 
 function resetPenguins() {
-	for (const id of PENGUIN_IDS) {
-		if (tracker.completed[section.id]?.[id]) {
-			tracker.toggleComplete(section.id, id);
-		}
+	const completedPenguinIds = Array.from(PENGUIN_IDS).filter((id) => tracker.completed[section.id]?.[id]);
+	if (completedPenguinIds.length > 0) {
+		tracker.clearGroupCompletions(section.id, completedPenguinIds);
 	}
 }
 
-function resetGroup(sectionId: string, groupTasks: any[]) {
-	for (const task of groupTasks) {
-		if (tracker.completed[sectionId]?.[task.id]) {
-			tracker.toggleComplete(sectionId, task.id);
-		}
+function resetGroup(sectionId: string, groupTasks: TrackerTask[]) {
+	const completedIds = groupTasks.map((t) => t.id).filter((id) => tracker.completed[sectionId]?.[id]);
 
+	if (completedIds.length > 0) {
+		tracker.clearGroupCompletions(sectionId, completedIds);
+	}
+
+	for (const task of groupTasks) {
 		if (task.timerId) {
 			clearTimer(task.timerId, { load, save });
 		}
@@ -87,11 +97,12 @@ const groupCountdown = $derived.by(() => {
 
 {#each taskGroups as group (group.id)}
 	{@const groupCollapsed = group.id !== 'default' ? tracker.isCollapsedBlock(group.id) : false}
-	{@const penguinTasks = group.tasks.filter((t: any) => isPenguinTask(t.id))}
-	{@const normalTasks = group.tasks.filter((t: any) => !isPenguinTask(t.id))}
+	{@const penguinTasks = group.tasks.filter((task) => isPenguinTask(task.id))}
+	{@const normalTasks = group.tasks.filter((task) => !isPenguinTask(task.id))}
 
 	{#if group.name}
-		<SubgroupHeader
+		<TrackerHeader
+			type="subgroup"
 			id={group.id}
 			label={group.name}
 			colspan={columns.length}
@@ -123,7 +134,8 @@ const groupCountdown = $derived.by(() => {
 	{/if}
 
 	{#if penguinTasks.length > 0}
-		<SubgroupHeader
+		<TrackerHeader
+			type="subgroup"
 			id={PENGUIN_GROUP_ID}
 			label="Penguins"
 			colspan={columns.length}
@@ -175,7 +187,11 @@ const groupCountdown = $derived.by(() => {
 							</div>
 						</td>
 
-						<RowStatus completed={isDone} onToggle={() => tracker.toggleComplete(section.id, task.id)} />
+						<RowStatus
+							completed={isDone}
+							onToggle={() => tracker.toggleComplete(section.id, task.id)}
+							ariaLabel={`${isDone ? 'Mark task incomplete' : 'Mark task complete'}: ${task.name}`}
+						/>
 					</tr>
 				{/if}
 			{/each}

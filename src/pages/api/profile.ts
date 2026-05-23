@@ -1,5 +1,5 @@
-import type { APIRoute } from 'astro';
 import { readProfileBackup, writeProfileBackup } from '@shared/server/profile-storage';
+import type { APIRoute } from 'astro';
 
 function json(body: unknown, init: ResponseInit = {}) {
 	return new Response(JSON.stringify(body), {

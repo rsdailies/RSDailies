@@ -37,6 +37,16 @@ export class HiddenStore {
 		save(StorageKeyBuilder.sectionHiddenRows(sectionKey), section);
 	}
 
+	restoreGroup(sectionKey: string, taskIds: string[]) {
+		const section = { ...(this.state[sectionKey] || {}) };
+		for (const taskId of taskIds) {
+			delete section[taskId];
+		}
+		this.state[sectionKey] = section;
+		this.state = { ...this.state };
+		save(StorageKeyBuilder.sectionHiddenRows(sectionKey), section);
+	}
+
 	restoreAll(sectionKey: string) {
 		this.state[sectionKey] = {};
 		this.state = { ...this.state };

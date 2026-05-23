@@ -1,4 +1,6 @@
 <script lang="ts">
+import { AppLink, AppMenu } from '@shared/ui';
+
 const resourceLinks = [
 	{ href: 'https://runescape.wiki/w/Money_making_guide', label: 'Money Making Guide' },
 	{ href: 'https://runescape.wiki/w/Distractions_and_Diversions', label: 'Distractions and Diversions' },
@@ -22,16 +24,18 @@ let { isOpen, onToggle } = $props();
 	>
 		More Resources
 	</button>
-	{#if isOpen}
-		<div class="ds-menu">
-			{#each resourceLinks.slice(0, 4) as link}
-				<a class="ds-menu-item" href={link.href} target="_blank" rel="noreferrer noopener">{link.label}</a>
-			{/each}
-			<div class="ds-menu-divider"></div>
-			<h6 class="ds-menu-header">RS3 Discords</h6>
-			{#each resourceLinks.slice(4) as link}
-				<a class="ds-menu-item" href={link.href} target="_blank" rel="noreferrer noopener">{link.label}</a>
-			{/each}
-		</div>
-	{/if}
+	<AppMenu open={isOpen}>
+		{#each resourceLinks.slice(0, 4) as link}
+			<AppLink variant="menu" href={link.href} target="_blank" rel="noreferrer noopener">
+				{link.label}
+			</AppLink>
+		{/each}
+		<div class="ds-menu-divider"></div>
+		<h6 class="ds-menu-header">RS3 Discords</h6>
+		{#each resourceLinks.slice(4) as link}
+			<AppLink variant="menu" href={link.href} target="_blank" rel="noreferrer noopener">
+				{link.label}
+			</AppLink>
+		{/each}
+	</AppMenu>
 </li>

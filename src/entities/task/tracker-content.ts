@@ -28,7 +28,7 @@ function sortByDisplayOrder<T extends { displayOrder?: number; id?: string }>(le
 function cloneSection<T>(section: T): T {
 	return JSON.parse(JSON.stringify(section));
 }
-function filterTaskItems(items: TrackerTask[] = [], cadence: string, weeklyData: Record<string, any>) {
+function filterTaskItems(items: TrackerTask[] = [], cadence: string, weeklyData: Record<string, Partial<TrackerTask>>) {
 	return items
 		.map((item) => resolvePenguinTask(item, weeklyData))
 		.filter((item) => cadence === 'all' || String(item.reset || '').toLowerCase() === cadence);
@@ -61,7 +61,7 @@ export function getTrackerSectionsForPage(
 	view: string | null | undefined,
 	pages: TrackerPage[],
 	sections: TrackerSection[],
-	options: { weeklyData?: Record<string, any> } = {},
+	options: { weeklyData?: Record<string, Partial<TrackerTask>> } = {},
 ) {
 	const page = getTrackerPage(game, pageId, pages);
 	if (!page) return [];

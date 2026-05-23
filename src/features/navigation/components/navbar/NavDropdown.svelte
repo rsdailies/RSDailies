@@ -1,4 +1,6 @@
 <script lang="ts">
+import { AppLink, AppMenu } from '@shared/ui';
+
 let { label, items = [], isOpen = false, onToggle, onItemClick, isActive } = $props();
 </script>
 
@@ -11,19 +13,17 @@ let { label, items = [], isOpen = false, onToggle, onItemClick, isActive } = $pr
 	>
 		{label}
 	</button>
-	{#if isOpen}
-		<div class="ds-menu">
-			{#each items as subItem}
-				<a
-					class="ds-menu-item"
-					class:active={isActive(subItem.mode)}
-					href={subItem.href}
-					data-astro-prefetch
-					onclick={onItemClick}
-				>
-					{subItem.label}
-				</a>
-			{/each}
-		</div>
-	{/if}
+	<AppMenu open={isOpen}>
+		{#each items as subItem}
+			<AppLink
+				variant="menu"
+				active={isActive(subItem.mode)}
+				href={subItem.href}
+				prefetch={true}
+				onclick={onItemClick}
+			>
+				{subItem.label}
+			</AppLink>
+		{/each}
+	</AppMenu>
 </li>

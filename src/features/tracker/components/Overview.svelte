@@ -3,12 +3,22 @@ import type { PinnedTask } from '@entities/task/types';
 import { tracker } from '@features/tracker/stores/tracker.svelte';
 import { onMount } from 'svelte';
 import { mapPinnedTasks } from '../services/pins-manager';
-import SubgroupHeader from './SubgroupHeader.svelte';
 import TaskRow from './TaskRow.svelte';
+import TrackerHeader from './TrackerHeader.svelte';
 import OverviewEmpty from './overview/OverviewEmpty.svelte';
-import OverviewHeader from './overview/OverviewHeader.svelte';
 
-let { allSections = [] } = $props();
+type SectionEntry = {
+	data: {
+		id: string;
+		label?: string;
+		items?: unknown[];
+		groups?: unknown[];
+	};
+};
+
+let { allSections = [] as SectionEntry[] } = $props<{
+	allSections?: SectionEntry[];
+}>();
 let ready = $state(false);
 
 onMount(() => {
@@ -22,10 +32,10 @@ const pinnedTasks = $derived.by(() => {
 });
 
 const sectionsMap = $derived.by(() => {
-	// @ts-ignore
-	return Object.fromEntries(
-		allSections.map((s) => [s.data.id, s.data.label || s.data.title || s.data.name || s.data.id]),
-	);
+	return allSections.reduce<Record<string, string>>((sections, sectionEntry) => {
+		sections[sectionEntry.data.id] = sectionEntry.data.label || sectionEntry.data.id;
+		return sections;
+	}, {});
 });
 
 const groupedPinnedTasks = $derived.by(() => {
@@ -55,41 +65,57 @@ const isCollapsed = $derived(tracker.isCollapsedBlock('overview'));
 
 <div class="ds-layout-row" id="overview-root">
 	<div class="ds-layout-full table_container overview-container" id="overview-container" data-section-id="overview" data-hide={isCollapsed ? 'hide' : undefined}>
-		<OverviewHeader {pinnedTasks} />
+		<table class="activity_table ds-data-table" id="overview-table">
+			<colgroup>
+				<col class="activity_col_name" />
+				<col class="activity_col_notes" />
+				<col class="activity_col_status" />
+			</colgroup>
+			<TrackerHeader
+				type="overview"
+				id="overview"
+				label="Overview"
+				colspan={3}
+				tasks={pinnedTasks}
+			/>
 
-		<div class="overview-panel-body">
-			<div class="overview-note">Pinned tasks appear here for quick access across all tracker pages.</div>
-			<div class="overview-divider" aria-hidden="true"></div>
+			<tbody class="activity_body">
+				<tr class="overview-info-row">
+					<td colspan="3" class="overview-info-cell">
+						<div class="overview-note">Pinned tasks appear here for quick access across all tracker pages.</div>
+						<div class="overview-divider" aria-hidden="true"></div>
+					</td>
+				</tr>
 
-			{#if pinnedTasks.length > 0}
-				<table class="activity_table ds-data-table overview-pins-table" aria-label="Pinned overview tasks">
-					<colgroup>
-						<col class="activity_col_name" />
-						<col class="activity_col_notes" />
-						<col class="activity_col_status" />
-					</colgroup>
-					<tbody class="activity_body">
-						{#each groupedPinnedTasks as group (group.sectionKey)}
-							<SubgroupHeader label={group.sectionLabel} colspan={3} />
-							{#each group.tasks as task (task.sectionKey + '-' + task.id)}
-								<TaskRow 
-									id={task.id} 
-									name={task.name} 
-									wiki={task.wiki} 
-									note={task.note} 
-									detailLines={task.detailLines || []} 
-									completed={isCompleted(task)} 
-									hidden={isHidden(task)} 
-									pinned={isPinned(task)} 
-									sectionKey={task.sectionKey} 
-								/>
-							{/each}
+				{#if pinnedTasks.length > 0}
+					{#each groupedPinnedTasks as group (group.sectionKey)}
+						<TrackerHeader
+							type="subgroup"
+							label={group.sectionLabel}
+							colspan={3}
+						/>
+						{#each group.tasks as task (task.sectionKey + '-' + task.id)}
+							<TaskRow 
+								id={task.id} 
+								name={task.name} 
+								wiki={task.wiki} 
+								note={task.note} 
+								detailLines={task.detailLines || []} 
+								completed={isCompleted(task)} 
+								hidden={isHidden(task)} 
+								pinned={isPinned(task)} 
+								sectionKey={task.sectionKey} 
+							/>
 						{/each}
-					</tbody>
-				</table>
-			{:else}
-				<OverviewEmpty />
-			{/if}
-		</div>
+					{/each}
+				{:else}
+					<tr class="overview-empty-row">
+						<td colspan="3" class="overview-empty-cell">
+							<OverviewEmpty />
+						</td>
+					</tr>
+				{/if}
+			</tbody>
+		</table>
 	</div>
 </div>

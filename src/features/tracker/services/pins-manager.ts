@@ -3,12 +3,16 @@ import { load } from '../../../shared/storage/storage-service.ts';
 import { getTimerPlotTaskId } from '../../timers/services/timer-ids.ts';
 import { getTimerMinutes } from '../../timers/services/timer-math.ts';
 
-export function mapPinnedTasks(allSections: any[], pins: Record<string, boolean>): PinnedTask[] {
+type SectionEntry = {
+	data: TrackerSection;
+};
+
+export function mapPinnedTasks(allSections: SectionEntry[], pins: Record<string, boolean>): PinnedTask[] {
 	const rows: PinnedTask[] = [];
 	const settings = load('settings', {});
 
 	for (const entry of allSections) {
-		const section: TrackerSection = entry.data;
+		const section = entry.data;
 
 		// Standard Items
 		for (const task of section.items || []) {
@@ -29,7 +33,7 @@ export function mapPinnedTasks(allSections: any[], pins: Record<string, boolean>
 				const key = `${section.id}::${taskId}`;
 
 				if (pins[key]) {
-					const minutes = getTimerMinutes(plot, settings);
+					const minutes = getTimerMinutes(plot, settings) || 0;
 					const duration = minutes > 0 ? `Growth: ${minutes} min` : group.label;
 
 					rows.push({

@@ -22,6 +22,10 @@
 	border-collapse: separate;
 	border-spacing: 0;
 	table-layout: fixed;
+	background: #2f353d;
+	border: 1px solid rgba(80, 89, 99, 1);
+	border-radius: var(--ds-rounding-radius, 5px);
+	overflow: hidden;
 }
 
 #overview-root #overview-table thead td.header_like_color {
@@ -34,21 +38,14 @@
 	min-height: 42px;
 }
 
-/* Old-style overview drop-down body. This sits below the parent header with a
-   clear gap and inset width, matching the preserved overview feel without
-   changing the global row/table system. */
-#overview-root .overview-panel-body {
-	margin: 12px 14px 0;
-	padding: 12px 14px 14px;
+#overview-root .overview-info-cell {
+	padding: 12px 14px 0 !important;
 	background: #2f353d;
-	border: 1px solid rgba(80, 89, 99, 1);
-	border-radius: 0 0 var(--ds-rounding-radius, 5px) var(--ds-rounding-radius, 5px);
-	color: #ffffff;
-	overflow: hidden;
 }
 
-div.table_container[data-hide="hide"] .overview-panel-body {
-	display: none;
+#overview-root .overview-empty-cell {
+	padding: 12px 14px 14px !important;
+	background: #2f353d;
 }
 
 #overview-root .overview-note {
@@ -83,19 +80,10 @@ div.table_container[data-hide="hide"] .overview-panel-body {
 /* Pinned rows live inside the overview body. They keep TaskRow behavior, but
    columns blend into the overview panel instead of using completion-state red
    and green backgrounds. */
-#overview-root .overview-pins-table.activity_table {
-	width: 100%;
-	margin: 0;
-	table-layout: fixed;
-	border-collapse: separate;
-	border-spacing: 0;
-	background: transparent;
-}
-
-#overview-root .overview-pins-table td.activity_name,
-#overview-root .overview-pins-table td.activity_name a,
-#overview-root .overview-pins-table td.activity_name a:active,
-#overview-root .overview-pins-table td.activity_name a:link,
-#overview-root .overview-pins-table td.activity_name a:visited {
+#overview-root #overview-table td.activity_name,
+#overview-root #overview-table td.activity_name a,
+#overview-root #overview-table td.activity_name a:active,
+#overview-root #overview-table td.activity_name a:link,
+#overview-root #overview-table td.activity_name a:visited {
 	color: #ffffff;
 }

@@ -7,6 +7,7 @@ import {
 	getAllProfilesGlobal,
 	setActiveProfile,
 } from '@shared/storage/storage-service';
+import { AppButton, AppPanel } from '@shared/ui';
 
 let { isOpen, onToggle } = $props();
 
@@ -30,8 +31,8 @@ function handleSelect(name: string) {
 	onToggle();
 }
 
-function handleAdd(e: SubmitEvent) {
-	e.preventDefault();
+function handleAdd(event: SubmitEvent) {
+	event.preventDefault();
 	const name = newProfileName.trim();
 	if (!name) return;
 	setActiveProfile(name);
@@ -41,8 +42,8 @@ function handleAdd(e: SubmitEvent) {
 	onToggle();
 }
 
-function handleRemove(e: MouseEvent, name: string) {
-	e.stopPropagation();
+function handleRemove(event: MouseEvent, name: string) {
+	event.stopPropagation();
 	deleteProfile(name);
 	refresh();
 	tracker.reloadAll();
@@ -61,9 +62,9 @@ function handleRemove(e: MouseEvent, name: string) {
 	>
 		<span id="profile-name">{activeProfile}</span>&#128100;<span class="ds-expand-label">&nbsp;Profiles</span>
 	</button>
-	
+
 	{#if isOpen}
-		<div id="profile-control">
+		<AppPanel id="profile-control" variant="popover" className="ds-nav-popover" role="dialog">
 			<strong>Profiles</strong>
 			<ul id="profile-list">
 				{#each profiles as profile}
@@ -72,9 +73,9 @@ function handleRemove(e: MouseEvent, name: string) {
 							{profile}
 						</button>
 						{#if profile !== 'default'}
-							<button type="button" class="ds-button ds-button-small ds-button-ghost-danger profile-delete" onclick={(e) => handleRemove(e, profile)}>
-								&times;
-							</button>
+							<AppButton variant="ghost-danger" size="sm" className="profile-delete" onclick={(e) => handleRemove(e, profile)}>
+								×
+							</AppButton>
 						{/if}
 					</li>
 				{/each}
@@ -82,9 +83,9 @@ function handleRemove(e: MouseEvent, name: string) {
 			<form id="profile-form" onsubmit={handleAdd}>
 				<div class="profile-form-row">
 					<input type="text" class="ds-field" placeholder="New Profile" bind:value={newProfileName} required />
-					<button type="submit" class="ds-button ds-button-primary">+</button>
+					<AppButton type="submit" variant="primary">+</AppButton>
 				</div>
 			</form>
-		</div>
+		</AppPanel>
 	{/if}
 </li>

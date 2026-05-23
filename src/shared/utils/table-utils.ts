@@ -1,4 +1,5 @@
-import { StorageKeyBuilder } from '@shared/storage/keys-builder.ts';
+import type { TrackerTask } from '@entities/task/types.ts';
+import { StorageKeyBuilder } from '../storage/keys-builder.ts';
 import { SECTION_CONTAINER_IDS, SECTION_TABLE_IDS } from './section-ids.ts';
 
 export function getContainerId(sectionKey: string) {
@@ -9,20 +10,10 @@ export function getTableId(sectionKey: string) {
 	return SECTION_TABLE_IDS[sectionKey] || `${sectionKey}-table`;
 }
 
-export function slugify(input: unknown) {
-	if (!input) return '';
-	return String(input)
-		.toLowerCase()
-		.trim()
-		.replace(/\s+/g, '-')
-		.replace(/[^\w-]+/g, '')
-		.replace(/--+/g, '-');
-}
-
 export function applyOrderingAndSort(
 	sectionKey: string,
-	tasks: any[],
-	{ load }: { load: <T = any>(key: string, fallback?: T) => T },
+	tasks: TrackerTask[],
+	{ load }: { load: <T>(key: string, fallback: T) => T },
 ) {
 	const order = load<string[]>(StorageKeyBuilder.sectionOrder(sectionKey), []);
 	const sort = load<string>(StorageKeyBuilder.sectionSort(sectionKey), 'default');

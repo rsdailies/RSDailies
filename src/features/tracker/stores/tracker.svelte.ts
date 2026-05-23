@@ -86,6 +86,11 @@ class TrackerFacade {
 		this.syncToServer();
 	}
 
+	restoreGroup(sectionKey: string, taskIds: string[]) {
+		this.hidden.restoreGroup(sectionKey, taskIds);
+		this.syncToServer();
+	}
+
 	restoreAll(sectionKey: string) {
 		this.hidden.restoreAll(sectionKey);
 		this.syncToServer();

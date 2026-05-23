@@ -1,6 +1,6 @@
 import { tracker } from '@features/tracker/stores/tracker.svelte';
 import { nextWeeklyBoundary } from '@shared/time/boundaries';
-import { parsePenguinActives } from './penguin-parser';
+import { type ParsedPenguinData, parsePenguinActives } from './penguin-parser';
 import { penguinStore } from './stores/penguin.svelte';
 
 const PENGUIN_CACHE_KEY = 'penguinWeeklyData_v3';
@@ -8,6 +8,16 @@ const PENGUIN_META_KEY = 'penguinWeeklyDataMeta_v3';
 const PENGUIN_REFRESH_MS = 60000; // Refresh every minute
 
 let activePenguinSync: Promise<boolean> | null = null;
+
+type PenguinSyncMeta = {
+	weekKey?: string;
+	syncedAt?: number;
+	lastAttemptAt?: number;
+	lastError?: string;
+};
+
+type LoadFn = <T>(key: string, fallback: T) => T;
+type SaveFn = (key: string, value: unknown) => void;
 
 function getCurrentWeekKey(now = new Date()) {
 	return nextWeeklyBoundary(now).toISOString();
@@ -22,16 +32,16 @@ export function isPenguinSyncEnabled() {
 	return !!buildPenguinApiUrl();
 }
 
-function shouldSyncPenguins(load?: <T = any>(key: string, fallback?: T) => T) {
-	const meta = load?.(PENGUIN_META_KEY, {}) || {};
+function shouldSyncPenguins(load?: LoadFn) {
+	const meta = load?.(PENGUIN_META_KEY, {} as PenguinSyncMeta) || {};
 	const weekKey = getCurrentWeekKey();
-	const hasCurrentCache = Object.keys(load?.(PENGUIN_CACHE_KEY, {}) || {}).length > 0;
+	const hasCurrentCache = Object.keys(load?.(PENGUIN_CACHE_KEY, {} as ParsedPenguinData) || {}).length > 0;
 
-	if ((meta as any).weekKey !== weekKey) return true;
+	if (meta.weekKey !== weekKey) return true;
 	if (!hasCurrentCache) return true;
-	if (!(meta as any).syncedAt) return true;
+	if (!meta.syncedAt) return true;
 
-	return Date.now() - (meta as any).syncedAt >= PENGUIN_REFRESH_MS;
+	return Date.now() - meta.syncedAt >= PENGUIN_REFRESH_MS;
 }
 
 export async function syncPenguinWeeklyData({
@@ -39,8 +49,8 @@ export async function syncPenguinWeeklyData({
 	save,
 	fetchImpl = window.fetch.bind(window),
 }: {
-	load?: <T = any>(key: string, fallback?: T) => T;
-	save?: (key: string, value: any) => void;
+	load?: LoadFn;
+	save?: SaveFn;
 	fetchImpl?: typeof fetch;
 }) {
 	if (activePenguinSync) return activePenguinSync;
@@ -48,7 +58,7 @@ export async function syncPenguinWeeklyData({
 
 	activePenguinSync = (async () => {
 		const weekKey = getCurrentWeekKey();
-		const meta = load?.(PENGUIN_META_KEY, {}) || {};
+		const meta = load?.(PENGUIN_META_KEY, {} as PenguinSyncMeta) || {};
 		const penguinApiUrl = buildPenguinApiUrl();
 
 		if (!penguinApiUrl) {

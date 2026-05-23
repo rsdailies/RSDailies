@@ -1,7 +1,7 @@
+import type { TaskDetailLine, TaskGroup, TrackerSection, TrackerTask } from '@entities/task/types';
 import { getSettings } from '@features/settings/settings-service';
 import { getTimerPlotTaskId } from '@features/timers/services/timer-ids.ts';
 import { getTimerMinutes } from '@features/timers/services/timer-math.ts';
-import type { TaskDetailLine, TaskGroup, TrackerSection, TrackerTask } from '@entities/task/types';
 
 function formatMinutes(minutes: number) {
 	if (!Number.isFinite(minutes) || minutes <= 0) return '';
@@ -12,7 +12,7 @@ function formatMinutes(minutes: number) {
 }
 
 function buildTimerDetailLines(task: TrackerTask): TaskDetailLine[] {
-	const minutes = getTimerMinutes(task, getSettings());
+	const minutes = getTimerMinutes(task, getSettings()) || 0;
 	const detailLines: TaskDetailLine[] = [];
 
 	if (minutes > 0) {

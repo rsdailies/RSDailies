@@ -15,7 +15,39 @@ function cleanLocation(text: string) {
 	return clean;
 }
 
-function buildPenguinNote(entry: any) {
+type PenguinApiEntry = {
+	name?: string;
+	points?: string | number;
+	disguise?: string;
+	last_location?: string;
+	confined_to?: string;
+	warning?: string;
+	requirements?: string;
+	weight?: string | number;
+	active?: string | number;
+	location?: string;
+};
+
+type PenguinApiPayload = {
+	Activepenguin?: PenguinApiEntry[];
+	Bear?: PenguinApiEntry[];
+};
+
+export type ParsedPenguinData = Record<
+	string,
+	{
+		name: string;
+		note: string;
+		points?: string;
+		disguise?: string;
+		location?: string;
+		area?: string;
+		warning?: string;
+		req?: string;
+	}
+>;
+
+function buildPenguinNote(entry: PenguinApiEntry) {
 	const parts = [];
 
 	if (entry.points) parts.push(`${entry.points}-point`);
@@ -28,7 +60,7 @@ function buildPenguinNote(entry: any) {
 	return parts.join(' | ');
 }
 
-function buildPolarBearNote(entry: any) {
+function buildPolarBearNote(entry: PenguinApiEntry) {
 	const parts = [];
 
 	if (entry.name) parts.push(sanitizeText(entry.name));
@@ -37,36 +69,25 @@ function buildPolarBearNote(entry: any) {
 	return parts.join(' | ');
 }
 
-export function parsePenguinActives(payload: any) {
+export function parsePenguinActives(payload: PenguinApiPayload): ParsedPenguinData {
 	const penguins = Array.isArray(payload?.Activepenguin) ? [...payload.Activepenguin] : [];
-	const bear = Array.isArray(payload?.Bear) ? payload.Bear.find((entry: any) => String(entry?.active) === '1') : null;
+	const bear = Array.isArray(payload?.Bear) ? payload.Bear.find((entry) => String(entry?.active) === '1') : null;
 
-	penguins.sort((left: any, right: any) => {
+	penguins.sort((left, right) => {
 		const leftWeight = Number(left?.weight) || Number.MAX_SAFE_INTEGER;
 		const rightWeight = Number(right?.weight) || Number.MAX_SAFE_INTEGER;
 		return leftWeight - rightWeight;
 	});
 
-	const parsed: Record<
-		string,
-		{
-			name: string;
-			note: string;
-			points?: string;
-			disguise?: string;
-			location?: string;
-			area?: string;
-			warning?: string;
-			req?: string;
-		}
-	> = {};
+	const parsed: ParsedPenguinData = {};
 
-	penguins.slice(0, 12).forEach((entry: any, index: number) => {
+	penguins.slice(0, 12).forEach((entry, index) => {
+		const points = Number(entry.points);
 		parsed[`penguin-${index + 1}`] = {
 			name: sanitizeText(entry?.name) || `Penguin ${index + 1}`,
-			points: entry.points ? `${entry.points} point${entry.points > 1 ? 's' : ''}` : '1 point',
+			points: entry.points ? `${entry.points} point${points > 1 ? 's' : ''}` : '1 point',
 			disguise: entry.disguise || '',
-			location: cleanLocation(entry.last_location),
+			location: cleanLocation(entry.last_location || ''),
 			area: entry.confined_to ? `Area: ${sanitizeText(entry.confined_to)}` : '',
 			warning: entry.warning ? `Warning: ${sanitizeText(entry.warning)}` : '',
 			req: entry.requirements ? `Req: ${sanitizeText(entry.requirements)}` : '',
@@ -79,7 +100,7 @@ export function parsePenguinActives(payload: any) {
 			name: 'Polar Bear',
 			points: '2 points',
 			disguise: bear.name || '',
-			location: cleanLocation(bear.location),
+			location: cleanLocation(bear.location || ''),
 			area: '',
 			warning: '',
 			req: '',

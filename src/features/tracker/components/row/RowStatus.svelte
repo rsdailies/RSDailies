@@ -1,12 +1,14 @@
 <script lang="ts">
-let { completed, onToggle } = $props();
+let { completed, onToggle, ariaLabel = 'Toggle task completion' } = $props();
 </script>
 
-<td class="activity_status" onclick={onToggle}>
-	<div class="activity_check_off">
-		<span class="ds-icon-box"></span>
-	</div>
-	<div class="activity_check_on">
-		<span class="ds-icon-check">✓</span>
-	</div>
+<td class="activity_status">
+	<button type="button" class="activity-status-button" onclick={onToggle} aria-pressed={completed} aria-label={ariaLabel}>
+		<div class="activity_check_off">
+			<span class="ds-icon-box"></span>
+		</div>
+		<div class="activity_check_on">
+			<span class="ds-icon-check">✓</span>
+		</div>
+	</button>
 </td>

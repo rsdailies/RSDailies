@@ -1,4 +1,8 @@
-export function resolvePenguinTask(task: any, weeklyData: any = {}) {
+import type { TrackerTask } from '@entities/task/types';
+
+type WeeklyPenguinOverrides = Record<string, Partial<TrackerTask>>;
+
+export function resolvePenguinTask(task: TrackerTask, weeklyData: WeeklyPenguinOverrides = {}) {
 	const sourceChildren = Array.isArray(task.childRows)
 		? task.childRows
 		: Array.isArray(task.children)
@@ -9,7 +13,7 @@ export function resolvePenguinTask(task: any, weeklyData: any = {}) {
 		return task;
 	}
 
-	const mergedChildren = sourceChildren.map((child: any) => {
+	const mergedChildren = sourceChildren.map((child) => {
 		const override = weeklyData[child.id] || {};
 		return {
 			...child,

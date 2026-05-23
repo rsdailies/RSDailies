@@ -1,4 +1,11 @@
-function loadJson(key: string, fallback: any, storage: Storage) {
+type ProfileStorageKey = (profileName: string, key: string) => string;
+type StorageKeyBuilderLike = {
+	timers: () => string;
+	overviewPins: () => string;
+	collapsedBlocks: () => string;
+};
+
+function loadJson<T>(key: string, fallback: T, storage: Storage): T {
 	try {
 		const raw = storage.getItem(key);
 		return raw !== null ? JSON.parse(raw) : fallback;
@@ -7,32 +14,35 @@ function loadJson(key: string, fallback: any, storage: Storage) {
 	}
 }
 
-function saveJson(key: string, value: any, storage: Storage) {
+function saveJson(key: string, value: unknown, storage: Storage) {
 	storage.setItem(key, JSON.stringify(value));
 }
 
 const LEGACY_TIMER_SECTION_KEY = 'rs3farming';
 const TIMER_SECTION_KEY = 'timers';
 
-export function renameValue(value: any, replacements: string[][]) {
+export function renameValue(value: unknown, replacements: string[][]) {
 	if (typeof value !== 'string') return value;
 	return replacements.reduce((nextValue, [from, to]) => nextValue.split(from).join(to), value);
 }
 
-export function renameObjectKeys(value: any, replacements: string[][]) {
+export function renameObjectKeys<T>(value: T, replacements: string[][]): T {
 	if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
-	return Object.entries(value).reduce<Record<string, any>>((nextValue, [key, entryValue]) => {
-		nextValue[renameValue(key, replacements)] = entryValue;
-		return nextValue;
-	}, {});
+	return Object.entries(value as Record<string, unknown>).reduce<Record<string, unknown>>(
+		(nextValue, [key, entryValue]) => {
+			nextValue[String(renameValue(key, replacements))] = entryValue;
+			return nextValue;
+		},
+		{},
+	) as T;
 }
 
 export function migrateLegacySectionValue(
 	storage: Storage,
 	profileName: string,
 	sectionValueKey: string,
-	profileStorageKey: (profileName: string, key: string) => string,
-	transform = (value: any) => value,
+	profileStorageKey: ProfileStorageKey,
+	transform: (value: unknown) => unknown = (value) => value,
 ) {
 	const legacyKey = profileStorageKey(profileName, `${sectionValueKey}:${LEGACY_TIMER_SECTION_KEY}`);
 	const nextKey = profileStorageKey(profileName, `${sectionValueKey}:${TIMER_SECTION_KEY}`);
@@ -46,7 +56,12 @@ export function migrateLegacySectionValue(
 	return true;
 }
 
-export function migrateLegacyPageMode(storage: Storage, profileName: string, key: string, profileStorageKey: any) {
+export function migrateLegacyPageMode(
+	storage: Storage,
+	profileName: string,
+	key: string,
+	profileStorageKey: ProfileStorageKey,
+) {
 	const storageKey = profileStorageKey(profileName, key);
 	const storedValue = loadJson(storageKey, null, storage);
 	const nextValue = renameValue(storedValue, [[LEGACY_TIMER_SECTION_KEY, TIMER_SECTION_KEY]]);
@@ -60,8 +75,8 @@ export function migrateLegacyPageMode(storage: Storage, profileName: string, key
 export function migrateLegacyTimerStorage(
 	storage: Storage,
 	profileName: string,
-	profileStorageKey: any,
-	StorageKeyBuilder: any,
+	profileStorageKey: ProfileStorageKey,
+	StorageKeyBuilder: StorageKeyBuilderLike,
 ) {
 	const legacyKey = profileStorageKey(profileName, 'farmingTimers');
 	const nextKey = profileStorageKey(profileName, StorageKeyBuilder.timers());
@@ -78,8 +93,8 @@ export function migrateLegacyTimerStorage(
 export function migrateLegacyOverviewPins(
 	storage: Storage,
 	profileName: string,
-	profileStorageKey: any,
-	StorageKeyBuilder: any,
+	profileStorageKey: ProfileStorageKey,
+	StorageKeyBuilder: StorageKeyBuilderLike,
 ) {
 	const key = profileStorageKey(profileName, StorageKeyBuilder.overviewPins());
 	const pins = loadJson(key, null, storage);
@@ -94,8 +109,8 @@ export function migrateLegacyOverviewPins(
 export function migrateLegacyCollapsedBlocks(
 	storage: Storage,
 	profileName: string,
-	profileStorageKey: any,
-	StorageKeyBuilder: any,
+	profileStorageKey: ProfileStorageKey,
+	StorageKeyBuilder: StorageKeyBuilderLike,
 ) {
 	const key = profileStorageKey(profileName, StorageKeyBuilder.collapsedBlocks());
 	const collapsedBlocks = loadJson(key, null, storage);

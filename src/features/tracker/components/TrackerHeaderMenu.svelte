@@ -1,5 +1,6 @@
 <script lang="ts">
 import { usePenguinStore } from '@features/penguins/stores/penguin.svelte';
+import { AppButton, AppMenu } from '@shared/ui';
 
 type MenuTaskEntry = {
 	id: string;
@@ -30,7 +31,6 @@ let {
 const penguins = usePenguinStore();
 
 let triggerButton = $state<HTMLButtonElement | null>(null);
-let panelElement = $state<HTMLDivElement | null>(null);
 
 function closeDropdown() {
 	open = false;
@@ -47,7 +47,8 @@ function handleWindowClick(event: MouseEvent) {
 	if (
 		triggerButton instanceof Node &&
 		target instanceof Node &&
-		(triggerButton.contains(target) || panelElement?.contains(target))
+		(triggerButton.contains(target) ||
+			!!(target as HTMLElement | null)?.closest?.('[data-app-menu-root="tracker-header"]'))
 	) {
 		return;
 	}
@@ -82,21 +83,25 @@ function handleRestoreAll() {
 <svelte:window onclick={handleWindowClick} onkeydown={handleEscape} />
 
 <div class:menu-open={open} class="ds-menu-shell tracker-header-menu-shell" role="none">
-	<button
-		bind:this={triggerButton}
-		type="button"
-		class={`ds-button ds-button-secondary ${buttonClass}`.trim()}
+	<AppButton
+		bind:element={triggerButton}
+		variant="secondary"
+		className={buttonClass}
 		onclick={toggleDropdown}
 		title="Manage completed and removed tasks"
 		aria-expanded={open}
+		ariaLabel="Manage completed and removed tasks"
 	>
 		&#8635;
-	</button>
-	{#if open}
-		<div
-			bind:this={panelElement}
-			class="ds-menu ds-menu-end tracker-header-menu"
-		>
+	</AppButton>
+	<AppMenu
+		{open}
+		align="end"
+		portal={true}
+		anchor={triggerButton}
+		panelClass="tracker-header-menu"
+	>
+		<div data-app-menu-root="tracker-header">
 			<div class="ds-menu-header">Completed</div>
 			<div class="ds-menu-divider"></div>
 			<div class="ds-menu-header">Tasks</div>
@@ -129,5 +134,5 @@ function handleRestoreAll() {
 				Reset All Removed
 			</button>
 		</div>
-	{/if}
+	</AppMenu>
 </div>

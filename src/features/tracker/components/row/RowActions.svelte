@@ -1,28 +1,7 @@
 <script lang="ts">
-let { pinned, hidden, onPin, onHide } = $props();
+import { AppRowActions } from '@shared/ui';
 
-function handleAction(fn: () => void) {
-	return (e: MouseEvent) => {
-		e.stopPropagation();
-		fn();
-	};
-}
+let { pinned, hidden, onPin, onHide } = $props();
 </script>
 
-<button 
-	type="button"
-	class="ds-button ds-button-secondary pin-button" 
-	class:active={pinned} 
-	onclick={handleAction(onPin)}
-	title={pinned ? 'Unpin from overview' : 'Pin to overview'}
->
-	📌
-</button>
-<button 
-	type="button"
-	class="ds-button ds-button-secondary hide-button" 
-	onclick={handleAction(onHide)}
-	title="Hide task"
->
-	✕
-</button>
+<AppRowActions {pinned} {hidden} {onPin} {onHide} />

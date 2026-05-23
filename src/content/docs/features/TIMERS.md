@@ -5,7 +5,7 @@ description: Timer-group rendering rules, farming behavior, and cooldown handlin
 
 # Timers and farming page
 
-The timers page is rendered by `src/features/tracker/components/TimerGroups.svelte` through `src/features/tracker/components/section/SectionBody.svelte`.
+The timers page is rendered through `src/features/sections/section-resolution.ts`, then grouped by `src/features/timers/services/timer-group-resolution.ts`, and finally displayed by `src/features/tracker/components/section/SectionBody.svelte`.
 
 ## Data shape
 

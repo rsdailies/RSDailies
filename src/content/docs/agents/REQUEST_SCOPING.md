@@ -34,8 +34,9 @@ Do not touch Svelte markup or CSS.
 
 Scope:
 
-- `src/features/tracker/components/TimerGroups.svelte`
+- `src/features/tracker/components/section/SectionBody.svelte`
 - `src/features/timers/services/`
+- `src/features/sections/section-resolution.ts`
 - `src/content/games/rs3/sections/timers.json`
 
 Do not touch RS3 daily/weekly/monthly, OSRS, navbar, or modals.

@@ -192,9 +192,9 @@ export function deleteProfile(profileName: string) {
 }
 
 export function listCurrentProfileEntries() {
-	if (!storageBackend) return {} as Record<string, any>;
+	if (!storageBackend) return {} as Record<string, unknown>;
 
-	const payload: Record<string, any> = {};
+	const payload: Record<string, unknown> = {};
 
 	for (let index = 0; index < storageBackend.length; index += 1) {
 		const key = storageBackend.key(index);

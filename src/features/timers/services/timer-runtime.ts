@@ -1,10 +1,25 @@
+import type { TimerDefinition, TrackerTask } from '@entities/task/types.ts';
 import { getSettings } from '@features/settings/settings-service.ts';
 import { StorageKeyBuilder } from '@shared/storage/keys-builder';
 import { formatDurationMs } from '@shared/time/formatters';
 import { getTimerMinutes } from './timer-math.ts';
 
-type LoadFn = <T = any>(key: string, fallback?: T) => T;
-type SaveFn = (key: string, value: any) => void;
+type LoadFn = <T>(key: string, fallback: T) => T;
+type SaveFn = (key: string, value: unknown) => void;
+type TimerTaskLike = Partial<TimerDefinition & TrackerTask> & {
+	id: string;
+	name?: string;
+	timerCategory?: string;
+};
+
+export type TimerRuntimeEntry = {
+	id: string;
+	name: string;
+	timerCategory: string;
+	startedAt: number;
+	readyAt: number;
+	growthMinutes: number;
+};
 
 export const TIMER_SECTION_KEY = 'timers';
 export const LEGACY_TIMER_SECTION_KEY = 'rs3farming';
@@ -14,7 +29,7 @@ function getNow() {
 }
 
 function reader(load?: LoadFn) {
-	return load || ((_: string, fallback: any) => fallback);
+	return load || (<T>(_: string, fallback: T) => fallback);
 }
 
 function writer(save?: SaveFn) {
@@ -30,11 +45,11 @@ export function getTimerChildStorageId(taskId: string, childId: string) {
 }
 
 export function getTimers({ load }: { load?: LoadFn } = {}) {
-	const value = reader(load)<Record<string, any>>(StorageKeyBuilder.timers(), {});
+	const value = reader(load)<Record<string, TimerRuntimeEntry>>(StorageKeyBuilder.timers(), {});
 	return value && typeof value === 'object' ? value : {};
 }
 
-export function saveTimers(nextTimers: Record<string, any>, { save }: { save?: SaveFn } = {}) {
+export function saveTimers(nextTimers: Record<string, TimerRuntimeEntry>, { save }: { save?: SaveFn } = {}) {
 	writer(save)(StorageKeyBuilder.timers(), nextTimers);
 }
 
@@ -75,7 +90,7 @@ function clearChildProgressForTimer(taskId: string, { load, save }: { load?: Loa
 }
 
 export function startTimer(
-	task: any,
+	task: TimerTaskLike,
 	{
 		load,
 		save,
@@ -149,7 +164,7 @@ export function cleanupReadyTimers({ load, save }: { load?: LoadFn; save?: SaveF
 	return changed;
 }
 
-export function getTimerHeaderStatus(task: any, { load }: { load?: LoadFn } = {}) {
+export function getTimerHeaderStatus(task: TimerTaskLike | null | undefined, { load }: { load?: LoadFn } = {}) {
 	if (!task?.id) {
 		return { state: 'idle', note: task?.note || '' };
 	}

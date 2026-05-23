@@ -4,18 +4,17 @@ import { StorageKeyBuilder } from '@shared/storage/keys-builder';
 import { formatDurationMs } from '@shared/time/formatters';
 
 type LoadFn = <T = any>(key: string, fallback?: T) => T;
-type SaveFn = (key: string, value: any) => void;
+type SaveFn = (key: string, value: unknown) => void;
+type CooldownEntry = { readyAt: number; minutes: number };
+type CooldownMap = Record<string, CooldownEntry>;
 
-function getCooldownsMap({ load }: { load?: LoadFn } = {}): Record<string, { readyAt: number; minutes: number }> {
-	const reader = load || ((_: string, fallback: any) => fallback);
-	const value = reader(StorageKeyBuilder.cooldowns(), {});
+function getCooldownsMap({ load }: { load?: LoadFn } = {}): CooldownMap {
+	const reader = load || (<T>(_: string, fallback: T) => fallback);
+	const value = reader<CooldownMap>(StorageKeyBuilder.cooldowns(), {});
 	return value && typeof value === 'object' ? value : {};
 }
 
-function saveCooldownsMap(
-	data: Record<string, { readyAt: number; minutes: number }>,
-	{ save }: { save?: SaveFn } = {},
-) {
+function saveCooldownsMap(data: CooldownMap, { save }: { save?: SaveFn } = {}) {
 	(save || (() => {}))(StorageKeyBuilder.cooldowns(), data);
 }
 
@@ -41,7 +40,7 @@ export function startCooldown(taskId: string, minutes: number, { load, save }: {
 	if (!taskId) return false;
 
 	const durationMinutes = Math.max(1, Math.floor(Number(minutes) || 0));
-	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
+	const cooldowns: CooldownMap = { ...getCooldownsMap({ load }) };
 	cooldowns[taskId] = {
 		readyAt: Date.now() + durationMinutes * 60000,
 		minutes: durationMinutes,
@@ -54,7 +53,7 @@ export function startCooldown(taskId: string, minutes: number, { load, save }: {
 export function clearCooldown(taskId: string, { load, save }: { load?: LoadFn; save?: SaveFn } = {}) {
 	if (!taskId) return false;
 
-	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
+	const cooldowns: CooldownMap = { ...getCooldownsMap({ load }) };
 	if (!cooldowns[taskId]) return false;
 
 	delete cooldowns[taskId];
@@ -79,7 +78,7 @@ export function getCooldownStatus(taskId: string, { load }: { load?: LoadFn } = 
 }
 
 export function cleanupReadyCooldowns({ load, save }: { load?: LoadFn; save?: SaveFn } = {}) {
-	const cooldowns: Record<string, { readyAt: number; minutes: number }> = { ...getCooldownsMap({ load }) };
+	const cooldowns: CooldownMap = { ...getCooldownsMap({ load }) };
 	const sections = TRACKER_SECTIONS.filter(
 		(section) => !('renderVariant' in section) || section.renderVariant !== 'timer-groups',
 	).map((section) => section.id);

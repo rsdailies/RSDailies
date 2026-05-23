@@ -1,21 +1,31 @@
+import type { TimerDefinition, TimerPlot, TrackerTask } from '@entities/task/types.ts';
 import type { Settings } from '@features/settings/settings-defaults.ts';
 
-function getBaseTimerMinutes(task: any) {
-	if (Number.isFinite(task?.growthMinutes)) return task.growthMinutes;
-	if (Number.isFinite(task?.timerMinutes)) return task.timerMinutes;
-	if (Number.isFinite(task?.cooldownMinutes)) return task.cooldownMinutes;
+type TimerLike = Partial<TimerDefinition & TimerPlot & TrackerTask>;
 
-	const parsedGrowth = parseInt(task?.growthMinutes, 10);
-	if (Number.isFinite(parsedGrowth) && parsedGrowth > 0) return parsedGrowth;
+function parsePositiveInt(value: unknown) {
+	const parsed = Number.parseInt(String(value ?? ''), 10);
+	return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+}
 
-	const parsedTimer = parseInt(task?.timerMinutes, 10);
-	if (Number.isFinite(parsedTimer) && parsedTimer > 0) return parsedTimer;
+function getBaseTimerMinutes(task: TimerLike): number {
+	if (Number.isFinite(task?.growthMinutes)) return Number(task.growthMinutes);
+	if (Number.isFinite(task?.timerMinutes)) return Number(task.timerMinutes);
+	if (Number.isFinite(task?.cooldownMinutes)) return Number(task.cooldownMinutes);
 
-	const parsedCooldown = parseInt(task?.cooldownMinutes, 10);
-	if (Number.isFinite(parsedCooldown) && parsedCooldown > 0) return parsedCooldown;
+	const parsedGrowth = parsePositiveInt(task?.growthMinutes);
+	if (parsedGrowth > 0) return parsedGrowth;
 
-	const cycleMinutes = Number.isFinite(task?.cycleMinutes) ? task.cycleMinutes : parseInt(task?.cycleMinutes, 10);
-	const stages = Number.isFinite(task?.stages) ? task.stages : parseInt(task?.stages, 10);
+	const parsedTimer = parsePositiveInt(task?.timerMinutes);
+	if (parsedTimer > 0) return parsedTimer;
+
+	const parsedCooldown = parsePositiveInt(task?.cooldownMinutes);
+	if (parsedCooldown > 0) return parsedCooldown;
+
+	const cycleMinutes = Number.isFinite(task?.cycleMinutes)
+		? Number(task.cycleMinutes)
+		: parsePositiveInt(task?.cycleMinutes);
+	const stages = Number.isFinite(task?.stages) ? Number(task.stages) : parsePositiveInt(task?.stages);
 
 	if (Number.isFinite(cycleMinutes) && cycleMinutes > 0 && Number.isFinite(stages) && stages > 0) {
 		return cycleMinutes * stages;
@@ -24,7 +34,7 @@ function getBaseTimerMinutes(task: any) {
 	return 0;
 }
 
-export function getFarmingTimerMinutes(task: any, settings: Partial<Settings> = {}) {
+export function getFarmingTimerMinutes(task: TimerLike, settings: Partial<Settings> = {}): number {
 	const baseMinutes = getBaseTimerMinutes(task);
 	if (!baseMinutes) return 0;
 
@@ -43,7 +53,7 @@ export function getFarmingTimerMinutes(task: any, settings: Partial<Settings> = 
 	return baseMinutes;
 }
 
-export function getTimerMinutes(task: any, settings: Partial<Settings> = {}) {
+export function getTimerMinutes(task: TimerLike, settings: Partial<Settings> = {}): number {
 	if (task?.timerCategory === 'farming') {
 		return getFarmingTimerMinutes(task, settings);
 	}

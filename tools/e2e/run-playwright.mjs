@@ -16,7 +16,7 @@ function waitForServerReady(serverProcess, timeoutMs = 30000) {
 		const handleReady = (chunk) => {
 			const text = chunk.toString();
 			process.stdout.write(text);
-			if (!settled && text.includes(`Serving dist on ${serverUrl}`)) {
+			if (!settled && text.includes(`Serving preview on ${serverUrl}`)) {
 				settled = true;
 				clearTimeout(timeoutId);
 				resolve();

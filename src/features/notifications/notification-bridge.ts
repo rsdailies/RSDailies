@@ -5,9 +5,15 @@ import {
 	maybeWebhookNotify as hostedMaybeWebhookNotify,
 } from './notifications.ts';
 
-type LoadFn = <T = any>(key: string, fallback?: T) => T;
-type SaveFn = (key: string, value: any) => void;
+type LoadFn = <T>(key: string, fallback: T) => T;
+type SaveFn = (key: string, value: unknown) => void;
 type RemoveFn = (key: string) => void;
+type AlertTask = {
+	id?: string;
+	name?: string;
+	reset?: string;
+	alertDaysBeforeReset?: number;
+};
 
 export function maybeBrowserNotify(title: string, body: string) {
 	return hostedMaybeBrowserNotify(title, body, getHostedSettings());
@@ -17,22 +23,26 @@ export async function maybeWebhookNotify(taskName: string) {
 	return hostedMaybeWebhookNotify(taskName, getHostedSettings());
 }
 
-export function getTaskAlertConfig(task: any) {
-	const days = Number.isFinite(task?.alertDaysBeforeReset) ? Math.max(0, task.alertDaysBeforeReset) : 0;
+export function getTaskAlertConfig(task: AlertTask) {
+	const days = Number.isFinite(task?.alertDaysBeforeReset) ? Math.max(0, Number(task.alertDaysBeforeReset)) : 0;
 	return { alertDaysBeforeReset: days };
 }
 
-export function getTaskNextReset(task: any) {
+export function getTaskNextReset(task: AlertTask) {
 	return getHostedTaskNextReset(String(task?.reset || ''));
 }
 
-export function getTaskAlertTarget(task: any) {
+export function getTaskAlertTarget(task: AlertTask) {
 	const nextReset = getTaskNextReset(task);
 	const { alertDaysBeforeReset } = getTaskAlertConfig(task);
 	return new Date(nextReset.getTime() - alertDaysBeforeReset * 86400000);
 }
 
-export function maybeNotifyTaskAlert(task: any, sectionKey: string, { load, save }: { load: LoadFn; save: SaveFn }) {
+export function maybeNotifyTaskAlert(
+	task: AlertTask,
+	sectionKey: string,
+	{ load, save }: { load: LoadFn; save: SaveFn },
+) {
 	if (!task?.reset) return;
 
 	const target = getTaskAlertTarget(task);
@@ -45,7 +55,7 @@ export function maybeNotifyTaskAlert(task: any, sectionKey: string, { load, save
 	if (notified[taskIdKey] === stamp) return;
 
 	maybeBrowserNotify('RSDailies', `${task.name} is due.`);
-	maybeWebhookNotify(task.name);
+	maybeWebhookNotify(task.name || 'Task');
 
 	notified[taskIdKey] = stamp;
 	save(`notified:${sectionKey}`, notified);

@@ -16,7 +16,7 @@ import {
 	renameValue,
 } from './schema-v3.ts';
 
-function loadJson(key: string, fallback: any, storage: Storage) {
+function loadJson<T>(key: string, fallback: T, storage: Storage): T {
 	try {
 		const raw = storage.getItem(key);
 		return raw !== null ? JSON.parse(raw) : fallback;
@@ -25,7 +25,7 @@ function loadJson(key: string, fallback: any, storage: Storage) {
 	}
 }
 
-function saveJson(key: string, value: any, storage: Storage) {
+function saveJson(key: string, value: unknown, storage: Storage) {
 	storage.setItem(key, JSON.stringify(value));
 }
 
@@ -64,7 +64,7 @@ function migrateProfileStorage(profileName: string, storage: Storage) {
 		const pageModeKey = profileStorageKey(profileName, 'pageMode');
 		const viewModeKey = profileStorageKey(profileName, 'viewMode');
 		const hasPageMode = storage.getItem(pageModeKey) !== null;
-		const legacyViewMode = loadJson(viewModeKey, null, storage);
+		const legacyViewMode = loadJson<string | null>(viewModeKey, null, storage);
 
 		if (!hasPageMode && typeof legacyViewMode === 'string' && legacyViewMode.trim() !== '') {
 			saveJson(pageModeKey, legacyViewMode, storage);
@@ -76,8 +76,8 @@ function migrateProfileStorage(profileName: string, storage: Storage) {
 		const pageModeKey = profileStorageKey(profileName, 'pageMode');
 		const rs3PageModeKey = profileStorageKey(profileName, 'pageMode:rs3');
 		const existingRs3PageMode = storage.getItem(rs3PageModeKey);
-		const storedPageMode = loadJson(pageModeKey, null, storage);
-		const legacyViewMode = loadJson(profileStorageKey(profileName, 'viewMode'), null, storage);
+		const storedPageMode = loadJson<string | null>(pageModeKey, null, storage);
+		const legacyViewMode = loadJson<string | null>(profileStorageKey(profileName, 'viewMode'), null, storage);
 		const nextRs3PageMode =
 			typeof storedPageMode === 'string' && storedPageMode.trim() !== ''
 				? storedPageMode

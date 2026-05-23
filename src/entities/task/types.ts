@@ -33,7 +33,11 @@ export interface TrackerSection {
 	displayOrder: number;
 	resetFrequency: string;
 	renderVariant?: string;
-	shell?: any;
+	shell?: {
+		columns?: string[];
+		showCountdown?: boolean;
+		showResetButton?: boolean;
+	};
 	items?: TrackerTask[];
 	groups?: TimerGroup[];
 	containerId?: string;
@@ -91,6 +95,7 @@ export interface TimerGroup {
 	id: string;
 	label?: string;
 	name?: string;
+	note?: string;
 	plots?: TimerPlot[];
 	timers?: TimerDefinition[];
 }
