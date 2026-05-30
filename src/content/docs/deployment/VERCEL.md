@@ -25,4 +25,4 @@ The root route renders the game-selection landing page. RS3 and OSRS tracker rou
 
 ## GitHub Pages note
 
-The old visual checkpoint lives under a GitHub Pages URL. This cleaned project currently assumes root-relative routes such as `/rs3/tasks`. If deploying under a subpath, configure Astro `site`/`base` and review asset URLs before publishing.
+The old visual checkpoint lives under a GitHub Pages URL and is kept only as a historical reference. This cleaned project currently assumes root-relative routes such as `/rs3/tasks`. If deploying under a subpath, configure Astro `site`/`base` and review asset URLs before publishing.

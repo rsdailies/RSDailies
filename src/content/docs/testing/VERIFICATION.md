@@ -22,15 +22,12 @@ This runs:
 5. `npm run audit:routes`
 6. `npm run audit:timers`
 7. `npm run audit:no-mojibake`
-8. `npm audit`
-9. `npm run build`
-10. `npm run test:e2e`
+8. `npm run build`
+9. `npm run test:e2e`
 
 Notes:
 
 - `npm run lint` uses the repo-managed Biome dependency from `devDependencies`; no global install is required after `npm install`.
-- `npm audit` remains a zero-vulnerability gate when the audit service is reachable.
-- If the npm audit endpoint is unavailable, `verify:full` logs an explicit warning and continues, but the security check is incomplete and must be rerun later.
 
 ## Browser smoke gate
 

@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://rsdailies.vercel.app">Live Site</a> |
+  <a href="https://dailyscape.app">Live Site</a> |
   <a href="#features">Features</a> |
   <a href="#local-development">Local Development</a> |
   <a href="#verification">Verification</a> |
@@ -86,9 +86,8 @@ This runs:
 2. `npm run check`
 3. `npm test`
 4. Content, route, timer, legacy-surface, hash-link, mojibake, dependency, heading, and asset-budget audits
-5. `npm audit`
-6. `npm run build`
-7. `npm run test:e2e`
+5. `npm run build`
+6. `npm run test:e2e`
 
 ### Browser prerequisites
 
@@ -138,4 +137,4 @@ Detailed technical notes live in `src/content/docs/`, especially:
 
 ## Disclaimer
 
-RSDailies is an unofficial fan-made tracker project inspired by Dailyscape. It is not affiliated with, endorsed by, sponsored by, or approved by Jagex.
+Dailyscape is an unofficial fan-made RuneScape tracker inspired by the earlier RSDailies project. It is not affiliated with, endorsed by, sponsored by, or approved by Jagex.

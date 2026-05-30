@@ -1,5 +1,6 @@
 import type { Settings } from '@features/settings/settings-defaults.ts';
 import { nextDailyBoundary, nextMonthlyBoundary, nextWeeklyBoundary } from '@shared/time/boundaries';
+import { APP_DEFAULT_WEBHOOK_MESSAGE } from '../../shared/app-meta.js';
 
 export function maybeBrowserNotify(title: string, body: string, settings: Settings) {
 	if (typeof window === 'undefined') return;
@@ -15,7 +16,7 @@ export function maybeBrowserNotify(title: string, body: string, settings: Settin
 }
 
 export function applyWebhookTemplate(template: string, taskName: string) {
-	const safeTemplate = String(template || 'RSDailies: {task} is due.');
+	const safeTemplate = String(template || APP_DEFAULT_WEBHOOK_MESSAGE);
 	const safeTaskName = String(taskName || 'Task');
 	return safeTemplate.replace(/\{task\}/g, safeTaskName);
 }

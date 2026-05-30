@@ -13,7 +13,9 @@ import '../styles/responsive.css';
 
 import type { NavItem } from '@features/navigation';
 import Navbar from '@features/navigation/components/Navbar.svelte';
+import { STORAGE_ROOT } from '@shared/storage/namespace.ts';
 import ModalContainer from '@shared/ui/modal/ModalContainer.svelte';
+import { APP_KEYWORDS, APP_NAME } from '../../shared/app-meta.js';
 import Footer from './Footer.astro';
 
 interface Props {
@@ -42,8 +44,9 @@ const description =
 
 		<!-- SEO Metadata -->
 		<meta name="description" content={description} />
-		<meta name="keywords" content="RuneScape, RS3, OSRS, Daily Tasks, Weekly Tasks, Monthly Tasks, Tracker, Dailyscape" />
-		<meta name="author" content="Dailyscape" />
+		<meta name="keywords" content={APP_KEYWORDS} />
+		<meta name="author" content={APP_NAME} />
+		<meta name="application-name" content={APP_NAME} />
 
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
@@ -59,9 +62,8 @@ const description =
 		<meta property="twitter:description" content={description} />
 		<meta property="twitter:image" content={new URL('/img/banner.png', Astro.url).href} />
 
-		<script is:inline>
+		<script is:inline define:vars={{ storageRoot: STORAGE_ROOT }}>
 			(() => {
-				const storageRoot = 'rsdailies';
 				const activeProfileKey = `${storageRoot}:active-profile`;
 				const activeProfile = window.localStorage.getItem(activeProfileKey);
 				let profileName = 'default';
@@ -98,23 +100,12 @@ const description =
 		<script>
 			import { initStorageService, load, save } from '@shared/storage/storage-service';
 			import { StorageKeyBuilder } from '@shared/storage/keys-builder';
+			import { settingsDefaults } from '@features/settings/settings-defaults.ts';
 
 			// Initialize storage on client
 			initStorageService();
 			if (!load(StorageKeyBuilder.settings(), null)) {
-				save(StorageKeyBuilder.settings(), {
-					splitDailyTables: true,
-					splitWeeklyTables: true,
-					showCompletedTasks: false,
-					densityMode: 'compact',
-					herbTicks: 4,
-					growthOffsetMinutes: 0,
-					browserNotif: false,
-					webhookUrl: '',
-					webhookUserId: '',
-					webhookMessageTemplate: 'RSDailies: {task} is due.',
-					overviewVisible: true,
-				});
+				save(StorageKeyBuilder.settings(), settingsDefaults);
 			}
 		</script>
 	</body>

@@ -28,8 +28,6 @@ audit=true
 
 This prevents lockfile entries generated in a private CI or AI sandbox registry from leaking into local installs. The checked `package-lock.json` should not contain private registry hosts.
 
-If `npm audit` fails because the registry audit endpoint is unavailable, treat that as an operational warning and rerun the command later. It is not equivalent to a zero-vulnerability result.
-
 ## Windows EPERM cleanup warnings
 
 If npm is interrupted, Windows can leave locked folders under `node_modules`. Close terminals, editors, preview servers, and file explorers that may be touching the folder, then delete `node_modules` and run `npm install` again.

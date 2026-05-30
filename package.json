@@ -11,7 +11,7 @@
 		"preview": "npm run build && node tools/e2e/serve-dist.mjs",
 		"preview:serve": "node tools/e2e/serve-dist.mjs",
 		"astro": "node node_modules/astro/bin/astro.mjs",
-		"check": "node node_modules/astro/bin/astro.mjs check",
+		"check": "node tools/check/run-astro-check.mjs",
 		"test": "node --experimental-strip-types --test tests/**/*.test.js",
 		"audit:content": "node --experimental-strip-types tools/audit/validate-content.mjs",
 		"audit:routes": "node --experimental-strip-types tools/audit/verify-routes.mjs",

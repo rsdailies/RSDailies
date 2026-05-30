@@ -1,10 +1,11 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 
 import svelte from '@astrojs/svelte';
 
 import starlight from '@astrojs/starlight';
+import { APP_REPOSITORY_URL, APP_SITE_URL, APP_WIKI_TITLE } from './src/shared/app-meta.js';
 
+// @ts-check
 /**
  * Vite plugin that raises the FSWatcher MaxListeners limit at the point
  * when the dev server is configured directly on the watcher instance.
@@ -38,13 +39,13 @@ const dailyscapeBanner = {
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://dailyscape.app',
+	site: APP_SITE_URL,
 	integrations: [
 		dailyscapeBanner,
-		svelte(),
+		svelte({ prebundleSvelteLibraries: false }),
 		starlight({
-			title: 'Dailyscape Internal Wiki',
-			social: [{ label: 'GitHub', href: 'https://github.com/anthony/dailyscape', icon: 'github' }],
+			title: APP_WIKI_TITLE,
+			social: [{ label: 'GitHub', href: APP_REPOSITORY_URL, icon: 'github' }],
 		}),
 	],
 
@@ -55,6 +56,15 @@ export default defineConfig({
 		enabled: false,
 	},
 	vite: {
+		cacheDir: '.astro-cache/vite',
+		optimizeDeps: {
+			disabled: true,
+		},
+		ssr: {
+			optimizeDeps: {
+				disabled: true,
+			},
+		},
 		plugins: [fixMaxListeners],
 	},
 });

@@ -31,6 +31,8 @@ debug.log
 test-results/
 playwright-report/
 
+.astro-cache/
+.tmp/
 .vercel
 user_data/
 

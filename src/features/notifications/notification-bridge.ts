@@ -1,3 +1,4 @@
+import { APP_NOTIFICATION_TITLE } from '../../shared/app-meta.js';
 import { getSettings as getHostedSettings } from '../settings/settings-service.ts';
 import {
 	getTaskNextReset as getHostedTaskNextReset,
@@ -54,7 +55,7 @@ export function maybeNotifyTaskAlert(
 
 	if (notified[taskIdKey] === stamp) return;
 
-	maybeBrowserNotify('RSDailies', `${task.name} is due.`);
+	maybeBrowserNotify(APP_NOTIFICATION_TITLE, `${task.name} is due.`);
 	maybeWebhookNotify(task.name || 'Task');
 
 	notified[taskIdKey] = stamp;

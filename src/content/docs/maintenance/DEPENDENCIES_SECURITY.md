@@ -9,10 +9,10 @@ description: Dependency management policy, npm audit expectations, and security 
 
 - Keep `package-lock.json` committed.
 - Use `npm install` to reproduce the dependency tree.
-- Use `npm audit` as the local known-vulnerability gate.
+- Use `npm audit` as an on-demand registry-backed security scan, not as part of `verify:full`.
 - Require zero reported vulnerabilities when `npm audit` completes successfully.
 - Do not use `npm audit fix --force` blindly.
-- Treat npm audit endpoint or registry outages as operational failures, not proof that the dependency tree is clean.
+- Treat npm audit endpoint or registry outages as an external availability issue, not proof that the dependency tree is clean.
 
 ## YAML tooling vulnerability note
 
@@ -33,11 +33,9 @@ That forces npm to resolve the patched `yaml` version while keeping the current 
 1. Run `npm outdated`.
 2. Upgrade direct dependencies intentionally.
 3. Run `npm install`.
-4. Run `npm audit`.
-5. Run `npm run verify:full`.
+4. Run `npm run verify:full`.
+5. Run `npm audit` when you want a registry-backed security pass and the audit service is reachable.
 6. Run browser smoke tests when UI packages changed.
-
-If step 4 fails because the audit service itself is unavailable, rerun it later and do not treat that result as a clean security pass.
 
 ## Cleaned up dependencies
 

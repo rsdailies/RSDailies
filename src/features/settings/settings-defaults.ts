@@ -1,3 +1,5 @@
+import { APP_DEFAULT_WEBHOOK_MESSAGE } from '../../shared/app-meta.js';
+
 export type DensityMode = 'compact' | 'comfortable';
 
 export const settingsDefaults = {
@@ -10,7 +12,7 @@ export const settingsDefaults = {
 	browserNotif: false,
 	webhookUrl: '',
 	webhookUserId: '',
-	webhookMessageTemplate: 'RSDailies: {task} is due.',
+	webhookMessageTemplate: APP_DEFAULT_WEBHOOK_MESSAGE,
 	overviewVisible: true,
 };
 

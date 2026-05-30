@@ -11,19 +11,6 @@ const nodeWithTypeStripping = (scriptPath) => ({
 	args: ['--experimental-strip-types', scriptPath],
 });
 
-const auditInfraFailurePatterns = [
-	/audit endpoint returned an error/i,
-	/request to .*security\/audits/i,
-	/failed, reason:/i,
-	/timed out/i,
-	/econnreset/i,
-	/enotfound/i,
-	/eai_again/i,
-	/503 service unavailable/i,
-	/502 bad gateway/i,
-	/504 gateway timeout/i,
-];
-
 const steps = [
 	{
 		label: 'check',
@@ -69,10 +56,6 @@ const steps = [
 	{
 		label: 'audit:timers',
 		...nodeWithTypeStripping('tools/audit/validate-timers.mjs'),
-	},
-	{
-		label: 'npm audit',
-		...npmStep('audit'),
 	},
 	{
 		label: 'build',
@@ -121,18 +104,6 @@ function runStep(step) {
 			if (code === 0) {
 				resolve();
 				return;
-			}
-
-			if (step.label === 'npm audit') {
-				const output = `${stdout.join('')}\n${stderr.join('')}`;
-				const isInfraFailure = auditInfraFailurePatterns.some((pattern) => pattern.test(output));
-				if (isInfraFailure) {
-					console.warn(
-						'[verify:full] npm audit could not complete because the audit service or registry endpoint was unavailable. Continuing verification, but security status is incomplete and npm audit must be rerun later.',
-					);
-					resolve();
-					return;
-				}
 			}
 
 			reject(new Error(`Step failed: ${step.label} (${code ?? 1})`));

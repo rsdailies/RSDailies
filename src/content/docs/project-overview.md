@@ -5,7 +5,7 @@ description: High-level goals and scope for the Dailyscape project.
 
 # Project overview
 
-RSDailies is a static tracker built with Astro for page composition and Svelte for hydrated interactivity.
+Dailyscape is a static tracker built with Astro for page composition and Svelte for hydrated interactivity.
 
 ## What is intentionally in scope
 

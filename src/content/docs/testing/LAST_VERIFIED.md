@@ -5,7 +5,7 @@ description: Snapshot of the most recent successful verification run and its res
 
 # Last verified by Codex
 
-Date: 2026-05-17
+Date: 2026-05-30
 
 ## Passed
 
@@ -16,7 +16,6 @@ npm test
 npm run audit:content
 npm run audit:routes
 npm run audit:timers
-npm audit
 npm run build
 npm run test:e2e
 ```
@@ -25,14 +24,13 @@ Summary:
 
 ```text
 lint: repo-managed Biome expected via devDependencies
-astro check: 0 errors, 0 warnings, 12 hints
-unit tests: 13 pass, 0 fail
+astro check: 0 errors, 0 warnings, 0 hints
+unit tests: 33 pass, 0 fail
 content audit: pass for 4 pages and 9 sections
 route audit: pass for 4 canonical routes
 timer audit: pass for 32 timer entries across 2 timer sections
-npm audit: 0 vulnerabilities
 build: pass, canonical routes built and server output generated
-e2e: 9 pass, 0 fail
+e2e: 17 pass, 0 fail
 ```
 
 ## Browser smoke tests

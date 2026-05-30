@@ -1,12 +1,13 @@
 ---
 export const prerender = true;
 import MainLayout from '@app/layout/MainLayout.astro';
+import { APP_NAME } from '../shared/app-meta.js';
 ---
 
-<MainLayout title="RSDailies - Choose Game" game="rs3" mode="landing" navItems={[]}>
+<MainLayout title={`${APP_NAME} - Choose Game`} game="rs3" mode="landing" navItems={[]}>
 	<section class="game-selection-page" aria-labelledby="game-selection-title">
 		<div class="game-selection-card">
-			<img src="/img/dailyscapebig.png" alt="RSDailies" class="game-selection-logo" />
+			<img src="/img/dailyscapebig.png" alt="Dailyscape" class="game-selection-logo" />
 			<h1 id="game-selection-title">Choose Your Tracker</h1>
 			<div class="game-selection-actions">
 				<a class="ds-button ds-button-primary ds-button-large" href="/rs3/tasks">Open RS3 Tracker</a>

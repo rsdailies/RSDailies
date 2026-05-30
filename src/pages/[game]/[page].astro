@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import MainLayout from '@app/layout/MainLayout.astro';
 import { getTrackerPrimaryNavItems } from '@features/navigation';
 import { Dashboard, Overview } from '@features/tracker';
+import { APP_NAME } from '../../shared/app-meta.js';
 
 export async function getStaticPaths() {
 	const pages = await getCollection('pages');
@@ -48,7 +49,7 @@ const pageHeading = page === 'tasks' ? 'Daily Tasks' : pageLabel;
 const showOsrsNotice = game === 'osrs';
 ---
 
-<MainLayout title={`RSDailies - ${gameLabel} ${pageLabel}`} {game} {mode} {navItems}>
+<MainLayout title={`${APP_NAME} - ${gameLabel} ${pageLabel}`} {game} {mode} {navItems}>
 	<header class="tracker-page-header">
 		<p class="tracker-kicker">{game === 'osrs' ? 'Old School RuneScape' : 'RuneScape 3'}</p>
 		<h1>{pageHeading}</h1>
