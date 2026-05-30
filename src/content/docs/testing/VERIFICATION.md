@@ -21,9 +21,10 @@ This runs:
 4. `npm run audit:content`
 5. `npm run audit:routes`
 6. `npm run audit:timers`
-7. `npm audit`
-8. `npm run build`
-9. `npm run test:e2e`
+7. `npm run audit:no-mojibake`
+8. `npm audit`
+9. `npm run build`
+10. `npm run test:e2e`
 
 Notes:
 

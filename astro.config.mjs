@@ -7,7 +7,7 @@ import starlight from '@astrojs/starlight';
 
 /**
  * Vite plugin that raises the FSWatcher MaxListeners limit at the point
- * when the dev server is configured — directly on the watcher instance.
+ * when the dev server is configured directly on the watcher instance.
  * This permanently eliminates the MaxListenersExceededWarning.
  */
 const fixMaxListeners = {
@@ -26,7 +26,7 @@ const dailyscapeBanner = {
 	name: 'dailyscape-banner',
 	hooks: {
 		'astro:server:start': () => {
-			console.log(pc.bold(pc.magenta('\n  ▲ DAILYSCAPE DEVELOPMENT MODE')));
+			console.log(pc.bold(pc.magenta('\n  DAILYSCAPE DEVELOPMENT MODE')));
 			console.log(pc.dim('  ------------------------------------------'));
 			console.log(pc.cyan('  RS3 Module: ') + pc.green('100% (Beta Ready)'));
 			console.log(pc.cyan('  OSRS Module: ') + pc.yellow('Placeholder Shell'));

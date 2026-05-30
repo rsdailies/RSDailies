@@ -8,7 +8,7 @@ let { completed, onToggle, ariaLabel = 'Toggle task completion' } = $props();
 			<span class="ds-icon-box"></span>
 		</div>
 		<div class="activity_check_on">
-			<span class="ds-icon-check">✓</span>
+			<span class="ds-icon-check">&#10003;</span>
 		</div>
 	</button>
 </td>

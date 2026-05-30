@@ -27,6 +27,32 @@ test('storage service isolates profile keys and export tokens', () => {
 	assert.ok(StorageService.buildExportToken().length > 10);
 });
 
+test('import export preserves unicode-safe payloads and restores the source profile', () => {
+	initMemoryProfile();
+	StorageService.save('note', { label: 'RuneScape ✓', detail: 'Vis Wax' });
+
+	const token = StorageService.buildExportToken();
+	StorageService.setActiveProfile('blank');
+	StorageService.save('note', { label: 'Different' });
+
+	const imported = StorageService.importProfileToken(token);
+	assert.equal(imported?.profile, 'default');
+	assert.deepEqual(StorageService.load('note', null), { label: 'RuneScape ✓', detail: 'Vis Wax' });
+	assert.equal(StorageService.getActiveProfile(), 'default');
+});
+
+test('replaceCurrentProfileEntries rewrites the current profile payload', () => {
+	initMemoryProfile();
+	StorageService.save('alpha', { old: true });
+	StorageService.replaceCurrentProfileEntries({
+		alpha: { fresh: true },
+		beta: 42,
+	});
+
+	assert.deepEqual(StorageService.load('alpha', null), { fresh: true });
+	assert.equal(StorageService.load('beta', null), 42);
+});
+
 test('section reset clears owned view state', () => {
 	initMemoryProfile();
 	StorageService.save(StorageKeyBuilder.sectionCompletion('rs3daily'), { a: true });

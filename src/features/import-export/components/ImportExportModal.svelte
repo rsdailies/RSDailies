@@ -1,4 +1,5 @@
 <script lang="ts">
+import { tracker } from '@features/tracker/stores/tracker.svelte';
 import { buildExportToken, importProfileToken } from '@shared/storage/storage-service';
 import ModalFrame from '@shared/ui/modal/ModalFrame.svelte';
 
@@ -41,6 +42,7 @@ function handleImport() {
 
 <ModalFrame id="token-modal" titleId="token-modal-title" title="Import / Export" {isOpen} {onClose}>
 	<p class="ds-muted-copy ds-modal-copy">Transfer your tracker state between devices.</p>
+	<div class="ds-callout ds-callout-muted">{tracker.serverSyncNotice}</div>
 	
 	<div class="ds-modal-field-block">
 		<label class="ds-field-label" for="export-token">Export token</label>

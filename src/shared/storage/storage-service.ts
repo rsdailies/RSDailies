@@ -207,6 +207,32 @@ export function listCurrentProfileEntries() {
 	return payload;
 }
 
+export function hasCurrentProfileEntries() {
+	return Object.keys(listCurrentProfileEntries()).length > 0;
+}
+
+export function replaceCurrentProfileEntries(entries: Record<string, unknown>, clearExisting = true) {
+	if (!storageBackend) return;
+
+	if (clearExisting) {
+		const keysToDelete: string[] = [];
+		for (let index = 0; index < storageBackend.length; index += 1) {
+			const key = storageBackend.key(index);
+			if (key && key.startsWith(currentProfilePrefix)) {
+				keysToDelete.push(key);
+			}
+		}
+
+		keysToDelete.forEach((key) => storageBackend?.removeItem(key));
+	}
+
+	for (const [localKey, value] of Object.entries(entries || {})) {
+		saveJsonInternal(buildProfileKey(localKey), value, storageBackend);
+	}
+
+	emitStorageChange({ scope: 'profile', key: 'server-restore' });
+}
+
 function encodeBase64Unicode(value: string) {
 	const bytes = new TextEncoder().encode(value);
 	let binary = '';

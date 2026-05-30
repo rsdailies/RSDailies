@@ -1,5 +1,10 @@
-import { readProfileBackup, writeProfileBackup } from '@shared/server/profile-storage';
 import type { APIRoute } from 'astro';
+import {
+	ServerSyncDisabledError,
+	readProfileBackup,
+	resolveServerSyncConfig,
+	writeProfileBackup,
+} from '../../shared/server/profile-storage.ts';
 
 function json(body: unknown, init: ResponseInit = {}) {
 	return new Response(JSON.stringify(body), {
@@ -12,6 +17,11 @@ function json(body: unknown, init: ResponseInit = {}) {
 }
 
 export const GET: APIRoute = async ({ url }) => {
+	const syncConfig = resolveServerSyncConfig();
+	if (!syncConfig.enabled) {
+		return json({ success: false, driver: syncConfig.driver, message: syncConfig.message }, { status: 503 });
+	}
+
 	const profileName = String(url.searchParams.get('profileName') || '').trim();
 
 	if (!profileName) {
@@ -21,14 +31,24 @@ export const GET: APIRoute = async ({ url }) => {
 	try {
 		return json({
 			success: true,
+			driver: syncConfig.driver,
 			data: await readProfileBackup(profileName),
 		});
-	} catch {
+	} catch (error) {
+		if (error instanceof ServerSyncDisabledError) {
+			return json({ success: false, driver: syncConfig.driver, message: error.message }, { status: 503 });
+		}
+
 		return json({ success: false, message: 'No backup found on server.' }, { status: 404 });
 	}
 };
 
 export const POST: APIRoute = async ({ request }) => {
+	const syncConfig = resolveServerSyncConfig();
+	if (!syncConfig.enabled) {
+		return json({ success: false, driver: syncConfig.driver, message: syncConfig.message }, { status: 503 });
+	}
+
 	try {
 		const payload = await request.json();
 		const profileName = String(payload?.profileName || '').trim();
@@ -43,9 +63,14 @@ export const POST: APIRoute = async ({ request }) => {
 
 		return json({
 			success: true,
+			driver: syncConfig.driver,
 			syncedAt: new Date().toISOString(),
 		});
-	} catch {
+	} catch (error) {
+		if (error instanceof ServerSyncDisabledError) {
+			return json({ success: false, driver: syncConfig.driver, message: error.message }, { status: 503 });
+		}
+
 		return json({ success: false, message: 'Server failed to write data to disk.' }, { status: 500 });
 	}
 };

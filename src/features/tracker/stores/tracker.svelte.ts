@@ -1,9 +1,19 @@
 import { cleanupReadyCooldowns } from '@features/cooldowns/cooldown-service';
 import { checkAutoReset } from '@features/sections/auto-reset';
 import { cleanupReadyTimers } from '@features/timers';
-import { fetchServerProfile, syncServerProfile } from '@features/tracker/services/server-sync';
-import { StorageKeyBuilder } from '@shared/storage/keys-builder';
-import { getActiveProfile, listCurrentProfileEntries, load, save } from '@shared/storage/storage-service';
+import {
+	fetchServerProfile,
+	getClientServerSyncStatus,
+	syncServerProfile,
+} from '@features/tracker/services/server-sync';
+import {
+	getActiveProfile,
+	hasCurrentProfileEntries,
+	listCurrentProfileEntries,
+	load,
+	replaceCurrentProfileEntries,
+	save,
+} from '@shared/storage/storage-service';
 
 import { CollapsedStore } from './collapsed.svelte';
 import { CompletionsStore } from './completions.svelte';
@@ -18,40 +28,64 @@ class TrackerFacade {
 
 	private boundaryTimer: number | null = null;
 	private syncDebounceTimer: number | null = null;
+	private readonly loadedSections = new Set<string>();
+	private syncNotice = $state(getClientServerSyncStatus().message);
 
 	constructor() {
 		if (typeof window !== 'undefined') {
-			this.initialize();
+			void this.initialize();
 			this.startBoundaryMonitor();
 		}
 	}
 
 	async initialize() {
+		await this.refreshActiveProfile();
+	}
+
+	async refreshActiveProfile() {
 		this.pins.load();
 		this.collapsed.load();
+		for (const key of this.loadedSections) {
+			this.loadSection(key);
+		}
+		this.completions.load('custom');
 
-		if (!this.serverSyncEnabled()) return;
+		const syncStatus = getClientServerSyncStatus();
+		this.syncNotice = syncStatus.message;
 
-		if (Object.keys(this.pins.map).length === 0) {
-			const profileName = getActiveProfile();
-			try {
-				const data = await fetchServerProfile(profileName);
-				if (data?.success && data.data) {
-					this.pins.map = (data.data[StorageKeyBuilder.overviewPins()] as Record<string, boolean>) || {};
-					this.reloadAll();
-				}
-			} catch {}
+		if (!syncStatus.enabled || hasCurrentProfileEntries()) return;
+
+		const profileName = getActiveProfile();
+		try {
+			const response = await fetchServerProfile(profileName);
+			if (response.success && response.data) {
+				replaceCurrentProfileEntries(response.data);
+				this.reloadAll();
+				return;
+			}
+
+			if (response.message) {
+				this.syncNotice = response.message;
+			}
+		} catch {
+			this.syncNotice = 'Server backup could not be reached. Local storage remains active.';
 		}
 	}
 
 	get completed() {
 		return this.completions.map;
 	}
+
 	get hiddenRows() {
 		return this.hidden.map;
 	}
+
 	get overviewPins() {
 		return this.pins.map;
+	}
+
+	get serverSyncNotice() {
+		return this.syncNotice;
 	}
 
 	isCollapsedBlock(blockId: string) {
@@ -64,6 +98,7 @@ class TrackerFacade {
 	}
 
 	loadSection(sectionKey: string) {
+		this.loadedSections.add(sectionKey);
 		this.completions.load(sectionKey);
 		this.hidden.load(sectionKey);
 	}
@@ -112,10 +147,12 @@ class TrackerFacade {
 	}
 
 	reloadAll() {
-		for (const key of Object.keys(this.completed)) {
+		for (const key of this.loadedSections) {
 			this.loadSection(key);
 		}
+		this.completions.load('custom');
 		this.pins.load();
+		this.collapsed.load();
 	}
 
 	async syncToServer() {
@@ -130,8 +167,18 @@ class TrackerFacade {
 			const profileName = getActiveProfile();
 			const data = listCurrentProfileEntries();
 			try {
-				await syncServerProfile({ profileName, data, timestamp: Date.now() });
-			} catch {}
+				const response = await syncServerProfile({ profileName, data, timestamp: Date.now() });
+				if (response.success) {
+					this.syncNotice = getClientServerSyncStatus().message;
+					return;
+				}
+
+				if (response.message) {
+					this.syncNotice = response.message;
+				}
+			} catch {
+				this.syncNotice = 'Server backup could not be reached. Local storage remains active.';
+			}
 		}, 2000);
 	}
 
@@ -140,13 +187,8 @@ class TrackerFacade {
 		const check = () => {
 			const loadValue = <T>(key: string, fallback?: T) => load(key, fallback as T) as T;
 
-			// 1. Run game-time boundary auto-resets
 			const boundaryChanged = checkAutoReset({ load: loadValue, save });
-
-			// 2. Check and clean up task cooldowns
 			const cooldownsChanged = cleanupReadyCooldowns({ load: loadValue, save });
-
-			// 3. Check and clean up active timer states
 			const timersChanged = cleanupReadyTimers({ load: loadValue, save });
 
 			if (boundaryChanged || cooldownsChanged || timersChanged) {
@@ -154,11 +196,11 @@ class TrackerFacade {
 			}
 		};
 		check();
-		this.boundaryTimer = window.setInterval(check, 10000); // Check every 10s for snappy UI reactivity
+		this.boundaryTimer = window.setInterval(check, 10000);
 	}
 
 	private serverSyncEnabled() {
-		return String(import.meta.env.PUBLIC_ENABLE_SERVER_SYNC || '').toLowerCase() === 'true';
+		return getClientServerSyncStatus().enabled;
 	}
 }
 

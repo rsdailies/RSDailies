@@ -23,6 +23,32 @@ async function expectFirstColumnLabelLeftAligned(page) {
 		});
 }
 
+function taskRow(page, taskId) {
+	return page.locator(`tr[data-task-id="${taskId}"]`);
+}
+
+async function hoverRow(page, taskId) {
+	await taskRow(page, taskId).hover();
+}
+
+async function openProfileMenu(page) {
+	const panel = page.locator('#profile-control');
+	if ((await panel.count()) === 0) {
+		await page.getByRole('button', { name: /Profiles/i }).click();
+	}
+	await expect(panel).toBeVisible();
+}
+
+async function openSettingsMenu(page) {
+	await page.getByRole('button', { name: /Settings/i }).click();
+	await expect(page.locator('#settings-control')).toBeVisible();
+}
+
+async function openImportExport(page) {
+	await page.getByRole('button', { name: /Import \/ Export/i }).click();
+	await expect(page.locator('#token-modal')).toBeVisible();
+}
+
 test('root renders game selection landing page and opens rs3 canonical tasks view', async ({ page }) => {
 	await page.goto('/');
 	await expect(page.locator('#game-selection-title')).toBeVisible();
@@ -66,19 +92,16 @@ test('osrs canonical tasks route renders the current osrs task, weekly, and time
 test('topbar and modal controls work without legacy framework hooks', async ({ page }) => {
 	await page.goto('/rs3/tasks');
 
-	await page.getByRole('button', { name: /Profiles/i }).click();
-	await expect(page.locator('#profile-control')).toBeVisible();
+	await openProfileMenu(page);
 	await page.keyboard.press('Escape');
 	await expect(page.locator('#profile-control')).toHaveCount(0);
 	await expect(page.locator('#profile-button')).toBeFocused();
 
-	await page.getByRole('button', { name: /Settings/i }).click();
-	await expect(page.locator('#settings-control')).toBeVisible();
+	await openSettingsMenu(page);
 	await page.locator('main').click();
 	await expect(page.locator('#settings-control')).toHaveCount(0);
 
-	await page.getByRole('button', { name: /Import \/ Export/i }).click();
-	await expect(page.locator('#token-modal')).toBeVisible();
+	await openImportExport(page);
 	await page.keyboard.press('Escape');
 	await expect(page.locator('#token-modal')).toHaveCount(0);
 	await expect(page.locator('#token-button')).toBeFocused();
@@ -104,7 +127,7 @@ test('density mode persists and changes tracker row spacing', async ({ page }) =
 	const firstRow = page.locator('#rs3daily-table tbody tr').first();
 	const compactHeight = await firstRow.evaluate((row) => row.getBoundingClientRect().height);
 
-	await page.getByRole('button', { name: /Settings/i }).click();
+	await openSettingsMenu(page);
 	await page.locator('#setting-density-mode').selectOption('comfortable');
 	await page.locator('#save-settings-button').click();
 	await expect(page.locator('html')).toHaveAttribute('data-density', 'comfortable');
@@ -114,6 +137,18 @@ test('density mode persists and changes tracker row spacing', async ({ page }) =
 
 	await page.reload();
 	await expect(page.locator('html')).toHaveAttribute('data-density', 'comfortable');
+});
+
+test('speedy growth persists beyond a reload', async ({ page }) => {
+	await page.goto('/rs3/timers');
+
+	await openSettingsMenu(page);
+	await page.locator('#speedy-growth').check();
+	await page.locator('#save-settings-button').click();
+	await page.reload();
+
+	await openSettingsMenu(page);
+	await expect(page.locator('#speedy-growth')).toBeChecked();
 });
 
 test('tracker pages share the same header and row action framework', async ({ page }) => {
@@ -158,24 +193,105 @@ test('overview reset menu renders above lower sections without clipping', async 
 	expect(menuBox.y + menuBox.height).toBeGreaterThan(overviewBox.y + overviewBox.height);
 });
 
-test('preview runtime serves profile and penguin api routes', async ({ request }) => {
-	const profileName = 'preview-smoke';
-	const syncResponse = await request.post('/api/profile', {
-		data: {
-			profileName,
-			timestamp: Date.now(),
-			data: {
-				'test:key': { ok: true },
-			},
-		},
-	});
-	expect(syncResponse.ok()).toBeTruthy();
+test('profile lifecycle isolates tracker state across profiles', async ({ page }) => {
+	await page.goto('/rs3/tasks');
 
-	const fetchResponse = await request.get(`/api/profile?profileName=${encodeURIComponent(profileName)}`);
-	expect(fetchResponse.ok()).toBeTruthy();
-	const fetchPayload = await fetchResponse.json();
-	expect(fetchPayload.success).toBeTruthy();
-	expect(fetchPayload.data['test:key'].ok).toBeTruthy();
+	await openProfileMenu(page);
+	await page.locator('#profile-form input').fill('alt-profile');
+	await page.locator('#profile-form').getByRole('button').click();
+	await expect(page.locator('#profile-name')).toHaveText('alt-profile');
+
+	await taskRow(page, 'daily-challenge')
+		.getByRole('button', { name: /Mark task complete/i })
+		.click();
+	await expect(taskRow(page, 'daily-challenge')).toHaveAttribute('data-completed', 'true');
+
+	await openProfileMenu(page);
+	await page.getByRole('button', { name: 'default' }).click();
+	await expect(page.locator('#profile-name')).toHaveText('default');
+	await expect(taskRow(page, 'daily-challenge')).toHaveAttribute('data-completed', 'false');
+
+	await openProfileMenu(page);
+	await page.getByRole('button', { name: 'alt-profile' }).click();
+	await expect(page.locator('#profile-name')).toHaveText('alt-profile');
+	await expect(taskRow(page, 'daily-challenge')).toHaveAttribute('data-completed', 'true');
+
+	await openProfileMenu(page);
+	await page.locator('.profile-row', { hasText: 'alt-profile' }).getByRole('button', { name: '×' }).click();
+	await expect(page.locator('#profile-name')).toHaveText('default');
+	await expect(page.getByRole('button', { name: 'alt-profile' })).toHaveCount(0);
+});
+
+test('import export round trip restores profile state', async ({ page }) => {
+	await page.goto('/rs3/tasks');
+
+	await taskRow(page, 'daily-challenge')
+		.getByRole('button', { name: /Mark task complete/i })
+		.click();
+	await taskRow(page, 'daily-challenge')
+		.getByRole('button', { name: /Pin to overview/i })
+		.click();
+
+	await openImportExport(page);
+	await page.getByRole('button', { name: 'Generate Export' }).click();
+	const token = await page.locator('#export-token').inputValue();
+	expect(token.length).toBeGreaterThan(10);
+	await page.locator('#token-modal .ds-modal-footer').getByRole('button', { name: 'Close' }).click();
+
+	await openProfileMenu(page);
+	await page.locator('#profile-form input').fill('transfer-profile');
+	await page.locator('#profile-form').getByRole('button').click();
+	await expect(page.locator('#profile-name')).toHaveText('transfer-profile');
+	await expect(taskRow(page, 'daily-challenge')).toHaveAttribute('data-completed', 'false');
+
+	await openImportExport(page);
+	await page.locator('#import-token').fill(token);
+	await expect(page.getByText('Preview:')).toBeVisible();
+	await page.getByRole('button', { name: 'Confirm Import' }).click();
+	await page.reload();
+
+	await expect(page.locator('#profile-name')).toHaveText('default');
+	await expect(page.locator('#rs3daily-table tr[data-task-id="daily-challenge"]')).toHaveAttribute(
+		'data-completed',
+		'true',
+	);
+	await expect(page.locator('#overview-table tr[data-task-id="daily-challenge"]')).toBeVisible();
+});
+
+test('pinned and hidden row state survives a reload', async ({ page }) => {
+	await page.goto('/rs3/tasks');
+
+	await hoverRow(page, 'daily-challenge');
+	await taskRow(page, 'daily-challenge')
+		.getByRole('button', { name: /Pin to overview/i })
+		.click();
+	await hoverRow(page, 'vis-wax');
+	await taskRow(page, 'vis-wax')
+		.getByRole('button', { name: /Hide task/i })
+		.click();
+
+	await expect(page.locator('#overview-table tr[data-task-id="daily-challenge"]')).toBeVisible();
+	await expect(taskRow(page, 'vis-wax')).toHaveCount(0);
+
+	await page.reload();
+
+	await expect(page.locator('#overview-table tr[data-task-id="daily-challenge"]')).toBeVisible();
+	await expect(taskRow(page, 'vis-wax')).toHaveCount(0);
+});
+
+test('disabled server sync is surfaced in the UI and API', async ({ page, request }) => {
+	await page.goto('/rs3/tasks');
+
+	await openImportExport(page);
+	await expect(
+		page.getByText('Server backup is disabled for this build. Use Import / Export to move or back up data.'),
+	).toBeVisible();
+
+	const profileResponse = await request.get('/api/profile?profileName=preview-smoke');
+	expect(profileResponse.status()).toBe(503);
+	const profilePayload = await profileResponse.json();
+	expect(profilePayload.success).toBeFalsy();
+	expect(profilePayload.message).toContain('disabled');
 
 	const penguinResponse = await request.get('/api/penguins');
 	expect(penguinResponse.status()).not.toBe(404);

@@ -19,6 +19,7 @@
 		"audit:no-bootstrap-vocabulary": "node --experimental-strip-types tools/audit/no-bootstrap-class-vocabulary.mjs",
 		"audit:no-legacy-surface": "node --experimental-strip-types tools/audit/no-legacy-shipped-surface.mjs",
 		"audit:no-hash-links": "node --experimental-strip-types tools/audit/no-hash-action-links.mjs",
+		"audit:no-mojibake": "node --experimental-strip-types tools/audit/no-mojibake.mjs",
 		"audit:dependencies": "node --experimental-strip-types tools/audit/dependency-audit.mjs",
 		"audit:timers": "node --experimental-strip-types tools/audit/validate-timers.mjs",
 		"audit:headings": "node --experimental-strip-types tools/audit/heading-audit.mjs",

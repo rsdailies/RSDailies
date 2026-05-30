@@ -33,19 +33,18 @@ function handleAction(fn?: () => void) {
 	ariaLabel={pinned ? 'Unpin from overview' : 'Pin to overview'}
 	onclick={handleAction(onPin)}
 >
-	📌
+	&#128204;
 </AppButton>
 
 {#if showHide && !hidden}
 	<AppButton
 		variant="secondary"
 		size="sm"
-		iconOnly={true}
 		className="hide-button"
 		title="Hide task"
 		ariaLabel="Hide task"
 		onclick={handleAction(onHide)}
 	>
-		✕
+		&times;
 	</AppButton>
 {/if}

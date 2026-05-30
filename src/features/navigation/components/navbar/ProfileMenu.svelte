@@ -27,7 +27,7 @@ function handleSelect(name: string) {
 	if (typeof document !== 'undefined') {
 		document.documentElement.dataset.density = settings.densityMode;
 	}
-	tracker.reloadAll();
+	void tracker.refreshActiveProfile();
 	onToggle();
 }
 
@@ -38,7 +38,7 @@ function handleAdd(event: SubmitEvent) {
 	setActiveProfile(name);
 	newProfileName = '';
 	refresh();
-	tracker.reloadAll();
+	void tracker.refreshActiveProfile();
 	onToggle();
 }
 
@@ -46,7 +46,7 @@ function handleRemove(event: MouseEvent, name: string) {
 	event.stopPropagation();
 	deleteProfile(name);
 	refresh();
-	tracker.reloadAll();
+	void tracker.refreshActiveProfile();
 }
 </script>
 
@@ -74,7 +74,7 @@ function handleRemove(event: MouseEvent, name: string) {
 						</button>
 						{#if profile !== 'default'}
 							<AppButton variant="ghost-danger" size="sm" className="profile-delete" onclick={(e) => handleRemove(e, profile)}>
-								×
+								&times;
 							</AppButton>
 						{/if}
 					</li>

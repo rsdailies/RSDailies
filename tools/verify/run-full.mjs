@@ -55,6 +55,10 @@ const steps = [
 		...nodeWithTypeStripping('tools/audit/no-hash-action-links.mjs'),
 	},
 	{
+		label: 'audit:no-mojibake',
+		...nodeWithTypeStripping('tools/audit/no-mojibake.mjs'),
+	},
+	{
 		label: 'audit:dependencies',
 		...nodeWithTypeStripping('tools/audit/dependency-audit.mjs'),
 	},

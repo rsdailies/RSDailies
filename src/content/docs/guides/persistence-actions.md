@@ -1,59 +1,52 @@
 ---
-title: Persistence & Astro Actions
-description: Technical guide to the server-side persistence layer and synchronization logic.
+title: Persistence & Profile Sync
+description: Technical guide to local-first storage, optional server backup, and profile synchronization.
 ---
 
-# Persistence & Astro Actions
+# Persistence & profile sync
 
-Dailyscape uses a **Local-First, Cloud-Synced** architecture. While the UI remains snappy by interacting primarily with `localStorage`, all state changes are asynchronously synchronized with the server using **Astro Actions**.
+Dailyscape is local-first. The tracker always writes to `localStorage` immediately, and optional server backup only runs when an explicit local filesystem sync driver is enabled.
 
-## Architecture Overview
+## Architecture overview
 
 The persistence layer consists of three main components:
 
-1.  **TrackerStore (Client)**: A Svelte 5 Rune-based store that manages the reactive UI state.
-2.  **Storage Service (Shared)**: A utility layer for reading/writing to `localStorage` with namespaced keys.
-3.  **Astro Actions (Server)**: A secure RPC layer that persists data to the server's filesystem.
+1. **Tracker store (client)**: A Svelte 5 rune-based store that manages reactive UI state.
+2. **Storage service (shared)**: A utility layer for namespaced `localStorage`, profile switching, import/export, and state replacement.
+3. **Profile API (server)**: The `/api/profile` route, backed by `src/shared/server/profile-storage.ts`, which can either disable server backup or use a local filesystem adapter.
 
-### The Sync Cycle
+## Sync cycle
 
-1.  User interacts with a component (e.g., checks a task).
-2.  `TrackerStore` updates its internal state and writes to `localStorage`.
-3.  `TrackerStore` triggers a **debounced sync** (2 seconds).
-4.  The `syncProfile` Astro Action is called with the full profile payload.
-5.  The server writes a JSON backup to `user_data/[profile].json`.
+1. A user action updates tracker state.
+2. The store writes to `localStorage` immediately.
+3. When server backup is enabled, the store schedules a debounced sync after 2 seconds.
+4. The client posts the current profile payload to `/api/profile`.
+5. The local filesystem adapter writes `user_data/[profile].json`.
 
-## Data Safety Bridge
+## Recovery bridge
 
-To fulfill the requirement of "data safety across cache resets," the store implements an automatic recovery bridge:
+When server backup is enabled and the active profile has no local entries, the tracker requests `/api/profile` and restores the full saved profile payload into local storage before reloading the stores.
 
-- On initialization, if `localStorage` is empty (e.g., after a cache clear), the store calls the `fetchProfile` Action.
-- If a backup exists on the server, the state is restored automatically.
+## Runtime modes
 
-## Implementation Details
+- Default mode: server backup disabled.
+- Local preview/dev mode: set `SERVER_SYNC_DRIVER=filesystem`, `PUBLIC_SERVER_SYNC_DRIVER=filesystem`, and `PUBLIC_ENABLE_SERVER_SYNC=true`.
+- Deployment mode: leave server backup disabled unless a real persistent backend is added in the future.
 
-### syncProfile Action
-Located in `src/actions/index.ts`. It uses **Node.js Filesystem API** to ensure that data survives browser-level events.
+## Implementation details
 
-```typescript
-// Example of the sync handler
-handler: async (input) => {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.writeFile(filePath, JSON.stringify(input.data));
-    return { success: true };
-}
-```
+### Server adapter boundary
 
-### TrackerStore Integration
-Located in `src/features/tracker/stores/tracker.svelte.ts`. It uses `debounce` to minimize network traffic.
+Located in `src/shared/server/profile-storage.ts`.
 
-```typescript
-async syncToServer() {
-    // ... debounce logic ...
-    const { error } = await actions.syncProfile({
-        profileName,
-        data,
-        timestamp: Date.now(),
-    });
-}
-```
+- `resolveServerSyncConfig()` decides whether server backup is available.
+- `filesystem` mode is only allowed for local development and preview runtimes.
+- Disabled mode returns a clear message and `/api/profile` responds with a non-200 status.
+
+### Tracker integration
+
+Located in `src/features/tracker/stores/tracker.svelte.ts`.
+
+- On startup and profile changes, the tracker loads local state first.
+- If local state is empty and server backup is enabled, it restores the full profile payload from `/api/profile`.
+- Sync failures do not block local usage; the UI falls back to import/export messaging.
